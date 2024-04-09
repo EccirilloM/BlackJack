@@ -24,7 +24,7 @@ export class AuthService {
 
   registrazione(request: RegistrazioneRequest): Observable<MessageResponse> {
     console.log(request);
-    return this.http.post<MessageResponse>(this.backendUrl + 'registrazione', request);
+    return this.http.post<MessageResponse>(this.backendUrl + 'registrazionePlayer', request);
   }
 
   logout(): void {

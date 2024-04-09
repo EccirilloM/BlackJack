@@ -8,5 +8,4 @@ export interface RegistrazioneRequest {
     password: string;
     passwordRipetuta: string;
     dataNascita: Date;
-    ruolo: Ruolo;
 }

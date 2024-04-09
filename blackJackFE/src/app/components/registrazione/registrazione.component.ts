@@ -33,19 +33,23 @@ export class RegistrazioneComponent implements OnInit {
       username: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required]),
       ripeti_password: new FormControl('', [Validators.required]),
-      ruolo: new FormControl('', [Validators.required]),
       dataNascita: new FormControl('', [Validators.required])
     });
   }  
 
    //per la registrazione
    register(): void {
+
+    console.log("Primo Controllo");
     
     //Se il form non è valido lancio un messaggio di errore
+    console.log(this.registrazioneForm.value);
     if (!this.checkForm(this.registrazioneForm)) {
       this.toastr.error("Compilare tutti i campi");
       return;
     }
+
+    console.log("Fine Primo Controllo");
 
     //Assegno i valori del form a delle variabili
     const nome: string = this.registrazioneForm.controls['nome'].value;
@@ -53,9 +57,8 @@ export class RegistrazioneComponent implements OnInit {
     const email: string = this.registrazioneForm.controls['email'].value;
     const username: string = this.registrazioneForm.controls['username'].value;
     const password: string = this.registrazioneForm.controls['password'].value;
-    const passwordRipetuta: string = this.registrazioneForm.controls['passwordRipetuta'].value;
+    const passwordRipetuta: string = this.registrazioneForm.controls['ripeti_password'].value;
     const dataNascita: Date = this.registrazioneForm.controls['dataNascita'].value;
-    const ruolo: Ruolo = Ruolo.PLAYER;
 
     //Creo il DTO per mandare la richiesta al server
     const request: RegistrazioneRequest = {
@@ -66,7 +69,6 @@ export class RegistrazioneComponent implements OnInit {
       password,
       passwordRipetuta,
       dataNascita, // Inclusa la data di nascita
-      ruolo,
     };
 
     console.log(request);
@@ -93,12 +95,14 @@ export class RegistrazioneComponent implements OnInit {
 
     Object.keys(form.controls).forEach(key => {
       if (form.controls[key].value === '' || form.controls[key].value === null || form.controls[key].value === undefined) {
+        console.log("Campo non valido:", key); // Aggiunto per debug
         isOk = false;
       }
     });
 
     return isOk;
   }
+
 
    //Sceglie quale icona visualizzare nel form
    toggleShowPassword(type: string): void {
