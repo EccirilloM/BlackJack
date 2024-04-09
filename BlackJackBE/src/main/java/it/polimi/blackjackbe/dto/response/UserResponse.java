@@ -2,13 +2,11 @@ package it.polimi.blackjackbe.dto.response;
 
 import it.polimi.blackjackbe.model.Ruolo;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class LoginResponse {
-
+public class UserResponse {
     private Long userId;
 
     private String nome;
@@ -21,7 +19,8 @@ public class LoginResponse {
 
     private Ruolo ruolo;
 
-    private String message;
+    private String password;
 
-    private String jwtToken;
+
+
 }

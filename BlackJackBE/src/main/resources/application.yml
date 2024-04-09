@@ -17,5 +17,9 @@ spring:
     generate-ddl: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+server:
+  port: 8080
   error:
     include-message: always
+security:
+    secret-key: "c11a7a92006ae9322bf336606a7311846c5847f2d5556f43952eea886f4d5655"

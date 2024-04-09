@@ -1,0 +1,117 @@
+package it.polimi.blackjackbe.service.implementation;
+
+import it.polimi.blackjackbe.dto.response.UserResponse;
+import it.polimi.blackjackbe.exception.BadRequestException;
+import it.polimi.blackjackbe.exception.InternalServerErrorException;
+import it.polimi.blackjackbe.exception.NotFoundException;
+import it.polimi.blackjackbe.model.Ruolo;
+import it.polimi.blackjackbe.model.User;
+import it.polimi.blackjackbe.repository.UserRepository;
+import it.polimi.blackjackbe.service.definition.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImplementation implements UserService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public UserResponse getUserData(Long userId) {
+        if(userId < 1){
+            throw new BadRequestException("Id non Valido");
+        }
+
+        Optional<User> userExists = userRepository.findByUserId(userId);
+
+        if(userExists.isEmpty()){
+            throw new NotFoundException("Utente non trovato");
+        }
+
+        return new UserResponse(
+                userExists.get().getUserId(),
+                userExists.get().getNome(),
+                userExists.get().getCognome(),
+                userExists.get().getEmail(),
+                userExists.get().getUsername(),
+                userExists.get().getRuolo(),
+                userExists.get().getPassword());
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        //L'id autoincrement parte da 1.
+        if(userId < 1) {
+            throw new BadRequestException("Id non valido");
+        }
+
+        //Prendo l'utente dal db con quell'id.
+        Optional<User> userExists = userRepository.findByUserId(userId);
+
+        //Se non esiste un utente con quell'id, lancio un'eccezione.
+        if(userExists.isEmpty()) {
+            throw new NotFoundException("Utente non trovato");
+        }
+
+        //Elimino l'utente dal database.
+        userRepository.delete(userExists.get());
+
+        //Controllo se esiste ancora l'utente con quell'id
+        Optional<User> userDeleted = userRepository.findByUserId(userId);
+
+        //Se non è stato eliminato, lancio un'eccezione.
+        if(userDeleted.isPresent()) {
+            throw new InternalServerErrorException("Errore nell'eliminazione dell'utente");
+        }
+    }
+
+    @Override
+    public List<UserResponse> getAllByRuolo(String ruolo) {
+        //Controllo la validità del campo.
+        if(ruolo.isBlank() || ruolo.isEmpty()) {
+            throw new BadRequestException("Ruolo non valido");
+        }
+
+        //In base al ruolo richiesto dal client, creo una variabile da usare per chiamare il db.
+        final Ruolo ruoloDaCercare = switch (ruolo) {
+            case "PLAYER" -> Ruolo.PLAYER;
+            case "ADMIN" -> Ruolo.ADMIN;
+            default -> throw new BadRequestException("Ruolo non valido");
+        };
+
+        //Prendo dal db tutti gli utenti.
+        Optional<List<User>> users = userRepository.findAllByRuolo(ruoloDaCercare);
+
+        //Se non è presente nessun utente lancio un'eccezione.
+        if(users.isEmpty()) {
+            throw new NotFoundException("Utenti non trovati");
+        }
+
+        //Inizializzo la variabile di risposta.
+        List<UserResponse> response = new ArrayList<>();
+
+        //Per ogni utente, aggiungo all'array di risposta i dati.
+        for(User user: users.get()) {
+            response.add(new UserResponse(
+                    user.getUserId(),
+                    user.getNome(),
+                    user.getCognome(),
+                    user.getEmail(),
+                    user.getUsername(),
+                    user.getRuolo(),
+                    user.getPassword()
+            ));
+        }
+
+        return response;
+    }
+
+
+}
