@@ -11,6 +11,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { TavoloComponent } from './components/tavolo/tavolo.component';
 import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,13 +22,15 @@ import { ConfirmChangeOperationComponent } from './components/confirm-change-ope
     DashboardComponent,
     ProfileComponent,
     TavoloComponent,
-    ConfirmChangeOperationComponent
+    ConfirmChangeOperationComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
