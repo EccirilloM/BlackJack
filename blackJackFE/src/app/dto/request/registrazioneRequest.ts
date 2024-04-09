@@ -1,6 +1,6 @@
 import { Ruolo } from "src/app/types/ruolo";
 
-export interface RegisterRequest {
+export interface RegistrazioneRequest {
     nome: string;
     cognome: string;
     email: string;
