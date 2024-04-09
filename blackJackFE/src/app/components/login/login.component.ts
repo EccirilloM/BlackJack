@@ -105,4 +105,14 @@ export class LoginComponent implements OnInit{
     return (this.loginForm.controls[campo].value === '' && this.loginForm.controls[campo].touched);
   }
 
+  goToRegistration(): void {
+    this.router.navigate(['/registrazione']);
+  }
+
+  forgotPassword(): void {
+    // Qui puoi aggiungere la logica per navigare alla pagina di recupero della password
+    // Per ora, lasciamo questo metodo vuoto o aggiungi una logica temporanea come un alert
+    alert('Funzione di recupero password non implementata.');
+  }
+
 }

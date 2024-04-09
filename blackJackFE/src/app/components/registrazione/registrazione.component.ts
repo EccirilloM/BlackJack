@@ -34,12 +34,13 @@ export class RegistrazioneComponent implements OnInit {
       password: new FormControl('', [Validators.required]),
       ripeti_password: new FormControl('', [Validators.required]),
       ruolo: new FormControl('', [Validators.required]),
-      dataNascita: new FormControl('', [Validators.required]) // Aggiunto campo dataNascita
+      dataNascita: new FormControl('', [Validators.required])
     });
   }  
 
    //per la registrazione
    register(): void {
+    
     //Se il form non è valido lancio un messaggio di errore
     if (!this.checkForm(this.registrazioneForm)) {
       this.toastr.error("Compilare tutti i campi");
@@ -67,6 +68,8 @@ export class RegistrazioneComponent implements OnInit {
       dataNascita, // Inclusa la data di nascita
       ruolo,
     };
+
+    console.log(request);
 
     //Tramite il service mando la richiesta al server
     this.authService.registrazione(request).subscribe({
@@ -111,5 +114,9 @@ export class RegistrazioneComponent implements OnInit {
   (si circonda di rosso per far capire che bisogna compilarlo e dev'essere uguale a password) */
   ripetiPasswordNotOk(): boolean {
     return (this.password !== this.ripeti_password && this.registrazioneForm.controls['ripeti_password'].touched);
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/login']);
   }
 }

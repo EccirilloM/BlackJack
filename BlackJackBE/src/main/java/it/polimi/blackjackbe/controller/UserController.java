@@ -39,5 +39,4 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(userService.getAllByRuolo(ruolo));
     }
-
 }
