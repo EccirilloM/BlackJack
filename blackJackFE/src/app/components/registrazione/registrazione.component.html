@@ -2,74 +2,66 @@
   <div class="container mx-auto h-full flex flex-1 justify-center items-center">
     <div class="w-full max-w-lg">
       <div class="leading-loose">
-        <form [formGroup]="registrazioneForm" (ngSubmit)="register()"
-          class="max-w-sm m-4 p-10 bg-white bg-opacity-25 rounded shadow-xl">
+        <!-- Rimossi (ngSubmit) e [formGroup], usiamo (click) sul bottone di registrazione -->
+        <div class="max-w-sm m-4 p-10 bg-white bg-opacity-25 rounded shadow-xl">
           <p class="text-white text-center text-lg font-bold">REGISTRAZIONE</p>
 
+          <!-- Aggiornato per utilizzare [(ngModel)] e name -->
           <!-- Campo Nome -->
           <div>
             <label class="block text-sm text-white" for="nome">Nome</label>
             <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              formControlName="nome" id="nome" placeholder="Inserisci il tuo nome" required>
-            <div *ngIf="emptyAndTouched('nome')" class="text-red-500">Il nome è richiesto</div>
+              [(ngModel)]="nome" name="nome" id="nome" placeholder="Inserisci il tuo nome" required>
           </div>
 
           <!-- Campo Cognome -->
           <div>
             <label class="block text-sm text-white" for="cognome">Cognome</label>
             <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              formControlName="cognome" id="cognome" placeholder="Inserisci il tuo cognome" required>
-            <div *ngIf="emptyAndTouched('cognome')" class="text-red-500">Il cognome è richiesto</div>
+              [(ngModel)]="cognome" name="cognome" id="cognome" placeholder="Inserisci il tuo cognome" required>
           </div>
 
           <!-- Campo Email -->
           <div>
             <label class="block text-sm text-white" for="email">Email</label>
             <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              formControlName="email" id="email" placeholder="Inserisci la tua email" required>
-            <div *ngIf="emptyAndTouched('email')" class="text-red-500">L'email è richiesta</div>
+              [(ngModel)]="email" name="email" id="email" placeholder="Inserisci la tua email" required>
           </div>
 
           <!-- Campo Username -->
           <div>
             <label class="block text-sm text-white" for="username">Username</label>
             <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              formControlName="username" id="username" placeholder="Inserisci il tuo username" required>
-            <div *ngIf="emptyAndTouched('username')" class="text-red-500">L'Username è richiesto</div>
+              [(ngModel)]="username" name="username" id="username" placeholder="Inserisci il tuo username" required>
           </div>
 
           <!-- Campo Data di Nascita -->
           <div class="mt-2">
             <label class="block text-sm text-white" for="dataNascita">Data di Nascita</label>
-            <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              type="date" id="dataNascita" formControlName="dataNascita" required>
-            <div *ngIf="emptyAndTouched('dataNascita')" class="text-red-500">La data di nascita è richiesta</div>
+            <input type="date" class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
+              [(ngModel)]="dataNascita" name="dataNascita" id="dataNascita" required>
           </div>
 
           <!-- Campo Password -->
           <div class="mt-2">
             <label class="block text-sm text-white" for="password">Password</label>
-            <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              type="password" id="password" formControlName="password" placeholder="Digita la tua password" required>
+            <input type="password" class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
+              [(ngModel)]="password" name="password" id="password" placeholder="Digita la tua password" required>
           </div>
 
           <!-- Campo Ripeti Password -->
           <div class="mt-2">
             <label class="block text-sm text-white" for="ripeti_password">Ripeti Password</label>
-            <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              type="password" id="ripeti_password" formControlName="ripeti_password"
-              placeholder="Ripeti la tua password" required>
-            <div *ngIf="ripetiPasswordNotOk()" class="text-red-500">Le password non coincidono</div>
+            <input type="password" class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
+              [(ngModel)]="passwordRipetuta" name="ripeti_password" id="ripeti_password" placeholder="Ripeti la tua password" required>
           </div>
 
           <!-- Bottone di Registrazione -->
           <div class="mt-4 items-center flex justify-between">
-            <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded"
-              type="submit">Registra</button>
-              <button (click)="goToLogin()" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded"
-              type="submit">Vai al Login</button>
+            <button (click)="register()" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Registra</button>
+            <button (click)="goToLogin()" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Vai al Login</button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

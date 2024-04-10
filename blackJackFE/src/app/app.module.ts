@@ -13,7 +13,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { TavoloComponent } from './components/tavolo/tavolo.component';
 import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    ReactiveFormsModule,
+    FormsModule,
     HttpClientModule
   ],
   providers: [],
