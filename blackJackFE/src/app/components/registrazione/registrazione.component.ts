@@ -46,7 +46,6 @@ export class RegistrazioneComponent {
       email: this.email,
       username: this.username,
       password: this.password,
-      passwordRipetuta: this.passwordRipetuta,
       dataNascita: new Date(this.dataNascita)
     };
 

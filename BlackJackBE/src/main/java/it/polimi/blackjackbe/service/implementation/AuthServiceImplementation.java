@@ -36,9 +36,6 @@ public class AuthServiceImplementation implements AuthService {
     @Override
     public void registrazionePlayer(@NonNull RegistrazioneRequest request) throws RuntimeException {
 
-        if(request.getRuolo().equals("ADMIN")){
-            throw new BadRequestException("Non è possibile registrare un admin");
-        }
         Optional<User> userAlreadyRegistered = userRepository.findByUsername(request.getUsername());
 
         if (userAlreadyRegistered.isPresent()) {
@@ -51,11 +48,7 @@ public class AuthServiceImplementation implements AuthService {
         final String email = request.getEmail().trim().toLowerCase();
         final String password = request.getPassword();
         final LocalDateTime dataNascita = request.getDataNascita();
-        final Ruolo ruolo = switch (request.getRuolo()) {
-            case "PLAYER" -> Ruolo.PLAYER;
-            case "ADMIN" -> Ruolo.ADMIN;
-            default -> throw new BadRequestException("Ruolo non valido");
-        };
+        final Ruolo ruolo = Ruolo.PLAYER;
 
         checkUserData(List.of(nome, cognome, username, email, password, ruolo.name()));
 

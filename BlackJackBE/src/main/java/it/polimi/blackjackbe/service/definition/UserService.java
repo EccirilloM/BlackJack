@@ -10,4 +10,6 @@ public interface UserService {
     void deleteUser(Long userId);
 
     List<UserResponse> getAllByRuolo(String ruolo);
+
+    void ricaricaSaldo();
 }

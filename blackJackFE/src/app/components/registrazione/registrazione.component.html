@@ -58,7 +58,7 @@
 
           <!-- Bottone di Registrazione -->
           <div class="mt-4 items-center flex justify-between">
-            <button (click)="register()" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Registra</button>
+            <button [disabled]="password!=passwordRipetuta" (click)="register()" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Registra</button>
             <button (click)="goToLogin()" class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Vai al Login</button>
           </div>
         </div>

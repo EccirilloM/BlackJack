@@ -6,6 +6,5 @@ export interface RegistrazioneRequest {
     email: string;
     username: string;
     password: string;
-    passwordRipetuta: string;
     dataNascita: Date;
 }

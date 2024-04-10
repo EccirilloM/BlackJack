@@ -87,7 +87,7 @@ public class UserServiceImplementation implements UserService {
         };
 
         //Prendo dal db tutti gli utenti.
-        Optional<List<User>> users = userRepository.findAllByRuolo(ruoloDaCercare);
+        List<User> users = userRepository.findAllByRuolo(ruoloDaCercare);
 
         //Se non è presente nessun utente lancio un'eccezione.
         if(users.isEmpty()) {
@@ -98,7 +98,7 @@ public class UserServiceImplementation implements UserService {
         List<UserResponse> response = new ArrayList<>();
 
         //Per ogni utente, aggiungo all'array di risposta i dati.
-        for(User user: users.get()) {
+        for(User user: users) {
             response.add(new UserResponse(
                     user.getUserId(),
                     user.getNome(),
@@ -111,6 +111,28 @@ public class UserServiceImplementation implements UserService {
         }
 
         return response;
+    }
+
+    @Override
+    public void ricaricaSaldo() {
+        //Prendo dal db tutti gli utenti PLAYER.
+        List<User> users = userRepository.findAllByRuolo(Ruolo.PLAYER);
+
+        //Se non è presente nessun utente lancio un'eccezione.
+        if(users.isEmpty()) {
+            throw new NotFoundException("Utenti non trovati");
+        }
+
+        //Per ogni utente, ricarico il saldo.
+        for(User user: users) {
+            System.out.println("Ricarica saldo per l'utente: " + user.getUsername());
+            System.out.println("Saldo corrente: " + user.getSaldo() + "€");
+            //Aggiungi 50 al saldo corrente
+            user.setSaldo(user.getSaldo() + 50.0);
+            userRepository.save(user);
+            System.out.println("Saldo aggiornato: " + user.getSaldo() + "€");
+        }
+
     }
 
 
