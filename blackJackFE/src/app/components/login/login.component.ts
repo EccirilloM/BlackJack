@@ -37,7 +37,7 @@ export class LoginComponent {
         // Qui puoi salvare i dettagli dell'utente come token nel localStorage o gestire la navigazione
         localStorage.setItem('token', `Bearer ${res.jwt}`);
         // Assumi che l'oggetto di risposta abbia un campo jwt. Modifica per adattarsi alla tua risposta effettiva
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/homepage']);
       },
       error: (error) => {
         this.toastr.error('Errore durante il login');

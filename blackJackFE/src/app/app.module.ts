@@ -14,6 +14,9 @@ import { TavoloComponent } from './components/tavolo/tavolo.component';
 import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FormsModule} from '@angular/forms';
+import { StatisticsComponent } from './components/statistics/statistics.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { FormsModule} from '@angular/forms';
     ProfileComponent,
     TavoloComponent,
     ConfirmChangeOperationComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    StatisticsComponent,
+    NavbarComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,

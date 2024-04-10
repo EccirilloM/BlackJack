@@ -6,11 +6,13 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
 
 const routes: Routes = [
   {path: "", redirectTo: "/login", pathMatch: "full"},
   {path: "login", component: LoginComponent},
   { path: 'registrazione', component: RegistrazioneComponent},
+  { path: 'homepage', component: HomepageComponent},
   { path: 'dashboard', component: DashboardComponent},
   {
     path: "profile/:username", component: ProfileComponent
