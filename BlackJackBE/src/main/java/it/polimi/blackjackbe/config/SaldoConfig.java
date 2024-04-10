@@ -1,3 +1,4 @@
+/*
 package it.polimi.blackjackbe.config;
 
 import it.polimi.blackjackbe.service.definition.UserService;
@@ -19,3 +20,6 @@ public class SaldoConfig {
         userService.ricaricaSaldo();
     }
 }
+*/
+
+//TODO: SCOMMENTARE IL CODICE SOPRA PER ABILITARE LA RICARICA DEL SALDO OGNI 5 GIORNI

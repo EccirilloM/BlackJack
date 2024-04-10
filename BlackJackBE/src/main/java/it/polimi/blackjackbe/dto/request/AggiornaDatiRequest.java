@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class RegistrazioneRequest {
+public class AggiornaDatiRequest {
     private String nome;
     private String cognome;
     private String email;
     private String username;
-    private String password;
+    private String vecchiaPassword;
     private LocalDateTime dataNascita;
+    private String nuovaPassword;
 }

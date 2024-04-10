@@ -1,5 +1,7 @@
 package it.polimi.blackjackbe.controller;
 
+import it.polimi.blackjackbe.dto.request.AggiornaDatiRequest;
+import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.MessageResponse;
 import it.polimi.blackjackbe.dto.response.UserResponse;
 import it.polimi.blackjackbe.service.definition.UserService;
@@ -17,11 +19,10 @@ public class UserController {
 
     private final UserService userService;
     @GetMapping("/getUserData/{userId}")
-    public ResponseEntity<UserResponse> getUserData(@PathVariable String userId) {
+    public ResponseEntity<UserResponse> getUserDataById(@PathVariable String userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                         .body(userService.getUserData(Long.parseLong(userId)));
-
     }
 
     @DeleteMapping("delete/{userId}")
@@ -38,5 +39,19 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getAllByRuolo(ruolo));
+    }
+
+    @GetMapping("getAll")
+    public ResponseEntity<List<UserResponse>> getAll() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getAll());
+    }
+
+    @PutMapping("aggiornaDatiUtente/{userId}")
+    public ResponseEntity<UserResponse> aggiornaDatiUtente(@RequestBody AggiornaDatiRequest aggiornaRequest, @PathVariable String userId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.aggiornaDatiUtente(aggiornaRequest, Long.parseLong(userId)));
     }
 }

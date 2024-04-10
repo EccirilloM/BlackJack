@@ -1,5 +1,7 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.dto.request.AggiornaDatiRequest;
+import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.UserResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
 import it.polimi.blackjackbe.exception.InternalServerErrorException;
@@ -42,7 +44,8 @@ public class UserServiceImplementation implements UserService {
                 userExists.get().getEmail(),
                 userExists.get().getUsername(),
                 userExists.get().getRuolo(),
-                userExists.get().getPassword());
+                userExists.get().getPassword(),
+                userExists.get().getDataNascita());
     }
 
     @Override
@@ -106,7 +109,8 @@ public class UserServiceImplementation implements UserService {
                     user.getEmail(),
                     user.getUsername(),
                     user.getRuolo(),
-                    user.getPassword()
+                    user.getPassword(),
+                    user.getDataNascita()
             ));
         }
 
@@ -135,5 +139,101 @@ public class UserServiceImplementation implements UserService {
 
     }
 
+    @Override
+    public List<UserResponse> getAll() {
+        //Prendo dal db tutti gli utenti.
+        List<User> users = userRepository.findAll();
+
+        //Se non è presente nessun utente lancio un'eccezione.
+        if(users.isEmpty()) {
+            throw new NotFoundException("Utenti non trovati");
+        }
+
+        //Inizializzo la variabile di risposta.
+        List<UserResponse> response = new ArrayList<>();
+
+        //Per ogni utente, aggiungo all'array di risposta i dati.
+        for(User user: users) {
+            response.add(new UserResponse(
+                    user.getUserId(),
+                    user.getNome(),
+                    user.getCognome(),
+                    user.getEmail(),
+                    user.getUsername(),
+                    user.getRuolo(),
+                    user.getPassword(),
+                    user.getDataNascita()
+            ));
+        }
+
+        return response;
+    }
+
+    @Override
+    public UserResponse aggiornaDatiUtente(AggiornaDatiRequest aggiornaRequest, Long userId) {
+        //Prendo l'utente dal db con quell'id.
+        Optional<User> userExists = userRepository.findByUserId(userId);
+
+        //Se non esiste un utente con quell'id, lancio un'eccezione.
+        if(userExists.isEmpty()) {
+            throw new NotFoundException("Utente non trovato");
+        }
+
+        if(!aggiornaRequest.getNome().isBlank() && !aggiornaRequest.getNome().isEmpty()){
+            userExists.get().setNome(aggiornaRequest.getNome());
+        }
+
+        if(!aggiornaRequest.getCognome().isBlank() && !aggiornaRequest.getCognome().isEmpty()){
+            userExists.get().setCognome(aggiornaRequest.getCognome());
+        }
+
+        if(!aggiornaRequest.getEmail().isBlank() && !aggiornaRequest.getEmail().isEmpty()){
+            userExists.get().setEmail(aggiornaRequest.getEmail());
+        }
+
+        if(!aggiornaRequest.getUsername().isBlank() && !aggiornaRequest.getUsername().isEmpty() &&
+        !aggiornaRequest.getUsername().equals(userExists.get().getUsername())){
+            Optional<User> userExistsByUsername = userRepository.findByUsername(aggiornaRequest.getUsername());
+            if(userExistsByUsername.isPresent()){
+                throw new BadRequestException("Username già in uso");
+            }
+            userExists.get().setUsername(aggiornaRequest.getUsername());
+        }
+
+        if(!aggiornaRequest.getVecchiaPassword().isBlank() && !aggiornaRequest.getVecchiaPassword().isEmpty()
+        && !aggiornaRequest.getNuovaPassword().isBlank() && !aggiornaRequest.getNuovaPassword().isEmpty()){
+            //Controlla se la vecchia password è corretta
+            if(!passwordEncoder.matches(aggiornaRequest.getVecchiaPassword(), userExists.get().getPassword())){
+                throw new BadRequestException("Vecchia Password non corretta");
+            }
+
+            //Controllo se la nuova password è uguale alla vecchia
+            if(aggiornaRequest.getVecchiaPassword().equals(aggiornaRequest.getNuovaPassword())){
+                throw new BadRequestException("La nuova password non può essere uguale alla vecchia");
+            }
+
+            //Setto la nuova password
+            userExists.get().setPassword(passwordEncoder.encode(aggiornaRequest.getNuovaPassword()));
+        }
+
+        //Controllo se la data di nascita è stata inserita e se l'utente è maggiorenne
+        if(aggiornaRequest.getDataNascita() != null && java.time.LocalDateTime.now().getYear() - aggiornaRequest.getDataNascita().getYear() >= 18){
+            userExists.get().setDataNascita(aggiornaRequest.getDataNascita());
+        }
+
+        //Salvo le modifiche nel db.
+        userRepository.save(userExists.get());
+
+        return new UserResponse(
+                userExists.get().getUserId(),
+                userExists.get().getNome(),
+                userExists.get().getCognome(),
+                userExists.get().getEmail(),
+                userExists.get().getUsername(),
+                userExists.get().getRuolo(),
+                userExists.get().getPassword(),
+                userExists.get().getDataNascita()
+        );
+    }
 
 }

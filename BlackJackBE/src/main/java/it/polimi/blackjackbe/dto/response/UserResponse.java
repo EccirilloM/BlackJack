@@ -4,6 +4,8 @@ import it.polimi.blackjackbe.model.Ruolo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 public class UserResponse {
@@ -21,6 +23,5 @@ public class UserResponse {
 
     private String password;
 
-
-
+    private LocalDateTime dataNascita;
 }
