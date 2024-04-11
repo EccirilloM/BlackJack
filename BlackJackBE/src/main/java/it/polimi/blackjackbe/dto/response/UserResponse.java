@@ -24,4 +24,6 @@ public class UserResponse {
     private String password;
 
     private LocalDateTime dataNascita;
+
+    private Double saldo;
 }

@@ -24,4 +24,6 @@ public class LoginResponse {
     private String message;
 
     private String jwtToken;
+
+    private Double saldo;
 }

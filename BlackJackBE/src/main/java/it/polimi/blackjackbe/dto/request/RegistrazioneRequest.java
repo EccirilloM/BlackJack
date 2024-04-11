@@ -14,7 +14,7 @@ public class RegistrazioneRequest {
     @NotBlank(message = "Cognome non può essere vuoto")
     private String cognome;
     @NotBlank(message = "Email non può essere vuota")
-    @Email(message = "Email non valida")
+    @Email(message = "Email deve avere un formato valido")
     private String email;
     @NotBlank(message = "Username non può essere vuoto")
     private String username;

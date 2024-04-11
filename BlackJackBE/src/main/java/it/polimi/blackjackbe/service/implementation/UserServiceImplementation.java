@@ -45,8 +45,9 @@ public class UserServiceImplementation implements UserService {
                 userExists.get().getUsername(),
                 userExists.get().getRuolo(),
                 userExists.get().getPassword(),
-                userExists.get().getDataNascita());
-    }
+                userExists.get().getDataNascita(),
+                userExists.get().getSaldo()
+        );}
 
     @Override
     public void deleteUser(Long userId) {
@@ -110,7 +111,8 @@ public class UserServiceImplementation implements UserService {
                     user.getUsername(),
                     user.getRuolo(),
                     user.getPassword(),
-                    user.getDataNascita()
+                    user.getDataNascita(),
+                    user.getSaldo()
             ));
         }
 
@@ -162,7 +164,8 @@ public class UserServiceImplementation implements UserService {
                     user.getUsername(),
                     user.getRuolo(),
                     user.getPassword(),
-                    user.getDataNascita()
+                    user.getDataNascita(),
+                    user.getSaldo()
             ));
         }
 
@@ -232,7 +235,8 @@ public class UserServiceImplementation implements UserService {
                 userExists.get().getUsername(),
                 userExists.get().getRuolo(),
                 userExists.get().getPassword(),
-                userExists.get().getDataNascita()
+                userExists.get().getDataNascita(),
+                userExists.get().getSaldo()
         );
     }
 

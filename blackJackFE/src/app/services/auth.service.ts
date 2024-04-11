@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginRequest } from '../dto/request/loginRequest';
 import { RegistrazioneRequest } from '../dto/request/registrazioneRequest';
 import { LoginResponse } from '../dto/response/loginResponse';
@@ -15,6 +15,20 @@ import { globalBackendUrl } from 'environment';
 })
 export class AuthService {
   private backendUrl: string = globalBackendUrl + 'auth/';
+  private isAuthenticatedSource = new BehaviorSubject<boolean>(this.checkIsAuthenticated());
+  isAuthenticated$ = this.isAuthenticatedSource.asObservable();
+
+  setIsAuthenticated(value: boolean) {
+    this.isAuthenticatedSource.next(value);
+  }
+
+  checkIsAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    if (token) {
+      return true;
+    }
+    return false;
+  }
 
   constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
 
@@ -31,5 +45,14 @@ export class AuthService {
     this.router.navigateByUrl('login');
     localStorage.clear();
     this.toastr.success('Logout effettuato con successo');
+  }
+
+  getHttpHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
+  getToken(): string {
+    return localStorage.getItem('token') ?? '';
   }
 }

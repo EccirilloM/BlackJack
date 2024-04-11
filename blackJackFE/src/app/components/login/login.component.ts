@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { LoginRequest } from 'src/app/dto/request/loginRequest';
+import { LoginResponse } from 'src/app/dto/response/loginResponse';
 
 @Component({
   selector: 'app-login',
@@ -32,10 +33,19 @@ export class LoginComponent {
     };
 
     this.authService.login(request).subscribe({
-      next: (res) => {
+      next: (res: LoginResponse) => {
         this.toastr.success('Login effettuato con successo!');
         // Qui puoi salvare i dettagli dell'utente come token nel localStorage o gestire la navigazione
+        localStorage.setItem('id', res.userId.toString());
+        localStorage.setItem('nome', res.nome);
+        localStorage.setItem('cognome', res.cognome);
+        localStorage.setItem('username', res.username);
+        localStorage.setItem('email', res.email);
+        localStorage.setItem('ruolo', res.ruolo);
         localStorage.setItem('token', `Bearer ${res.jwt}`);
+
+        this.authService.setIsAuthenticated(true);
+        
         // Assumi che l'oggetto di risposta abbia un campo jwt. Modifica per adattarsi alla tua risposta effettiva
         this.router.navigate(['/homepage']);
       },

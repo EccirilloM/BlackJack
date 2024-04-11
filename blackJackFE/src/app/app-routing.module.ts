@@ -9,16 +9,17 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 
 const routes: Routes = [
-  {path: "", redirectTo: "/login", pathMatch: "full"},
-  {path: "login", component: LoginComponent},
-  { path: 'registrazione', component: RegistrazioneComponent},
-  { path: 'homepage', component: HomepageComponent},
-  { path: 'dashboard', component: DashboardComponent},
+  { path: "", redirectTo: "/login", pathMatch: "full" },
+  { path: "login", component: LoginComponent },
+  { path: 'registrazione', component: RegistrazioneComponent },
   {
-    path: "profile/:username", component: ProfileComponent
-  },
-  {
-    path: "confirmChangeOperation", component: ConfirmChangeOperationComponent
+    path: 'homepage', component: HomepageComponent, children: [
+      { path: "profile/:id", component: ProfileComponent },
+      { path: 'dashboard', component: DashboardComponent },
+      {
+        path: "confirmChangeOperation", component: ConfirmChangeOperationComponent
+      }
+    ]
   },
 
   //404
