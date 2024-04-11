@@ -1,0 +1,7 @@
+.flex-none {
+    flex: none; /* Assicurati che la sidebar mantenga la sua larghezza senza ridimensionarsi */
+  }
+  
+  .flex-grow {
+    flex-grow: 1; /* Consente al contenuto principale di occupare lo spazio rimanente */
+  }

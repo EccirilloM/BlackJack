@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrazioneComponent } from './components/registrazione/registrazione.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ProfileComponent } from './components/profile/profile.component';
 import { TavoloComponent } from './components/tavolo/tavolo.component';
 import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -17,6 +16,10 @@ import { FormsModule } from '@angular/forms';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
+import { PersonalInfoComponent } from './components/profileMain/personal-info/personal-info.component';
+import { ChangeProfileDataComponent } from './components/profileMain/change-profile-data/change-profile-data.component';
+import { ProfileSideBarComponent } from './components/profileMain/profile-side-bar/profile-side-bar.component';
+import { ProfileContainerComponent } from './components/profileMain/profile-container/profile-container.component';
 
 @NgModule({
   declarations: [
@@ -24,14 +27,17 @@ import { HomepageComponent } from './components/homepage/homepage.component';
     LoginComponent,
     RegistrazioneComponent,
     DashboardComponent,
-    ProfileComponent,
     TavoloComponent,
     ConfirmChangeOperationComponent,
     NotFoundComponent,
     StatisticsComponent,
     NavbarComponent,
     HomepageComponent,
-    RegistrazioneComponent
+    RegistrazioneComponent,
+    PersonalInfoComponent,
+    ChangeProfileDataComponent,
+    ProfileSideBarComponent,
+    ProfileContainerComponent
   ],
   imports: [
     BrowserModule,
