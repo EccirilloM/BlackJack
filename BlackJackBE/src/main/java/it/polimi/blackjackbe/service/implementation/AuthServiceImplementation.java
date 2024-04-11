@@ -91,7 +91,9 @@ public class AuthServiceImplementation implements AuthService {
                 user.getRuolo(),
                 "Accesso effettuato con successo",
                 jwtUtils.generateToken(user),
-                user.getSaldo()
+                user.getSaldo(),
+                user.getDataNascita(),
+                user.getDataRegistrazione()
                 );
     }
 

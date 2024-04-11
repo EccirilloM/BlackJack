@@ -5,3 +5,9 @@
   .flex-grow {
     flex-grow: 1; /* Consente al contenuto principale di occupare lo spazio rimanente */
   }
+
+  .sidebar-fixed {
+    position: sticky;
+    top: 0; /* Regola questa distanza in base al layout del tuo sito */
+  }
+  

@@ -9,6 +9,7 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { PersonalInfoComponent } from './components/profileMain/personal-info/personal-info.component';
 import { ProfileSideBarComponent } from './components/profileMain/profile-side-bar/profile-side-bar.component';
 import { ProfileContainerComponent } from './components/profileMain/profile-container/profile-container.component';
+import { ChangeProfileDataComponent } from './components/profileMain/change-profile-data/change-profile-data.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
@@ -25,7 +26,7 @@ const routes: Routes = [
             path: "personalInfo", component: PersonalInfoComponent
           },
           {
-            path: "changeProfileData", component: ConfirmChangeOperationComponent
+            path: "changeProfileData", component: ChangeProfileDataComponent
           }
         ]
       }

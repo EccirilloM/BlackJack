@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @AllArgsConstructor
 public class LoginResponse {
@@ -26,4 +28,8 @@ public class LoginResponse {
     private String jwtToken;
 
     private Double saldo;
+
+    private LocalDateTime dataNascita;
+
+    private LocalDateTime dataRegistrazione;
 }

@@ -16,10 +16,10 @@ export class LoginComponent {
   showPassword: boolean = false;
 
   constructor(
-    private authService: AuthService, 
-    private toastr: ToastrService, 
+    private authService: AuthService,
+    private toastr: ToastrService,
     private router: Router
-  ) {}
+  ) { }
 
   login(): void {
     if (!this.username || !this.password) {
@@ -42,10 +42,13 @@ export class LoginComponent {
         localStorage.setItem('username', res.username);
         localStorage.setItem('email', res.email);
         localStorage.setItem('ruolo', res.ruolo);
+        localStorage.setItem('saldo', res.saldo.toString());
+        localStorage.setItem('dataNascita', res.dataNascita);
+        localStorage.setItem('dataRegistrazione', res.dataRegistrazione);
         localStorage.setItem('token', `Bearer ${res.jwt}`);
 
         this.authService.setIsAuthenticated(true);
-        
+
         // Assumi che l'oggetto di risposta abbia un campo jwt. Modifica per adattarsi alla tua risposta effettiva
         this.router.navigate(['/homepage']);
       },
