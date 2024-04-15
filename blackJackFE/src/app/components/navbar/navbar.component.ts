@@ -43,4 +43,12 @@ export class NavbarComponent implements OnInit {
   goToProfile(): void {
     this.router.navigate([`/homepage/profile/${this.userId}`]);
   }
+
+  goToChargeMoney(): void {
+    this.router.navigate(['/homepage/chargeMoney']);
+  }
+
+  goToForum(): void {
+    this.router.navigate(['/homepage/forum']);
+  }
 }

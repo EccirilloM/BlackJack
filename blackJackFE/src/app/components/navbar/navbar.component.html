@@ -19,6 +19,26 @@
           Home
         </button>
 
+        <!-- Charge Money -->
+        <button (click)="goToChargeMoney()"
+          [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
+          class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+          <span class="material-icons">
+            currency_exchange
+          </span>
+          Charge Money
+        </button>
+
+        <!-- Forum -->
+        <button (click)="goToForum()"
+          [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
+          class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+          <span class="material-icons">
+            forum
+          </span>
+          Forum
+        </button>
+
         <!-- Profile -->
         <button (click)="goToProfile()"
           [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'profile', 'bg-gray-700 text-gray-400': currentRoute !== 'profile' }"
@@ -50,11 +70,11 @@
               </div> -->
               <div class="ml-3">
                 <p class="text-base leading-6 font-medium text-white">
-                  {{ userNome }} {{userCognome}}
+                  {{ userNome }} {{ userCognome }}
                 </p>
                 <p
                   class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                  {{ userDisplayName}}
+                  {{ userDisplayName }}
                 </p>
               </div>
             </div>

@@ -20,6 +20,8 @@ import { PersonalInfoComponent } from './components/profileMain/personal-info/pe
 import { ChangeProfileDataComponent } from './components/profileMain/change-profile-data/change-profile-data.component';
 import { ProfileSideBarComponent } from './components/profileMain/profile-side-bar/profile-side-bar.component';
 import { ProfileContainerComponent } from './components/profileMain/profile-container/profile-container.component';
+import { ChargeMoneyComponent } from './components/charge-money/charge-money.component';
+import { ForumComponent } from './components/forum/forum.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { ProfileContainerComponent } from './components/profileMain/profile-cont
     PersonalInfoComponent,
     ChangeProfileDataComponent,
     ProfileSideBarComponent,
-    ProfileContainerComponent
+    ProfileContainerComponent,
+    ChargeMoneyComponent,
+    ForumComponent
   ],
   imports: [
     BrowserModule,

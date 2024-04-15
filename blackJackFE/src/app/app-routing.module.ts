@@ -10,6 +10,8 @@ import { PersonalInfoComponent } from './components/profileMain/personal-info/pe
 import { ProfileSideBarComponent } from './components/profileMain/profile-side-bar/profile-side-bar.component';
 import { ProfileContainerComponent } from './components/profileMain/profile-container/profile-container.component';
 import { ChangeProfileDataComponent } from './components/profileMain/change-profile-data/change-profile-data.component';
+import { ChargeMoneyComponent } from './components/charge-money/charge-money.component';
+import { ForumComponent } from './components/forum/forum.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
@@ -19,6 +21,12 @@ const routes: Routes = [
     path: 'homepage', component: HomepageComponent, children: [
       {
         path: "dashboard", component: DashboardComponent
+      },
+      {
+        path: "chargeMoney", component: ChargeMoneyComponent
+      },
+      {
+        path: "forum", component: ForumComponent
       },
       {
         path: "profile/:id", component: ProfileContainerComponent, children: [
