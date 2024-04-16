@@ -39,6 +39,26 @@
           Forum
         </button>
 
+        <!-- Admin -->
+        <button (click)="goToAdmin()"
+          [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
+          class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+          <span class="material-icons">
+            admin_panel_settings
+          </span>
+          Admin
+        </button>
+
+        <!-- Economo -->
+        <button (click)="goToEconomo()"
+          [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
+          class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+          <span class="material-icons">
+            price_check
+          </span>
+          Economo
+        </button>
+
         <!-- Profile -->
         <button (click)="goToProfile()"
           [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'profile', 'bg-gray-700 text-gray-400': currentRoute !== 'profile' }"

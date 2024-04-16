@@ -1,0 +1,132 @@
+<div class="antialiased bg-[#15202b] w-full min-h-screen text-slate-300 relative py-4">
+  <div class="mx-auto max-w-7xl my-10 px-2">
+    <div id="content" class="bg-white/10 w-full md:w-6/8 lg:w-7/8 xl:w-7/8 rounded-lg p-6">
+      <!-- INIZIO DATI STATISTICI GENERALI -->
+      <div id="statistics">
+        <h1 class="font-bold py-4 uppercase">Statistics</h1>
+        <div id="stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="bg-black/60 to-white/5 p-6 rounded-lg">
+            <!-- Sezione numero Utenti -->
+            <div class="flex flex-row space-x-4 items-center">
+              <div id="stats-1" class="flex items-center justify-center w-10 h-10">
+                <span class="material-icons text-white text-4xl">group_add</span>
+              </div>
+              <div>
+                <p class="text-indigo-300 text-sm font-medium uppercase leading-4">Users</p>
+                <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
+                  <span>{{ numberOfUsers }}</span>
+                  <span *ngIf="numberOfUsers > 0" class="material-icons text-white text-lg">trending_up</span>
+                  <span *ngIf="numberOfUsers < 0" class="material-icons text-white text-lg">trending_down</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- Sezione saldo Casinò -->
+          <div class="bg-black/60 p-6 rounded-lg">
+            <div class="flex flex-row space-x-4 items-center">
+              <div id="stats-1" class="flex items-center justify-center w-10 h-10">
+                <span class="material-icons text-white text-4xl">account_balance_wallet</span>
+              </div>
+              <div>
+                <p class="text-teal-300 text-sm font-medium uppercase leading-4">Income</p>
+                <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
+                  <span>${{ income }}</span>
+                  <span *ngIf="income > 0" class="material-icons text-white text-lg">trending_up</span>
+                  <span *ngIf="income < 0" class="material-icons text-white text-lg">trending_down</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
+          <!-- Grafico percentuale vincita casinò -->
+          <div class="bg-white p-4 rounded-md">
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Percentuale Vittorie Casinò</h2>
+            <div class="my1-"></div> <!-- Espacio de separación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px  mb-6"></div> <!-- Línea con gradiente -->
+            <div class="chart-container" style="position: relative; height:150px; width:100%">
+              <canvas id="usersChart"></canvas>
+            </div>
+          </div>
+          <!-- Grafico frequenza media di gioco per Utente -->
+          <div class="bg-white p-4 rounded-md">
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Frequenda media di gioco per Utente</h2>
+            <div class="my-1"></div> <!-- Espacio de separación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
+            <div class="chart-container" style="position: relative; height:150px; width:100%">
+              <canvas id="commercesChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIne dati statistici generali -->
+      <!-- Inizio Dati Statistici Singolari DATI STATISTICI SINGOLARI -->
+      <div id="singolar-incomes">
+        <h1 class="font-bold py-4 uppercase">Singolar incomes</h1>
+        <div id="stats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div class="bg-black/60 to-white/5 rounded-lg">
+            <div class="flex flex-row items-center">
+              <div class="text-3xl p-4">💰</div>
+              <div class="p-2">
+                <p class="text-xl font-bold">348$</p>
+                <p class="text-gray-500 font-medium">Amber Gates</p>
+                <p class="text-gray-500 text-sm">24 Nov 2022</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIne dati statistici Singolari -->
+      <!-- Inizio Tabelle User -->
+      <div id="last-users">
+        <h1 class="font-bold py-4 uppercase">Users</h1>
+        <!-- Campo de búsqueda -->
+        <div class="relative max-w-md w-full p-4">
+          <div class="absolute top-1 left-2 inline-flex items-center p-2">
+            <i class="fas fa-search text-gray-400"></i>
+          </div>
+          <input
+            class="w-full h-10 pl-10 pr-4 py-1 text-base placeholder-gray-500 border rounded-full focus:shadow-outline"
+            type="search" placeholder="Trova">
+        </div>
+        <div class="overflow-x-scroll">
+          <table class="w-full">
+            <thead class="bg-black/60">
+              <th class="text-left py-3 px-2 rounded-l-lg">Name</th>
+              <th class="text-left py-3 px-2">Email</th>
+              <th class="text-left py-3 px-2">Group</th>
+              <th class="text-left py-3 px-2">Status</th>
+              <th class="text-left py-3 px-2 rounded-r-lg">Actions</th>
+            </thead>
+            <tr class="border-b border-gray-700 hover:bg-blue-950">
+              <td class="py-3 px-2 font-bold">
+                <div class="inline-flex space-x-3 items-center">
+                  <span class="material-icons">
+                    account_circle
+                  </span>
+                  <span>Thai Mei</span>
+                </div>
+              </td>
+              <td class="py-3 px-2">thai.meiabc.com</td>
+              <td class="py-3 px-2">User</td>
+              <td class="py-3 px-2">Approved</td>
+              <td class="py-3 px-2">
+                <div class="inline-flex items-center space-x-3">
+                  <a title="Edit User Data" class="cursor-pointer">
+                    <span class="material-icons text-white text-lg hover:text-blue-500">edit_note</span>
+                  </a>
+                  <a title="Edit password" class="cursor-pointer">
+                    <span class="material-icons text-white text-lg hover:text-blue-500">lock_person</span>
+                  </a>
+                  <a title="Delete User" class="cursor-pointer">
+                    <span class="material-icons text-white text-lg hover:text-red-600">block_flipped</span>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

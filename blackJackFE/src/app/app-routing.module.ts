@@ -3,15 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrazioneComponent } from './components/registrazione/registrazione.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { PersonalInfoComponent } from './components/profileMain/personal-info/personal-info.component';
-import { ProfileSideBarComponent } from './components/profileMain/profile-side-bar/profile-side-bar.component';
 import { ProfileContainerComponent } from './components/profileMain/profile-container/profile-container.component';
 import { ChangeProfileDataComponent } from './components/profileMain/change-profile-data/change-profile-data.component';
 import { ChargeMoneyComponent } from './components/charge-money/charge-money.component';
 import { ForumComponent } from './components/forum/forum.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { EconomoDashboardComponent } from './components/economo-dashboard/economo-dashboard.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
@@ -37,7 +37,14 @@ const routes: Routes = [
             path: "changeProfileData", component: ChangeProfileDataComponent
           }
         ]
+      },
+      {
+        path: "adminDashboard", component: AdminDashboardComponent
+      },
+      {
+        path: "economoDashboard", component: EconomoDashboardComponent
       }
+
     ]
   },
 

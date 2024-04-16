@@ -22,6 +22,8 @@ import { ProfileSideBarComponent } from './components/profileMain/profile-side-b
 import { ProfileContainerComponent } from './components/profileMain/profile-container/profile-container.component';
 import { ChargeMoneyComponent } from './components/charge-money/charge-money.component';
 import { ForumComponent } from './components/forum/forum.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { EconomoDashboardComponent } from './components/economo-dashboard/economo-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { ForumComponent } from './components/forum/forum.component';
     ProfileSideBarComponent,
     ProfileContainerComponent,
     ChargeMoneyComponent,
-    ForumComponent
+    ForumComponent,
+    AdminDashboardComponent,
+    EconomoDashboardComponent
   ],
   imports: [
     BrowserModule,

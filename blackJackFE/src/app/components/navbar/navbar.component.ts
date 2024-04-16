@@ -51,4 +51,12 @@ export class NavbarComponent implements OnInit {
   goToForum(): void {
     this.router.navigate(['/homepage/forum']);
   }
+
+  goToAdmin(): void {
+    this.router.navigate(['/homepage/adminDashboard']);
+  }
+
+  goToEconomo(): void {
+    this.router.navigate(['/homepage/economoDashboard']);
+  }
 }
