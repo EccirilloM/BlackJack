@@ -9,15 +9,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private backendUrl: string = globalBackendUrl + 'auth/';
+  private backendUrl: string = globalBackendUrl + 'user/';
 
   constructor(private http: HttpClient) { }
 
-  updateUserData(nome: string, cognome: string, email: string, username: string, vecchiaPassword: string, nuovaPassword: string): Observable<GetUserDataResponse> {
+  aggiornaDatiUtente(nome: string, cognome: string, email: string, username: string, vecchiaPassword: string, nuovaPassword: string): Observable<GetUserDataResponse> {
     const header = this.getHeader();
     const request: UpdateUserDataRequest = { nome, cognome, email, username, vecchiaPassword, nuovaPassword };
 
-    return this.http.put<GetUserDataResponse>(this.backendUrl + 'updateUserData/' + localStorage.getItem('id')?.toString(), request, { headers: header });
+    return this.http.put<GetUserDataResponse>(this.backendUrl + 'aggiornaDatiUtente/' + localStorage.getItem('id')?.toString(), request, { headers: header });
   }
 
   //creo l'header con il token da mandare al backend

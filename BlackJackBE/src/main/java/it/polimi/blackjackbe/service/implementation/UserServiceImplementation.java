@@ -219,11 +219,6 @@ public class UserServiceImplementation implements UserService {
             userExists.get().setPassword(passwordEncoder.encode(aggiornaRequest.getNuovaPassword()));
         }
 
-        //Controllo se la data di nascita è stata inserita e se l'utente è maggiorenne
-        if(aggiornaRequest.getDataNascita() != null && java.time.LocalDateTime.now().getYear() - aggiornaRequest.getDataNascita().getYear() >= 18){
-            userExists.get().setDataNascita(aggiornaRequest.getDataNascita());
-        }
-
         //Salvo le modifiche nel db.
         userRepository.save(userExists.get());
 

@@ -13,6 +13,5 @@ public class AggiornaDatiRequest {
     private String email;
     private String username;
     private String vecchiaPassword;
-    private LocalDateTime dataNascita;
     private String nuovaPassword;
 }

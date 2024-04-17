@@ -3,11 +3,12 @@
   <div class="flex flex-col space-y-4">
     <!-- Card -->
     <div class="w-full flex flex-col">
-      <div class="flex-1 bg-white rounded-lg shadow-xl p-8 w-full">
+      <div class="flex-1 cardWhite p-8 w-full">
         <h4 class="text-xl text-gray-900 font-bold">Modifica i tuoi dati</h4>
 
         <!-- Form Fields -->
         <form class="mt-4 grid grid-cols-1 gap-y-6">
+          <!-- TODO: controllare che i campi non siano vuoti, e mettere il gap -->
           <!-- Nome -->
           <div>
             <label for="nome" class="block text-sm font-medium text-gray-900">Nome</label>
@@ -55,7 +56,7 @@
           <div class="flex items-center justify-end gap-4">
             <button type="button"
               class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">Annulla</button>
-            <button type="button" (click)="updateUserProfile()"
+            <button type="button" (click)="aggiornaDatiUtente()"
               class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Salva</button>
           </div>
         </form>

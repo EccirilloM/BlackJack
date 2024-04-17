@@ -6,7 +6,7 @@ export interface LoginResponse {
     username: string;
     ruolo: string;
     message: string;
-    jwt: string;
+    jwtToken: string;
     saldo: number;
     dataNascita: string;
     dataRegistrazione: string;

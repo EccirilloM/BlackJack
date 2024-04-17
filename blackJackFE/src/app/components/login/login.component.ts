@@ -34,6 +34,7 @@ export class LoginComponent {
 
     this.authService.login(request).subscribe({
       next: (res: LoginResponse) => {
+        console.log(res);
         this.toastr.success('Login effettuato con successo!');
         // Qui puoi salvare i dettagli dell'utente come token nel localStorage o gestire la navigazione
         localStorage.setItem('id', res.userId.toString());
@@ -45,7 +46,7 @@ export class LoginComponent {
         localStorage.setItem('saldo', res.saldo.toString());
         localStorage.setItem('dataNascita', res.dataNascita);
         localStorage.setItem('dataRegistrazione', res.dataRegistrazione);
-        localStorage.setItem('token', `Bearer ${res.jwt}`);
+        localStorage.setItem('token', `Bearer ${res.jwtToken}`);
 
         this.authService.setIsAuthenticated(true);
 
