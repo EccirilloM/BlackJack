@@ -8,29 +8,25 @@
           <!-- Input per username -->
           <div>
             <label class="block text-sm text-white" for="username">Username</label>
-            <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              type="text" id="username" [(ngModel)]="username" placeholder="Inserisci il tuo username" required>
+            <input class="w-full inputBox" type="text" id="username" [(ngModel)]="username"
+              placeholder="Inserisci il tuo username" required>
           </div>
 
           <!-- Input per password -->
           <div class="mt-2">
             <label class="block text-sm text-white" for="password">Password</label>
-            <input class="w-full px-5 py-1 text-gray-700 bg-gray-300 rounded focus:outline-none focus:bg-white"
-              type="password" id="password" [(ngModel)]="password" placeholder="Digita la tua password"
-              [type]="showPassword ? 'text' : 'password'" required>
+            <input class="w-full inputBox" type="password" id="password" [(ngModel)]="password"
+              placeholder="Digita la tua password" [type]="showPassword ? 'text' : 'password'" required>
           </div>
 
           <!-- Pulsanti di azione -->
           <div class="mt-4 flex justify-between items-center">
-            <button (click)="login()"
-              class="px-4 py-2 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Accedi</button>
-            <button (click)="forgotPassword()"
-              class="ml-4 px-4 py-2 text-white font-light tracking-wider bg-gray-900 hover:bg-gray-800 rounded">Password
+            <button (click)="login()" class="buttonBlueAction">Accedi</button>
+            <button (click)="forgotPassword()" class="ml-4 buttonBlueAction">Password
               Dimenticata?</button>
           </div>
           <div class="text-center mt-4">
-            <button (click)="goToRegistration()"
-              class="px-4 py-2 text-white font-light tracking-wider bg-gray-800 hover:bg-gray-700 rounded">Crea un
+            <button (click)="goToRegistration()" class="buttonBlueAction">Crea un
               account</button>
           </div>
         </div>

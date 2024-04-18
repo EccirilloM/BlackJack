@@ -3,6 +3,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter } from 'rxjs';
+import { Tavolo } from 'src/app/types/tavolo';
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +18,8 @@ export class NavbarComponent implements OnInit {
   userCognome: string = localStorage.getItem('cognome') ?? '';
   userUsername: string = localStorage.getItem('username') ?? '';
   userDisplayName: string = `@${this.userUsername}`;
+  Tavolo = Tavolo;
+
 
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {
     this.currentRoute = this.router.url.split('/')[1];
@@ -48,8 +51,8 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/homepage/chargeMoney']);
   }
 
-  goToForum(): void {
-    this.router.navigate(['/homepage/forum']);
+  goToForum(tipoTavolo: Tavolo): void {
+    this.router.navigate([`/homepage/forum/${tipoTavolo}`]);
   }
 
   goToAdmin(): void {
@@ -59,4 +62,11 @@ export class NavbarComponent implements OnInit {
   goToEconomo(): void {
     this.router.navigate(['/homepage/economoDashboard']);
   }
+
+  forumMenuOpen: boolean = false;
+
+  toggleForumMenu(): void {
+    this.forumMenuOpen = !this.forumMenuOpen;
+  }
+
 }

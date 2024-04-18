@@ -26,7 +26,7 @@ const routes: Routes = [
         path: "chargeMoney", component: ChargeMoneyComponent
       },
       {
-        path: "forum", component: ForumComponent
+        path: "forum/:tipoTavolo", component: ForumComponent
       },
       {
         path: "profile/:id", component: ProfileContainerComponent, children: [

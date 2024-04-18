@@ -29,15 +29,50 @@
           Charge Money
         </button>
 
-        <!-- Forum -->
-        <button (click)="goToForum()"
+        <!-- Voce Forum nella Navbar -->
+        <!-- Forum Button with Dropdown Menu -->
+        <button (click)="toggleForumMenu()"
           [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
-          class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+          class="mt-1 w-full flex items-center px-2 py-2 text-base font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300 group">
           <span class="material-icons">
             forum
           </span>
           Forum
+          <!-- Icon for dropdown indication -->
+          <span class="material-icons ml-auto">
+            {{ forumMenuOpen ? 'expand_less' : 'expand_more' }}
+          </span>
         </button>
+        <!-- Dropdown Menu -->
+        <div *ngIf="forumMenuOpen" class="bg-gray-700 text-gray-400 rounded-lg mt-1 cursor-pointer">
+          <ul class="flex flex-col">
+            <li>
+              <a (click)="goToForum(Tavolo.BASE)"
+                class="block px-2 py-2 text-white hover:bg-gray-800 hover:text-blue-300">
+                Forum Tavolo BASE
+              </a>
+            </li>
+            <li>
+              <a (click)="goToForum(Tavolo.PREMIUM)"
+                class="block px-2 py-2 text-white hover:bg-gray-800 hover:text-blue-300">
+                Forum Tavolo PREMIUM
+              </a>
+            </li>
+            <li>
+              <a (click)="goToForum(Tavolo.VIP)"
+                class="block px-2 py-2 text-white hover:bg-gray-800 hover:text-blue-300">
+                Forum Tavolo VIP
+              </a>
+            </li>
+            <li>
+              <a (click)="goToForum(Tavolo.EXCLUSIVE)"
+                class="block px-2 py-2 text-white hover:bg-gray-800 hover:text-blue-300">
+                Forum Tavolo EXCLUSIVE
+              </a>
+            </li>
+          </ul>
+        </div>
+
 
         <!-- Admin -->
         <button (click)="goToAdmin()"
