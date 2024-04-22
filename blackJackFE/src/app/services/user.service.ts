@@ -26,6 +26,11 @@ export class UserService {
     return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllUsers', { headers: header });
   }
 
+  getAllEconomoUsers(): Observable<GetUserDataResponse[]> {
+    const header = this.getHeader();
+    return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllEconomoUsers', { headers: header });
+  }
+
   richiediRicaricaSaldo(tabacchiId: number, importo: number): Observable<RicaricaSaldoRequest> {
     const header = this.getHeader();
     const request: RicaricaSaldoRequest = { tabacchiId, importo };

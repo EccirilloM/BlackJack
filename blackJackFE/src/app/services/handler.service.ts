@@ -15,4 +15,14 @@ export class HandlerService {
   constructor(private http: HttpClient, private userService: UserService) { }
 
 
+
+
+  //creo l'header con il token da mandare al backend
+  private getHeader(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': localStorage.getItem('token') ? `${localStorage.getItem('token')}` : '',
+      id: localStorage.getItem('id') ? `${localStorage.getItem('id')}` : '',
+      ruolo: localStorage.getItem('ruolo') ? `${localStorage.getItem('ruolo')}` : ''
+    });
+  }
 }
