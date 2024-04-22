@@ -2,6 +2,7 @@ package it.polimi.blackjackbe.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +16,6 @@ import java.util.List;
 @Entity(name = "User")
 @Table(name = "_user",
     uniqueConstraints = {
-        @UniqueConstraint(name = "utente_email_unique", columnNames = "email"),
         @UniqueConstraint(name = "utente_username_unique", columnNames = "username")
     }
 )
@@ -24,6 +24,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User implements UserDetails {
     @Id
     @SequenceGenerator(
@@ -32,10 +33,10 @@ public class User implements UserDetails {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
+            strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
-    @Column(updatable = false, nullable = false, unique = true)
+    @Column(updatable = false, nullable = false)
     private long userId;
 
     @Column(nullable = false)
@@ -63,7 +64,7 @@ public class User implements UserDetails {
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataRegistrazione;
 
-    @Column()
+    @Column(nullable = false)
     private Double saldo;
 
     @Override
