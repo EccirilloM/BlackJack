@@ -4,10 +4,13 @@ import it.polimi.blackjackbe.dto.request.AggiornaDatiRequest;
 import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.UserResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
+import it.polimi.blackjackbe.exception.ConflictException;
 import it.polimi.blackjackbe.exception.InternalServerErrorException;
 import it.polimi.blackjackbe.exception.NotFoundException;
 import it.polimi.blackjackbe.model.Ruolo;
+import it.polimi.blackjackbe.model.Tabacchi;
 import it.polimi.blackjackbe.model.User;
+import it.polimi.blackjackbe.repository.TabacchiRepository;
 import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.service.definition.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class UserServiceImplementation implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TabacchiRepository tabacchiRepository;
 
     @Override
     public UserResponse getUserData(Long userId) {
@@ -44,8 +48,8 @@ public class UserServiceImplementation implements UserService {
                 userExists.get().getEmail(),
                 userExists.get().getUsername(),
                 userExists.get().getRuolo(),
-                userExists.get().getPassword(),
                 userExists.get().getDataNascita(),
+                userExists.get().getDataRegistrazione(),
                 userExists.get().getSaldo()
         );}
 
@@ -62,6 +66,13 @@ public class UserServiceImplementation implements UserService {
         //Se non esiste un utente con quell'id, lancio un'eccezione.
         if(userExists.isEmpty()) {
             throw new NotFoundException("Utente non trovato");
+        }
+
+        List<Tabacchi> listaTabacchi = tabacchiRepository.findAll();
+        for(Tabacchi tabacchi : listaTabacchi){
+            if(tabacchi.getEconomo().getUserId() == userId){
+                throw new ConflictException("l'utente è associato ad un tabacchi.");
+            }
         }
 
         //Elimino l'utente dal database.
@@ -110,8 +121,8 @@ public class UserServiceImplementation implements UserService {
                     user.getEmail(),
                     user.getUsername(),
                     user.getRuolo(),
-                    user.getPassword(),
                     user.getDataNascita(),
+                    user.getDataRegistrazione(),
                     user.getSaldo()
             ));
         }
@@ -163,8 +174,8 @@ public class UserServiceImplementation implements UserService {
                     user.getEmail(),
                     user.getUsername(),
                     user.getRuolo(),
-                    user.getPassword(),
                     user.getDataNascita(),
+                    user.getDataRegistrazione(),
                     user.getSaldo()
             ));
         }
@@ -229,8 +240,8 @@ public class UserServiceImplementation implements UserService {
                 userExists.get().getEmail(),
                 userExists.get().getUsername(),
                 userExists.get().getRuolo(),
-                userExists.get().getPassword(),
                 userExists.get().getDataNascita(),
+                userExists.get().getDataRegistrazione(),
                 userExists.get().getSaldo()
         );
     }

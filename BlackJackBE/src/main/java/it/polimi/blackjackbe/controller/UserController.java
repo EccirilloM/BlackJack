@@ -8,6 +8,7 @@ import it.polimi.blackjackbe.service.definition.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserController {
     }
 
     @DeleteMapping("delete/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> deleteAccount(@PathVariable String userId) {
         userService.deleteUser(Long.parseLong(userId));
         return ResponseEntity
@@ -41,7 +43,7 @@ public class UserController {
                 .body(userService.getAllByRuolo(ruolo));
     }
 
-    @GetMapping("getAll")
+    @GetMapping("getAllUsers")
     public ResponseEntity<List<UserResponse>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)

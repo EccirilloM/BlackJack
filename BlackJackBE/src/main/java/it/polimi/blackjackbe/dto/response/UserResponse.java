@@ -21,9 +21,9 @@ public class UserResponse {
 
     private Ruolo ruolo;
 
-    private String password;
-
     private LocalDateTime dataNascita;
+
+    private LocalDateTime dataRegistrazione;
 
     private Double saldo;
 }

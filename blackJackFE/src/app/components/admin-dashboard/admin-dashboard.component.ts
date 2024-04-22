@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { GetUserDataResponse } from 'src/app/dto/response/getUserDataResponse';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -11,13 +15,25 @@ export class AdminDashboardComponent implements OnInit {
   @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
   income: number = 5000;
   numberOfUsers: number = 95;
+  utenti: GetUserDataResponse[] = [];
 
-  constructor() {
+  constructor(private userService: UserService, private toastr: ToastrService) {
     Chart.register(...registerables);
   }
 
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
+    this.userService.getAllUsers().subscribe({
+      next: (response: GetUserDataResponse[]) => {
+        console.log(response);
+        this.utenti = response;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching users: ', error);
+        this.toastr.error('Error while fetching users');
+      }
+
+    })
   }
 
   ngAfterViewInit(): void {

@@ -7,4 +7,7 @@ export interface GetUserDataResponse {
     email: string;
     username: string;
     ruolo: Ruolo;
+    dataNascita: Date;
+    dataRegistrazione: Date;
+    saldo: number;
 }

@@ -20,6 +20,10 @@ export class UserService {
     return this.http.put<GetUserDataResponse>(this.backendUrl + 'aggiornaDatiUtente/' + localStorage.getItem('id')?.toString(), request, { headers: header });
   }
 
+  getAllUsers(): Observable<GetUserDataResponse[]> {
+    const header = this.getHeader();
+    return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllUsers', { headers: header });
+  }
   //creo l'header con il token da mandare al backend
   private getHeader(): HttpHeaders {
     return new HttpHeaders({
@@ -28,4 +32,5 @@ export class UserService {
       ruolo: localStorage.getItem('ruolo') ? `${localStorage.getItem('ruolo')}` : ''
     });
   }
+
 }
