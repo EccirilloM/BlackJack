@@ -12,13 +12,19 @@ import { ChargeMoneyComponent } from './components/charge-money/charge-money.com
 import { ForumComponent } from './components/forum/forum.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { EconomoDashboardComponent } from './components/economo-dashboard/economo-dashboard.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+import { EconomoGuard } from './guards/economo.guard';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   { path: 'registrazione', component: RegistrazioneComponent },
   {
-    path: 'homepage', component: HomepageComponent, children: [
+    path: 'homepage',
+    component: HomepageComponent,
+    canActivate: [AuthGuard],
+    children: [
       {
         path: "dashboard", component: DashboardComponent
       },
@@ -39,10 +45,10 @@ const routes: Routes = [
         ]
       },
       {
-        path: "adminDashboard", component: AdminDashboardComponent
+        path: "adminDashboard", component: AdminDashboardComponent, canActivate: [AuthGuard, AdminGuard]
       },
       {
-        path: "economoDashboard", component: EconomoDashboardComponent
+        path: "economoDashboard", component: EconomoDashboardComponent, canActivate: [AuthGuard, EconomoGuard]
       }
 
     ]

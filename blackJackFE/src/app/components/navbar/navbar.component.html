@@ -75,7 +75,7 @@
 
 
         <!-- Admin -->
-        <button (click)="goToAdmin()"
+        <button *ngIf="isAdmin()" (click)="goToAdmin()"
           [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
           class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
           <span class="material-icons">
@@ -85,7 +85,7 @@
         </button>
 
         <!-- Economo -->
-        <button (click)="goToEconomo()"
+        <button *ngIf="isEconomo() || isAdmin()" (click)="goToEconomo()"
           [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
           class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
           <span class="material-icons">

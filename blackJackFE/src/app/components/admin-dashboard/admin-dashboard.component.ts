@@ -3,7 +3,7 @@ import { Chart, registerables } from 'chart.js';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { GetUserDataResponse } from 'src/app/dto/response/getUserDataResponse';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,7 +14,7 @@ export class AdminDashboardComponent implements OnInit {
   @ViewChild('usersChart') usersChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
   income: number = 5000;
-  numberOfUsers: number = 95;
+  numberOfUsers: number = 0;
   utenti: GetUserDataResponse[] = [];
 
   constructor(private userService: UserService, private toastr: ToastrService) {
@@ -23,21 +23,25 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
+    this.loadUsers();
+  }
+
+  ngAfterViewInit(): void {
+    this.initializeCharts();
+  }
+
+  loadUsers(): void {
     this.userService.getAllUsers().subscribe({
       next: (response: GetUserDataResponse[]) => {
         console.log(response);
         this.utenti = response;
+        this.numberOfUsers = this.utenti.length;  // Aggiorna qui il numero di utenti
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while fetching users: ', error);
         this.toastr.error('Error while fetching users');
       }
-
-    })
-  }
-
-  ngAfterViewInit(): void {
-    this.initializeCharts();
+    });
   }
 
   private initializeCharts(): void {
@@ -95,4 +99,3 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 }
-

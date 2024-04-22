@@ -15,22 +15,25 @@ import { globalBackendUrl } from 'environment';
 })
 export class AuthService {
   private backendUrl: string = globalBackendUrl + 'auth/';
-  private isAuthenticatedSource = new BehaviorSubject<boolean>(this.checkIsAuthenticated());
+  private isAuthenticatedSource = new BehaviorSubject<boolean>(this.checkIsAuthenticatedInitial());
   isAuthenticated$ = this.isAuthenticatedSource.asObservable();
+
+  constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
+
+  // Rinominato per evitare confusione con il getter Observable
+  private checkIsAuthenticatedInitial(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token; // Restituisce true se token esiste, altrimenti false
+  }
+
+  // Usato per accedere allo stato corrente in un modo reattivo
+  checkIsAuthenticated(): Observable<boolean> {
+    return this.isAuthenticated$;
+  }
 
   setIsAuthenticated(value: boolean) {
     this.isAuthenticatedSource.next(value);
   }
-
-  checkIsAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    if (token) {
-      return true;
-    }
-    return false;
-  }
-
-  constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
 
   login(request: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(this.backendUrl + 'login', request);
@@ -42,9 +45,10 @@ export class AuthService {
   }
 
   logout(): void {
-    this.router.navigateByUrl('login');
+    this.router.navigateByUrl('/login');
     localStorage.clear();
     this.toastr.success('Logout effettuato con successo');
+    this.setIsAuthenticated(false);
   }
 
   getHttpHeaders(): HttpHeaders {
@@ -54,5 +58,9 @@ export class AuthService {
 
   getToken(): string {
     return localStorage.getItem('token') ?? '';
+  }
+
+  getRole(): string {
+    return localStorage.getItem('ruolo') ?? '';
   }
 }

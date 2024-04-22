@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter } from 'rxjs';
 import { Tavolo } from 'src/app/types/tavolo';
+import { ToastrService } from 'ngx-toastr';
+import { Ruolo } from 'src/app/types/ruolo';
 
 @Component({
   selector: 'app-navbar',
@@ -67,6 +69,14 @@ export class NavbarComponent implements OnInit {
 
   toggleForumMenu(): void {
     this.forumMenuOpen = !this.forumMenuOpen;
+  }
+
+  isAdmin(): boolean {
+    return this.authService.getRole() === Ruolo.ADMIN;
+  }
+
+  isEconomo(): boolean {
+    return this.authService.getRole() === Ruolo.ECONOMO;
   }
 
 }

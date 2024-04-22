@@ -28,7 +28,7 @@
                 <span class="material-icons text-white text-4xl">account_balance_wallet</span>
               </div>
               <div>
-                <p class="text-teal-300 text-sm font-medium uppercase leading-4">Income</p>
+                <p class="text-teal-300 text-sm font-medium uppercase leading-4">Saldo</p>
                 <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
                   <span>${{ income }}</span>
                   <span *ngIf="income > 0" class="material-icons text-white text-lg">trending_up</span>
@@ -92,41 +92,49 @@
         <div class="overflow-x-scroll">
           <table class="w-full">
             <thead class="bg-black/60">
-              <th class="text-left py-3 px-2 rounded-l-lg">Name</th>
-              <th class="text-left py-3 px-2">Email</th>
-              <th class="text-left py-3 px-2">Group</th>
-              <th class="text-left py-3 px-2">Status</th>
-              <th class="text-left py-3 px-2 rounded-r-lg">Actions</th>
+              <tr>
+                <th class="text-left py-3 px-2 rounded-l-lg">Name</th>
+                <th class="text-left py-3 px-2">Email</th>
+                <th class="text-left py-3 px-2">Ruolo</th>
+                <th class="text-left py-3 px-2">Ruolo</th>
+                <th class="text-left py-3 px-2">Data di Nascita</th>
+                <th class="text-left py-3 px-2">Saldo</th>
+                <th class="text-left py-3 px-2 rounded-r-lg">Actions</th>
+              </tr>
             </thead>
-            <tr class="border-b border-gray-700 hover:bg-blue-950">
-              <td class="py-3 px-2 font-bold">
-                <div class="inline-flex space-x-3 items-center">
-                  <span class="material-icons">
-                    account_circle
-                  </span>
-                  <span>Thai Mei</span>
-                </div>
-              </td>
-              <td class="py-3 px-2">thai.meiabc.com</td>
-              <td class="py-3 px-2">User</td>
-              <td class="py-3 px-2">Approved</td>
-              <td class="py-3 px-2">
-                <div class="inline-flex items-center space-x-3">
-                  <a title="Edit User Data" class="cursor-pointer">
-                    <span class="material-icons text-white text-lg hover:text-blue-500">edit_note</span>
-                  </a>
-                  <a title="Edit password" class="cursor-pointer">
-                    <span class="material-icons text-white text-lg hover:text-blue-500">lock_person</span>
-                  </a>
-                  <a title="Delete User" class="cursor-pointer">
-                    <span class="material-icons text-white text-lg hover:text-red-600">block_flipped</span>
-                  </a>
-                </div>
-              </td>
-            </tr>
+            <tbody>
+              <tr *ngFor="let utente of utenti" class="border-b border-gray-700 hover:bg-blue-950">
+                <td class="py-3 px-2 font-bold">
+                  <div class="inline-flex space-x-3 items-center">
+                    <span class="material-icons">account_circle</span>
+                    <span>{{ utente.nome }} {{ utente.cognome }}</span>
+                  </div>
+                </td>
+                <td class="py-3 px-2">{{ utente.email }}</td>
+                <td class="py-3 px-2">{{ utente.ruolo }}</td>
+                <td class="py-3 px-2">{{ utente.ruolo }}</td>
+                <td class="py-3 px-2">{{ utente.dataNascita | date: 'mediumDate' }}</td>
+                <td class="py-3 px-2">{{ utente.saldo | currency:'EUR' }}</td>
+                <td class="py-3 px-2">
+                  <div class="inline-flex items-center space-x-3">
+                    <a title="Edit User Data" class="cursor-pointer">
+                      <span class="material-icons text-white text-lg hover:text-blue-500">lock_person</span>
+                    </a>
+                    <a title="Delete User" class="cursor-pointer">
+                      <span class="material-icons text-white text-lg hover:text-red-600">block_flipped</span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
+
+
+      <!-- Inizio Gestione Tabacchi -->
+      <div id="Tabacchi">
+        <h1 class="font-bold py-4 uppercase">Manage Tabacchi</h1>
+      </div>
     </div>
   </div>
-</div>
