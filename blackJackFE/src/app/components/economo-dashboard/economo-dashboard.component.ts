@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GetRichiestaRicaricaSaldoResponse } from 'src/app/dto/response/getRichiestaRicaricaSaldoResponse';
 
 @Component({
   selector: 'app-economo-dashboard',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./economo-dashboard.component.css']
 })
 export class EconomoDashboardComponent implements OnInit {
+  richieste: GetRichiestaRicaricaSaldoResponse[] = [];
   nomeEconomo: string = 'Ettore';
 
   constructor() { }

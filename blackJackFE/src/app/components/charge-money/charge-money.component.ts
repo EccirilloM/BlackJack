@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { debounceTime } from 'rxjs';
 import { MapService } from 'src/app/services/map.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-charge-money',
@@ -16,7 +17,7 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
 
   private map: any;
 
-  constructor(private mapService: MapService) {
+  constructor(private mapService: MapService, private userService: UserService) {
   }
 
   ngAfterViewInit() {

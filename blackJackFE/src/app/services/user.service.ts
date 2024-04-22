@@ -4,6 +4,7 @@ import { UpdateUserDataRequest } from '../dto/request/updateUserDataRequest';
 import { GetUserDataResponse } from '../dto/response/getUserDataResponse';
 import { globalBackendUrl } from 'environment';
 import { Observable } from 'rxjs';
+import { RicaricaSaldoRequest } from '../dto/request/ricaricaSaldoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,13 @@ export class UserService {
     const header = this.getHeader();
     return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllUsers', { headers: header });
   }
+
+  richiediRicaricaSaldo(tabacchiId: number, importo: number): Observable<RicaricaSaldoRequest> {
+    const header = this.getHeader();
+    const request: RicaricaSaldoRequest = { tabacchiId, importo };
+    return this.http.post<RicaricaSaldoRequest>(globalBackendUrl + "ricarica/richiediRicarica/" + localStorage.getItem("id")?.toString(), request, { headers: header });
+  }
+
   //creo l'header con il token da mandare al backend
   private getHeader(): HttpHeaders {
     return new HttpHeaders({

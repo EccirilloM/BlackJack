@@ -29,6 +29,9 @@ public class Tabacchi {
     private Long tabacchiId;
 
     @Column(nullable = false, updatable = false)
+    private String nome;
+
+    @Column(nullable = false, updatable = false)
     private Float lat;
 
     @Column(nullable = false, updatable = false)
