@@ -23,7 +23,7 @@ public class Tavolo {
             strategy = GenerationType.SEQUENCE,
             generator = "tavolo_sequence"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false, name = "tavolo_id")
     private Long tavoloId;
 
 
@@ -33,4 +33,14 @@ public class Tavolo {
 
     @Column(nullable = false, updatable = false)
     private String descrizione;
+
+    @Column(nullable = false, updatable = false)
+    private boolean vittoriaUser;
+
+    @Column(nullable = false, updatable = false)
+    private Double guadagnoUser;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User player;
 }

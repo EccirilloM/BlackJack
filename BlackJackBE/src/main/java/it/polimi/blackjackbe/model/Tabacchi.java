@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -23,7 +25,7 @@ public class Tabacchi {
             strategy = GenerationType.SEQUENCE,
             generator = "tabacchi_sequence"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false, name = "tabacchi_id")
     private Long tabacchiId;
 
     @Column(nullable = false, updatable = false)
@@ -31,4 +33,11 @@ public class Tabacchi {
 
     @Column(nullable = false, updatable = false)
     private Float lng;
+
+    @OneToMany(mappedBy = "tabacchi", fetch = FetchType.LAZY)
+    private List<Ricarica> ricariche; //Ricariche effettuate nel singolo tabacchi
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User economo; //Economo che gestisce il tabacchi
 }

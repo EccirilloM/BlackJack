@@ -25,7 +25,7 @@ public class Messaggio {
             strategy = GenerationType.SEQUENCE,
             generator = "messaggio_sequence"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false, name = "messaggio_id")
     private Long messaggioId;
 
     @Column(nullable = false, updatable = false)
@@ -37,4 +37,8 @@ public class Messaggio {
     @Column(nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private TipoTavolo tipoTavolo;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user; // user che ha inviato il messaggio
 }

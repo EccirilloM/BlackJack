@@ -36,7 +36,7 @@ public class User implements UserDetails {
             strategy = GenerationType.SEQUENCE,
             generator = "user_sequence"
     )
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false, name = "user_id")
     private long userId;
 
     @Column(nullable = false)
@@ -66,6 +66,18 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private Double saldo;
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    private List<Tavolo> tavoli; //Tavoli in cui ha giocato il player
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Messaggio> messaggi; //Messaggi inviati dall'utente
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    private List<Ricarica> ricariche; //Ricariche effettuate dall'utente
+
+    @OneToMany(mappedBy = "economo", fetch = FetchType.LAZY)
+    private List<Tabacchi> tabacchi; //Tabacchi gestiti dall'economo
 
     @Override
     public String getPassword() {
