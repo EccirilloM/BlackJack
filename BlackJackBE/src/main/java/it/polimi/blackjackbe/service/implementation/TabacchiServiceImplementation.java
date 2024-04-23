@@ -1,6 +1,9 @@
 package it.polimi.blackjackbe.service.implementation;
 
 import it.polimi.blackjackbe.dto.request.CreaTabacchiRequest;
+import it.polimi.blackjackbe.dto.response.TabacchiResponse;
+import it.polimi.blackjackbe.dto.response.UserResponse;
+import it.polimi.blackjackbe.exception.NotFoundException;
 import it.polimi.blackjackbe.model.Tabacchi;
 import it.polimi.blackjackbe.model.User;
 import it.polimi.blackjackbe.repository.TabacchiRepository;
@@ -9,6 +12,8 @@ import it.polimi.blackjackbe.service.definition.TabacchiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,10 +50,39 @@ public class TabacchiServiceImplementation implements TabacchiService {
 
         Tabacchi tabacchi = Tabacchi.builder()
                 .nome(request.getNomeTabacchi())
-                .lng(request.getLng())
-                .lat(request.getLat())
+                .lng(Double.valueOf(request.getLng()))
+                .lat(Double.valueOf(request.getLat()))
                 .economo(economo.get())
                 .build();
         tabacchiRepository.save(tabacchi);
+    }
+
+    @Override
+    public List<TabacchiResponse> getAllTabacchi() {
+        //Prendo dal db tutti gli utenti.
+        List<Tabacchi> tabacchis = tabacchiRepository.findAll();
+
+        //Se non è presente nessun utente lancio un'eccezione.
+        if(tabacchis.isEmpty()) {
+            throw new NotFoundException("Utenti non trovati");
+        }
+
+        //Inizializzo la variabile di risposta.
+        List<TabacchiResponse> response = new ArrayList<>();
+
+        //Per ogni utente, aggiungo all'array di risposta i dati.
+        for(Tabacchi tabacchi: tabacchis) {
+            response.add(new TabacchiResponse(
+                    tabacchi.getTabacchiId(),
+                    tabacchi.getNome(),
+                    tabacchi.getLat(),
+                    tabacchi.getLng(),
+                    tabacchi.getEconomo().getUserId()
+            ));
+        }
+
+        return response;
+
+
     }
 }

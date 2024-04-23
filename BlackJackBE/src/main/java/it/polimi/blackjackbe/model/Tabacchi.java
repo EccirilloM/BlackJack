@@ -32,10 +32,10 @@ public class Tabacchi {
     private String nome;
 
     @Column(nullable = false, updatable = false)
-    private Float lat;
+    private Double lat;
 
     @Column(nullable = false, updatable = false)
-    private Float lng;
+    private Double lng;
 
     @OneToMany(mappedBy = "tabacchi", fetch = FetchType.LAZY)
     private List<Ricarica> ricariche; //Ricariche effettuate nel singolo tabacchi
