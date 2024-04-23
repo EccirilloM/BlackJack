@@ -28,9 +28,9 @@ export class UserService {
     return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllUsers', { headers: header });
   }
 
-  getAllEconomoUsers(): Observable<GetUserDataResponse[]> {
+  getAllByRuolo(ruolo: string): Observable<GetUserDataResponse[]> {
     const header = this.getHeader();
-    return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllEconomoUsers', { headers: header });
+    return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllByRuolo/' + ruolo, { headers: header });
   }
 
   richiediRicaricaSaldo(tabacchiId: number, importo: number): Observable<RicaricaSaldoRequest> {

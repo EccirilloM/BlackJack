@@ -100,6 +100,7 @@ public class UserServiceImplementation implements UserService {
         final Ruolo ruoloDaCercare = switch (ruolo) {
             case "PLAYER" -> Ruolo.PLAYER;
             case "ADMIN" -> Ruolo.ADMIN;
+            case "ECONOMO" -> Ruolo.ECONOMO;
             default -> throw new BadRequestException("Ruolo non valido");
         };
 

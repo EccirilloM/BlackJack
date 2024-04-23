@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 import { GetAllTabacchiResponse } from '../dto/response/getAllTabacchiResponse';
 import { globalBackendUrl } from 'environment';
 //configurazione dell'immagine del marker
-const iconUrl = 'assets/marker_icon.png';
+const iconUrl = 'assets/marker/marker_icon.png';
 const iconDefault = L.icon({
   iconUrl,
   iconSize: [40, 40],
@@ -24,11 +24,16 @@ L.Marker.prototype.options.icon = iconDefault;
 })
 export class MapService {
   private mapCreaTabacchi: any;
+  private mapRicaricaDenaro: any;
+
+  public lat: number = 0;
+  public lng: number = 0;
+  private markersInMap: number = 0;
 
   constructor(private http: HttpClient) { }
 
-  initMap(map: any): any {
-    map = L.map('map', {
+  initMap(mapRicaricaDenaro: any): any {
+    mapRicaricaDenaro = L.map('map', {
       center: [41.9027835, 12.4963655],
       zoom: 10
     });
@@ -39,8 +44,9 @@ export class MapService {
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
-    tiles.addTo(map);
-    return map;
+    tiles.addTo(mapRicaricaDenaro);
+    this.mapRicaricaDenaro = mapRicaricaDenaro;
+    return mapRicaricaDenaro;
   }
 
   initMapCreaTabacchi(mapCreaTabacchi: any): any {
@@ -56,6 +62,23 @@ export class MapService {
     });
 
     tiles.addTo(mapCreaTabacchi);
+    mapCreaTabacchi.on('click', (e: any) => {
+      this.lat = e.latlng.lat;
+      this.lng = e.latlng.lng;
+      if (!this.markersInMap) {
+        this.markersInMap++;
+      } else {
+        mapCreaTabacchi.eachLayer((layer: any) => {
+          if (layer instanceof L.Marker) {
+            mapCreaTabacchi.removeLayer(layer);
+          }
+
+        });
+
+      }
+      L.marker([this.lat, this.lng]).addTo(mapCreaTabacchi);
+    });
+
     this.mapCreaTabacchi = mapCreaTabacchi;
     return mapCreaTabacchi;
   }

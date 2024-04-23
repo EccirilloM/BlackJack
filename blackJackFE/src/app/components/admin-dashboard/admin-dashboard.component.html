@@ -30,9 +30,9 @@
               <div>
                 <p class="text-teal-300 text-sm font-medium uppercase leading-4">Saldo</p>
                 <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
-                  <span>${{ income }}</span>
-                  <span *ngIf="income > 0" class="material-icons text-white text-lg">trending_up</span>
-                  <span *ngIf="income < 0" class="material-icons text-white text-lg">trending_down</span>
+                  <span>${{ saldo }}</span>
+                  <span *ngIf="saldo > 0" class="material-icons text-white text-lg">trending_up</span>
+                  <span *ngIf="saldo < 0" class="material-icons text-white text-lg">trending_down</span>
                 </p>
               </div>
             </div>
@@ -182,18 +182,27 @@
             <!-- Campo Latitudine Tabacchi -->
             <div class="mt-3">
               <label class="block text-sm text-white" for="cognome">Latitudine</label>
-              <input class="w-full inputBox" [(ngModel)]="lat" name="lat" id="lat" placeholder="" required>
+              <input type="number" class="w-full inputBox" [value]="latMarker()" name="lat" id="lat" placeholder=""
+                required>
             </div>
 
             <!-- Campo Longitudine Tabacchi -->
             <div class="mt-3">
               <label class="block text-sm text-white" for="lng">Longitudine</label>
-              <input class="w-full inputBox" [(ngModel)]="lng" name="lng" id="lng" placeholder="" required>
+              <input type="number" class="w-full inputBox" [value]="lngMarker()" name="lng" id="lng" placeholder=""
+                required>
             </div>
 
             <!-- Campo Economo Associato -->
             <div class="mt-3">
-              <label class="block text-sm text-white" for="username">Economo Associato</label>
+              <label class="block text-sm text-white">Economo Associato</label>
+              <select name="economo" id="economi" [(ngModel)]="economoSelezionatoId">
+                <option value="" selected></option>
+                <ng-container *ngFor="let economo of economi">
+                  <option [value]="economo.userId">{{ economo.nome | titlecase }} {{ economo.cognome | titlecase }}
+                  </option>
+                </ng-container>
+              </select>
               <!-- <input class="w-full inputBox" [(ngModel)]="username" name="username" id="username"
                 placeholder="Inserisci il tuo username" required> -->
             </div>

@@ -15,13 +15,13 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
 
   location: string = "Roma";
 
-  private map: any;
+  private mapRicaricaDenaro: any;
 
   constructor(private mapService: MapService, private userService: UserService) {
   }
 
   ngAfterViewInit() {
-    this.map = this.mapService.initMap(this.map);
+    this.mapRicaricaDenaro = this.mapService.initMap(this.mapRicaricaDenaro);
   }
 
   ngOnInit(): void {
@@ -50,7 +50,7 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
   centerMapOnResult(result: any): void {
     const lat = parseFloat(result.lat);
     const lon = parseFloat(result.lon);
-    this.map.flyTo([lat, lon], 15);
+    this.mapRicaricaDenaro.flyTo([lat, lon], 15);
   }
 
   // FINE COMPONENTE 

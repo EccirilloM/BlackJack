@@ -9,8 +9,8 @@
     </div>
     <!-- Map Section -->
     <div class="flex-grow relative h-64 lg:h-auto">
-      <div class="map-container">
-        <div class="map-frame">
+      <div class="map-containerRicaricaDenaro">
+        <div class="map-frameRicaricaDenaro">
           <!-- HO MESSO COME Z-INDEX 450 PERCHè LEAFLET HA COME Z-INDEX DELLA MAPPA 400 -->
           <section *ngIf="searchResults.length > 0" class="relative z-[450]">
             <div
@@ -24,7 +24,7 @@
         </div>
       </div>
       <!-- Stabilisce un'altezza per la mappa -->
-      <div id="map" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full"></div>
+      <div id="mapRicaricaDenaro" class="absolute top-0 left-0 right-0 bottom-0 w-full h-full"></div>
     </div>
   </div>
 

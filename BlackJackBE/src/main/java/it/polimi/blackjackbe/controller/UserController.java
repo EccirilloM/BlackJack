@@ -36,19 +36,18 @@ public class UserController {
                 .body(new MessageResponse("Account eliminato con successo"));
     }
 
-    @GetMapping("getAll/{ruolo}")
-    public ResponseEntity<List<UserResponse>> getAllByRuolo(@PathVariable String ruolo) {
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.getAllByRuolo(ruolo));
-    }
-
     @GetMapping("getAllUsers")
     public ResponseEntity<List<UserResponse>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getAll());
+    }
+
+    @GetMapping("getAllByRuolo/{ruolo}")
+    public ResponseEntity<List<UserResponse>> getAllByRuolo(@PathVariable String ruolo) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.getAllByRuolo(ruolo));
     }
 
     @PutMapping("aggiornaDatiUtente/{userId}")

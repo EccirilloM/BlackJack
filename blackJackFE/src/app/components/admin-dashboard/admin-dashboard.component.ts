@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MessageResponse } from 'src/app/dto/response/messageResponse';
 import { MapService } from 'src/app/services/map.service';
 import { debounceTime } from 'rxjs';
+import { TabacchiService } from 'src/app/services/tabacchi.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -20,7 +21,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('usersChart') usersChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
   // VARIABILI DATI ----------------------------------------------------------------------------
-  income: number = 5000;
   numberOfUsers: number = 0;
   utenti: GetUserDataResponse[] = [];
   public searchResults: any[] = [];
@@ -35,12 +35,16 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   dataNascita = new Date(); // Assicurati di gestire correttamente la formattazione della data per il backend
   showPassword = false;
   showRepeatPassword = false;
+  saldoString: string = localStorage.getItem('saldo') || '0';
+  saldo: number = parseFloat(this.saldoString);
+  economi: GetUserDataResponse[] = [];
+  economoSelezionatoId: number = 0;
   // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
   nomeTabacchi: string = '';
-  lat: number = 0;
-  lng: number = 0;
+  // lat: number = this.mapService.lat;
+  // lng: number = this.mapService.lng;
   // COSTRUTTORE ----------------------------------------------------------------------------
-  constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService, private mapService: MapService) {
+  constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService, private mapService: MapService, private tabacchiService: TabacchiService) {
     Chart.register(...registerables);
   }
 
@@ -48,11 +52,20 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
     this.loadUsers();
+    this.loadAllEconomi();
   }
 
   ngAfterViewInit(): void {
     this.mapCreaTabacchi = this.mapService.initMapCreaTabacchi(this.mapCreaTabacchi);
     this.initializeCharts();
+  }
+
+  latMarker(): number {
+    return this.mapService.lat;
+  }
+
+  lngMarker(): number {
+    return this.mapService.lng;
   }
 
   //NOMINATIM SECTION --------------------------------------------------------------
@@ -123,7 +136,16 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   // FUNZIONI PER CREARE TABACCHI ----------------------------------------------------------------------------
   creaTabacchi(): void {
-    console.log('Creazione tabacchi');
+    this.tabacchiService.creaTabacchi(this.nomeTabacchi, this.latMarker(), this.lngMarker(), this.economoSelezionatoId).subscribe({
+      next: (res: MessageResponse) => {
+        this.toastr.success(res.message);
+        this.nomeTabacchi = '';
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.toastr.error(err.error.message || 'Errore durante la creazione del tabacchi');
+      }
+    });
   }
 
   // FUNZIONE PER CARICARE GLI UTENTI ----------------------------------------------------------------------------
@@ -143,7 +165,16 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   // Funzione per caricare tutti gli Economo ----------------------------------------------------------------------------
   loadAllEconomi(): void {
-    console.log('Caricamento di tutti gli Economi');
+    this.userService.getAllByRuolo('ECONOMO').subscribe({
+      next: (response: GetUserDataResponse[]) => {
+        this.economi = response;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching users: ', error);
+        this.toastr.error('Error while fetching users');
+      }
+    });
+
   }
 
   // FUNZIONE PER ELIMINARE UN UTENTE ----------------------------------------------------------------------------
