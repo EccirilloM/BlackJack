@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
@@ -7,13 +7,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RegistrazioneRequest } from 'src/app/dto/request/registrazioneRequest';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageResponse } from 'src/app/dto/response/messageResponse';
+import { MapService } from 'src/app/services/map.service';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboardComponent implements OnInit, AfterViewInit {
   // VARIABILI PER I GRAFICI ----------------------------------------------------------------------------
   @ViewChild('usersChart') usersChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
@@ -21,6 +23,8 @@ export class AdminDashboardComponent implements OnInit {
   income: number = 5000;
   numberOfUsers: number = 0;
   utenti: GetUserDataResponse[] = [];
+  public searchResults: any[] = [];
+  private mapCreaTabacchi: any;
   // VARIABILI PER Creare Economo ----------------------------------------------------------------------------
   nome = '';
   cognome = '';
@@ -31,11 +35,14 @@ export class AdminDashboardComponent implements OnInit {
   dataNascita = new Date(); // Assicurati di gestire correttamente la formattazione della data per il backend
   showPassword = false;
   showRepeatPassword = false;
+  // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
+  nomeTabacchi: string = '';
+  lat: number = 0;
+  lng: number = 0;
   // COSTRUTTORE ----------------------------------------------------------------------------
-  constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService) {
+  constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService, private mapService: MapService) {
     Chart.register(...registerables);
   }
-
 
   //NGONINIT E AFTERVIEWINIT ---------------------------------------------------------------------------- 
   ngOnInit(): void {
@@ -44,9 +51,37 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    this.mapCreaTabacchi = this.mapService.initMapCreaTabacchi(this.mapCreaTabacchi);
     this.initializeCharts();
   }
 
+  //NOMINATIM SECTION --------------------------------------------------------------
+  searchNominatim(query: string) {
+    if (query.length < 3) {
+      this.searchResults = [];
+      return;
+    }
+
+    //LASCIA COSì il debounce Fidati
+    this.mapService.searchNominatimLocation(query).pipe(debounceTime(5000)).subscribe({
+      next: (results) => {
+        this.searchResults = results;
+      },
+      error: (error) => {
+        console.error('Errore nella ricerca:', error);
+        this.searchResults = [];
+      }
+    });
+  }
+
+  centerMapOnResult(result: any): void {
+    const lat = parseFloat(result.lat);
+    const lon = parseFloat(result.lon);
+    this.mapCreaTabacchi.flyTo([lat, lon], 15);
+  }
+
+
+  // FUNZIONI PER CREARE ECONOMO ----------------------------------------------------------------------------
   creaEconomo(): void {
     // Validazione semplice. Potresti voler aggiungere validazioni più specifiche
     if (!this.nome || !this.cognome || !this.email || !this.username || !this.password || !this.passwordRipetuta || !this.dataNascita) {
@@ -86,8 +121,12 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  // FUNZIONE PER CARICARE GLI UTENTI ----------------------------------------------------------------------------
+  // FUNZIONI PER CREARE TABACCHI ----------------------------------------------------------------------------
+  creaTabacchi(): void {
+    console.log('Creazione tabacchi');
+  }
 
+  // FUNZIONE PER CARICARE GLI UTENTI ----------------------------------------------------------------------------
   loadUsers(): void {
     this.userService.getAllUsers().subscribe({
       next: (response: GetUserDataResponse[]) => {
@@ -102,8 +141,17 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  // FUNZIONE PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------
+  // Funzione per caricare tutti gli Economo ----------------------------------------------------------------------------
+  loadAllEconomi(): void {
+    console.log('Caricamento di tutti gli Economi');
+  }
 
+  // FUNZIONE PER ELIMINARE UN UTENTE ----------------------------------------------------------------------------
+  deleteUser(id: number): void {
+    console.log('Eliminazione utente con id: ', id);
+  }
+
+  // FUNZIONE PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------
   private initializeCharts(): void {
     this.initializeUsersChart();
     this.initializeCommercesChart();

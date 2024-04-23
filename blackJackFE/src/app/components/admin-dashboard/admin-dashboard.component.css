@@ -1,4 +1,4 @@
-.map-container {
+.map-containerCreaTabacchi {
     position: absolute;
     top: 0;
     left: 0;
@@ -7,12 +7,11 @@
     margin: 30px;
   }
   
-  .map-frame {
-    border: 2px solid black;
+  .map-frameCreaTabacchi {
     height: 100%;
   }
   
-  #map {
+  #mapCreaTabacchi {
     height: 100%;
   }
   
