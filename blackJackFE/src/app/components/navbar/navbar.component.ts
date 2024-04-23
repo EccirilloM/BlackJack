@@ -24,6 +24,9 @@ export class NavbarComponent implements OnInit {
   userUsername: string = localStorage.getItem('username') ?? '';
   userDisplayName: string = `@${this.userUsername}`;
 
+  // VABRIABILI PER IL TIPO DI TAVOLO -----------------------------------------------------------------------------------
+  Tavolo = Tavolo;
+
   // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {
     this.currentRoute = this.router.url.split('/')[1];
@@ -39,13 +42,13 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  // METODI PER IL LOGOUT -----------------------------------------------------------------------------------
+  // METODI PER AUTENTIFICAZIONE -----------------------------------------------------------------------------------
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
-  // METODI PER LA NAVIGAZIONE IN ALTRE PAGINE -----------------------------------------------------------------------------------
+  // METODI PER LA NAVIGAZIONE IN ALTRE PAGIONE -----------------------------------------------------------------------------------
   goToDashboard(): void {
     this.router.navigate(['/homepage/dashboard']);
   }
