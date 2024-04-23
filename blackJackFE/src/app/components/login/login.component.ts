@@ -15,12 +15,14 @@ export class LoginComponent {
   password: string = '';
   showPassword: boolean = false;
 
+  // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private router: Router
   ) { }
 
+  // METODI PER IL LOGIN ----------------------------------------------------------------------------
   login(): void {
     if (!this.username || !this.password) {
       this.toastr.error("Compilare tutti i campi");
@@ -60,14 +62,17 @@ export class LoginComponent {
     });
   }
 
+  // METODI PER MOSTRARE LA PASSWORD ----------------------------------------------------------------------------
   toggleShowPassword(): void {
     this.showPassword = !this.showPassword;
   }
 
+  // METODI PER ANDARE AD ALTRE PAGINE ----------------------------------------------------------------------------
   goToRegistration(): void {
     this.router.navigate(['/registrazione']);
   }
 
+  // METODI PER IL RECUPERO PASSWORD ----------------------------------------------------------------------------
   forgotPassword(): void {
     // Implementa la logica per il recupero della password qui
     console.log('Funzionalità di recupero password non implementata.');

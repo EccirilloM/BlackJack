@@ -10,6 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./change-profile-data.component.css']
 })
 export class ChangeProfileDataComponent implements OnInit {
+  // VARIABILI PER I DATI UTENTE -----------------------------------------------------------------------------------
   userData = {
     nome: localStorage.getItem('nome') || '',
     cognome: localStorage.getItem('cognome') || '',
@@ -19,12 +20,15 @@ export class ChangeProfileDataComponent implements OnInit {
     nuovaPassword: '',
   };
 
+  // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(private userService: UserService, private toastr: ToastrService, private router: Router) { }
 
+  // NGONINIT -----------------------------------------------------------------------------------
   ngOnInit(): void {
     console.log("ChangeProfileDataComponent initialized");
   }
 
+  // METODI PER L'AGGIORNAMENTO DATI UTENTE -----------------------------------------------------------------------------------
   aggiornaDatiUtente() {
     if (!this.userData.vecchiaPassword) {
       this.toastr.error("La vecchia password è necessaria.");

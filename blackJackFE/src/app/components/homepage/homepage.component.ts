@@ -12,6 +12,7 @@ export class HomepageComponent implements OnInit {
 
   isAuthenticated: boolean = false;
 
+  // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(public authService: AuthService, public router: Router) {
     this.authService.isAuthenticated$.subscribe(
       (isAuthenticated) => this.isAuthenticated = isAuthenticated

@@ -20,11 +20,13 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   // VARIABILI PER I GRAFICI ----------------------------------------------------------------------------
   @ViewChild('usersChart') usersChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
-  // VARIABILI DATI ----------------------------------------------------------------------------
+  // VARIABILI DATI ADMIN ----------------------------------------------------------------------------
   numberOfUsers: number = 0;
   utenti: GetUserDataResponse[] = [];
   public searchResults: any[] = [];
   private mapCreaTabacchi: any;
+  saldoString: string = localStorage.getItem('saldo') || '0';
+  saldo: number = parseFloat(this.saldoString);
   // VARIABILI PER Creare Economo ----------------------------------------------------------------------------
   nome = '';
   cognome = '';
@@ -35,8 +37,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   dataNascita = new Date(); // Assicurati di gestire correttamente la formattazione della data per il backend
   showPassword = false;
   showRepeatPassword = false;
-  saldoString: string = localStorage.getItem('saldo') || '0';
-  saldo: number = parseFloat(this.saldoString);
   economi: GetUserDataResponse[] = [];
   economoSelezionatoId: number = 0;
   // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
@@ -60,6 +60,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.initializeCharts();
   }
 
+  // METODI PER PRENDERE LA LATITUDINE E LONGITUDINE DEL MARKER ----------------------------------------------------------------------------
   latMarker(): number {
     return this.mapService.lat;
   }

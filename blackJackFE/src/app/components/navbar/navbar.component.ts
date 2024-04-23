@@ -13,20 +13,23 @@ import { Ruolo } from 'src/app/types/ruolo';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  // VARIABILI PER L'IMMAGINE PROFILO -----------------------------------------------------------------------------------
   logoPath: string = 'assets/logos/BlackJackSaferLogo.png';
+  // VARIABILI PER LA ROTTA -----------------------------------------------------------------------------------
   currentRoute: string = '';
+  // VARIABILI PER L'UTENTE -----------------------------------------------------------------------------------
   userId: string = localStorage.getItem('id') ?? '';
   userNome: string = localStorage.getItem('nome') ?? '';
   userCognome: string = localStorage.getItem('cognome') ?? '';
   userUsername: string = localStorage.getItem('username') ?? '';
   userDisplayName: string = `@${this.userUsername}`;
-  Tavolo = Tavolo;
 
-
+  // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {
     this.currentRoute = this.router.url.split('/')[1];
   }
 
+  // NGONINIT -----------------------------------------------------------------------------------
   ngOnInit(): void {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -36,11 +39,13 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  // METODI PER IL LOGOUT -----------------------------------------------------------------------------------
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
 
+  // METODI PER LA NAVIGAZIONE IN ALTRE PAGINE -----------------------------------------------------------------------------------
   goToDashboard(): void {
     this.router.navigate(['/homepage/dashboard']);
   }
@@ -65,6 +70,7 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/homepage/economoDashboard']);
   }
 
+  // METODI PER IL MENU DEL FORUM -----------------------------------------------------------------------------------
   forumMenuOpen: boolean = false;
 
   toggleForumMenu(): void {

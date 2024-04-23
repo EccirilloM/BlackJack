@@ -7,19 +7,26 @@ import { Chart, registerables } from 'chart.js';
   styleUrls: ['./personal-info.component.css']
 })
 export class PersonalInfoComponent implements OnInit {
+  // VARIABILI PER IL GRAFICO -----------------------------------------------------------------------------------
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
+  // VARIABILI PER SALDO -----------------------------------------------------------------------------------
+  saldoString: string = localStorage.getItem('saldo') || '0';
+  saldo: number = parseFloat(this.saldoString);
 
+  // VARIABILI PER INFORMAZIONI UTENTE -----------------------------------------------------------------------------------
   fullName: string = "";
   birthday: string = "";
   joined: string = "";
   email: string = "";
   daysAgo: number = 0;
 
+  // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor() {
     this.initializeUserInfo();
     Chart.register(...registerables);
   }
 
+  // NGONINIT E AFTERVIEWINIT -----------------------------------------------------------------------------------
   ngOnInit(): void {
     console.log('PersonalInfoComponent initialized');
   }
@@ -28,6 +35,7 @@ export class PersonalInfoComponent implements OnInit {
     this.initializeChart();
   }
 
+  // METODI PER INIZIALIZZARE I DATI UTENTE -----------------------------------------------------------------------------------
   private initializeUserInfo(): void {
     this.fullName = this.getFullName();
     this.birthday = this.formatDate(localStorage.getItem('dataNascita'));
@@ -60,6 +68,7 @@ export class PersonalInfoComponent implements OnInit {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
+  // METODI PER IL GRAFICO -----------------------------------------------------------------------------------
   private initializeChart(): void {
     if (this.chartCanvas && this.chartCanvas.nativeElement) {
       const ctx = this.chartCanvas.nativeElement.getContext('2d');

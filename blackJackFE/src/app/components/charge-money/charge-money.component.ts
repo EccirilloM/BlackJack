@@ -12,14 +12,14 @@ import { UserService } from 'src/app/services/user.service';
 export class ChargeMoneyComponent implements OnInit, AfterViewInit {
 
   public searchResults: any[] = [];
-
   location: string = "Roma";
-
   private mapRicaricaDenaro: any;
 
+  //COSTRUTTORE ----------------------------------------------------------------------------
   constructor(private mapService: MapService, private userService: UserService) {
   }
 
+  //NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
   ngAfterViewInit() {
     this.mapRicaricaDenaro = this.mapService.initMap(this.mapRicaricaDenaro);
   }

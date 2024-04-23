@@ -8,10 +8,12 @@ import { Router } from '@angular/router';
 })
 export class ProfileContainerComponent implements OnInit {
 
+  // COSTRUTTORE ----------------------------------------------------------------------------
   constructor() {
 
   }
 
+  // NGONINIT ----------------------------------------------------------------------------
   ngOnInit(): void {
     console.log('ProfileContainerComponent');
   }

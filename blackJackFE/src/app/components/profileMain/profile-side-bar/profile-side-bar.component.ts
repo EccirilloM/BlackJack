@@ -8,10 +8,13 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./profile-side-bar.component.css']
 })
 export class ProfileSideBarComponent implements OnInit {
+  // VARIABILI PER IL SUBPATH CORRENTE ----------------------------------------------------------------------------
   currentSubPath: string = '';
 
+  // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(private router: Router, private route: ActivatedRoute) { }
 
+  // NGONINIT ----------------------------------------------------------------------------
   ngOnInit(): void {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -22,6 +25,7 @@ export class ProfileSideBarComponent implements OnInit {
     });
   }
 
+  // METODI PER LA NAVIGAZIONE IN ALTRE PAGINE ----------------------------------------------------------------------------
   navigateTo(subPath: string): void {
     // Naviga verso il sottopercorso relativo all'interno del profilo
     this.router.navigate([subPath], { relativeTo: this.route });

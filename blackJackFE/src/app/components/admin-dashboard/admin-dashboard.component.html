@@ -199,7 +199,8 @@
               <select name="economo" id="economi" [(ngModel)]="economoSelezionatoId">
                 <option value="" selected></option>
                 <ng-container *ngFor="let economo of economi">
-                  <option [value]="economo.userId">{{ economo.nome | titlecase }} {{ economo.cognome | titlecase }}
+                  <option class="text-black" [value]="economo.userId">{{ economo.nome | titlecase }}
+                    {{ economo.cognome | titlecase }}
                   </option>
                 </ng-container>
               </select>

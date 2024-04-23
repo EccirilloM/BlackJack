@@ -33,7 +33,7 @@ export class MapService {
   constructor(private http: HttpClient) { }
 
   initMap(mapRicaricaDenaro: any): any {
-    mapRicaricaDenaro = L.map('map', {
+    mapRicaricaDenaro = L.map('mapRicaricaDenaro', {
       center: [41.9027835, 12.4963655],
       zoom: 10
     });

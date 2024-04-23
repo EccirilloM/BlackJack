@@ -16,6 +16,7 @@ export class EconomoDashboardComponent implements OnInit {
     console.log('EconomoDashboardComponent');
   }
 
+  // METODI PER LE RICHIESTE DI RICARICA SALDO ----------------------------------------------------------------------------
   loadRichieste(): void {
     console.log('Carico le richieste');
   }

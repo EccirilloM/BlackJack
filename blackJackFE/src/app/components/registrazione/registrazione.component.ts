@@ -12,6 +12,7 @@ import { MessageResponse } from 'src/app/dto/response/messageResponse';
 })
 export class RegistrazioneComponent {
 
+  // VARIABILI PER LA REGISTRAZIONE -----------------------------------------------------------------------------------
   nome = '';
   cognome = '';
   email = '';
@@ -22,12 +23,14 @@ export class RegistrazioneComponent {
   showPassword = false;
   showRepeatPassword = false;
 
+  // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private router: Router
   ) { }
 
+  // METODO PER LA REGISTRAZIONE -----------------------------------------------------------------------------------
   register(): void {
     // Validazione semplice. Potresti voler aggiungere validazioni più specifiche
     if (!this.nome || !this.cognome || !this.email || !this.username || !this.password || !this.passwordRipetuta || !this.dataNascita) {
@@ -61,6 +64,7 @@ export class RegistrazioneComponent {
     });
   }
 
+  // METODI PER MOSTRARE LE PASSWORD -----------------------------------------------------------------------------------
   toggleShowPassword(): void {
     this.showPassword = !this.showPassword;
   }
@@ -69,6 +73,7 @@ export class RegistrazioneComponent {
     this.showRepeatPassword = !this.showRepeatPassword;
   }
 
+  // METODI PER LA NAVIGAZIONE IN ALTRE PAGINE ----------------------------------------------------------------------------
   goToLogin(): void {
     this.router.navigate(['/login']);
   }

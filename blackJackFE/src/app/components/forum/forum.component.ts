@@ -11,11 +11,13 @@ import { Tavolo } from 'src/app/types/tavolo';
 export class ForumComponent implements OnInit {
   tipoTavolo: Tavolo | null = null;
 
+  // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(
     private forumService: ForumService,
     private route: ActivatedRoute
   ) { }
 
+  // NGONINIT ----------------------------------------------------------------------------
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.tipoTavolo = params['tipoTavolo'];
@@ -23,11 +25,13 @@ export class ForumComponent implements OnInit {
     });
   }
 
+  // METODI PER I TAVOLI ----------------------------------------------------------------------------
   getTavoloImage(tipoTavolo: Tavolo | null): string {
     if (!tipoTavolo) return ''; // o un percorso di immagine predefinito
     return `assets/tables/tavolo${tipoTavolo}.png`;
   }
 
+  // METODI PER I MESSAGGI ----------------------------------------------------------------------------
   scriviMessaggio(): void {
     console.log('Scrivi messaggio');
   }
