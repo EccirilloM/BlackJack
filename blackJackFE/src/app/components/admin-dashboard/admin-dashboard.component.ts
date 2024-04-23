@@ -4,6 +4,9 @@ import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { GetUserDataResponse } from 'src/app/dto/response/getUserDataResponse';
 import { HttpErrorResponse } from '@angular/common/http';
+import { RegistrazioneRequest } from 'src/app/dto/request/registrazioneRequest';
+import { AuthService } from 'src/app/services/auth.service';
+import { MessageResponse } from 'src/app/dto/response/messageResponse';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -11,16 +14,30 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
+  // VARIABILI PER I GRAFICI ----------------------------------------------------------------------------
   @ViewChild('usersChart') usersChartRef!: ElementRef<HTMLCanvasElement>;
   @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
+  // VARIABILI DATI ----------------------------------------------------------------------------
   income: number = 5000;
   numberOfUsers: number = 0;
   utenti: GetUserDataResponse[] = [];
-
-  constructor(private userService: UserService, private toastr: ToastrService) {
+  // VARIABILI PER Creare Economo ----------------------------------------------------------------------------
+  nome = '';
+  cognome = '';
+  email = '';
+  username = '';
+  password = '';
+  passwordRipetuta = '';
+  dataNascita = new Date(); // Assicurati di gestire correttamente la formattazione della data per il backend
+  showPassword = false;
+  showRepeatPassword = false;
+  // COSTRUTTORE ----------------------------------------------------------------------------
+  constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService) {
     Chart.register(...registerables);
   }
 
+
+  //NGONINIT E AFTERVIEWINIT ---------------------------------------------------------------------------- 
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
     this.loadUsers();
@@ -29,6 +46,47 @@ export class AdminDashboardComponent implements OnInit {
   ngAfterViewInit(): void {
     this.initializeCharts();
   }
+
+  creaEconomo(): void {
+    // Validazione semplice. Potresti voler aggiungere validazioni più specifiche
+    if (!this.nome || !this.cognome || !this.email || !this.username || !this.password || !this.passwordRipetuta || !this.dataNascita) {
+      this.toastr.error("Compilare tutti i campi");
+      return;
+    }
+
+    if (this.password !== this.passwordRipetuta) {
+      this.toastr.error("Le password non coincidono");
+      return;
+    }
+
+    const request: RegistrazioneRequest = {
+      nome: this.nome,
+      cognome: this.cognome,
+      email: this.email,
+      username: this.username,
+      password: this.password,
+      dataNascita: new Date(this.dataNascita)
+    };
+
+    this.userService.creaEconomo(request).subscribe({
+      next: (res: MessageResponse) => {
+        this.toastr.success(res.message);
+        this.nome = '';
+        this.cognome = '';
+        this.email = '';
+        this.username = '';
+        this.password = '';
+        this.passwordRipetuta = '';
+        this.dataNascita = new Date();
+      },
+      error: (err: any) => {
+        console.error(err);
+        this.toastr.error(err.error.message || 'Errore durante la registrazione');
+      }
+    });
+  }
+
+  // FUNZIONE PER CARICARE GLI UTENTI ----------------------------------------------------------------------------
 
   loadUsers(): void {
     this.userService.getAllUsers().subscribe({
@@ -43,6 +101,8 @@ export class AdminDashboardComponent implements OnInit {
       }
     });
   }
+
+  // FUNZIONE PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------
 
   private initializeCharts(): void {
     this.initializeUsersChart();
@@ -98,4 +158,6 @@ export class AdminDashboardComponent implements OnInit {
       });
     }
   }
+
+  // FINE COMPONETE ----------------------------------------------------------------------------
 }

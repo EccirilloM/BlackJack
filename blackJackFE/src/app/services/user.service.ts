@@ -5,6 +5,8 @@ import { GetUserDataResponse } from '../dto/response/getUserDataResponse';
 import { globalBackendUrl } from 'environment';
 import { Observable } from 'rxjs';
 import { RicaricaSaldoRequest } from '../dto/request/ricaricaSaldoRequest';
+import { MessageResponse } from '../dto/response/messageResponse';
+import { RegistrazioneRequest } from '../dto/request/registrazioneRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +37,11 @@ export class UserService {
     const header = this.getHeader();
     const request: RicaricaSaldoRequest = { tabacchiId, importo };
     return this.http.post<RicaricaSaldoRequest>(globalBackendUrl + "ricarica/richiediRicarica/" + localStorage.getItem("id")?.toString(), request, { headers: header });
+  }
+
+  creaEconomo(request: RegistrazioneRequest): Observable<MessageResponse> {
+    const header = this.getHeader();
+    return this.http.post<MessageResponse>(this.backendUrl + 'creaEconomo', request, { headers: header });
   }
 
   //creo l'header con il token da mandare al backend

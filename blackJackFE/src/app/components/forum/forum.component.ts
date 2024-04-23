@@ -27,5 +27,14 @@ export class ForumComponent implements OnInit {
     if (!tipoTavolo) return ''; // o un percorso di immagine predefinito
     return `assets/tables/tavolo${tipoTavolo}.png`;
   }
+
+  scriviMessaggio(): void {
+    console.log('Scrivi messaggio');
+  }
+
+  loadMessages(): void {
+    console.log('Carico i messaggi del tavolo');
+  }
+
 }
 

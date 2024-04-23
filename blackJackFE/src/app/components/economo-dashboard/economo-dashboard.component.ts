@@ -16,4 +16,15 @@ export class EconomoDashboardComponent implements OnInit {
     console.log('EconomoDashboardComponent');
   }
 
+  loadRichieste(): void {
+    console.log('Carico le richieste');
+  }
+
+  accettaRichiesta(): void {
+    console.log('Accetto richiesta: ');
+  }
+
+  rifiutaRichiesta(): void {
+    console.log('Rifiuto richiesta: ');
+  }
 }

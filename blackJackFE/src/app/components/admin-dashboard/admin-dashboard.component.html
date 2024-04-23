@@ -133,6 +133,86 @@
       <!-- Inizio Gestione Tabacchi -->
       <div id="Tabacchi">
         <h1 class="font-bold py-4 uppercase">Manage Tabacchi</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+          <!-- MAPPA PER EVENTALE ELIMINAZIONE -->
+          <div class="bg-cardDark p-4 rounded-md">
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Mappa</h2>
+            <div class="my1-"></div> <!-- Espacio de separación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px  mb-6"></div> <!-- Línea con gradiente -->
+            <!-- Campo Nome -->
+            <div>
+              <label class="block text-sm text-white" for="nome">Inserisci indirizzo</label>
+              <input class="w-full inputBox" name="indirizzo" id="indirizzo" placeholder="Es. Via Tiburtina" required>
+            </div>
+
+          </div>
+
+          <!-- FORM PER CREAZIONE DI UN TABACCHI -->
+          <div class="bg-cardDark p-4 rounded-md">
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Form Per Creazione Tabacchi</h2>
+            <div class="my-1"></div> <!-- Espacio de separación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
+            <!-- Bottone di Creazione -->
+            <button class="buttonBlueAction">Crea Tabacchi</button>
+          </div>
+          <!-- FORM PER CREAZIONE DI UN TABACCHI -->
+          <div class="bg-cardDark p-4 rounded-md">
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Form per creare un Economo</h2>
+            <div class="my-1"></div> <!-- Espacio de separación -->
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
+            <!-- Campo Nome -->
+            <div>
+              <label class="block text-sm text-white" for="nome">Nome</label>
+              <input class="w-full inputBox" [(ngModel)]="nome" name="nome" id="nome"
+                placeholder="Inserisci il tuo nome" required>
+            </div>
+
+            <!-- Campo Cognome -->
+            <div>
+              <label class="block text-sm text-white" for="cognome">Cognome</label>
+              <input class="w-full inputBox" [(ngModel)]="cognome" name="cognome" id="cognome"
+                placeholder="Inserisci il tuo cognome" required>
+            </div>
+
+            <!-- Campo Email -->
+            <div>
+              <label class="block text-sm text-white" for="email">Email</label>
+              <input class="w-full inputBox" [(ngModel)]="email" name="email" id="email"
+                placeholder="Inserisci la tua email" required>
+            </div>
+
+            <!-- Campo Username -->
+            <div>
+              <label class="block text-sm text-white" for="username">Username</label>
+              <input class="w-full inputBox" [(ngModel)]="username" name="username" id="username"
+                placeholder="Inserisci il tuo username" required>
+            </div>
+
+            <!-- Campo Data di Nascita -->
+            <div class="mt-2">
+              <label class="block text-sm text-white" for="dataNascita">Data di Nascita</label>
+              <input type="date" class="w-full inputBox" [(ngModel)]="dataNascita" name="dataNascita" id="dataNascita"
+                required>
+            </div>
+
+            <!-- Campo Password -->
+            <div class="mt-2">
+              <label class="block text-sm text-white" for="password">Password</label>
+              <input type="password" class="w-full inputBox" [(ngModel)]="password" name="password" id="password"
+                placeholder="Digita la tua password" required>
+            </div>
+
+            <!-- Campo Ripeti Password -->
+            <div class="mt-2">
+              <label class="block text-sm text-white" for="ripeti_password">Ripeti Password</label>
+              <input type="password" class="w-full inputBox" [(ngModel)]="passwordRipetuta" name="ripeti_password"
+                id="ripeti_password" placeholder="Ripeti la tua password" required>
+            </div>
+
+            <!-- Bottone di Creazione -->
+            <button class="buttonBlueAction" (click)="creaEconomo()">Crea Economo</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

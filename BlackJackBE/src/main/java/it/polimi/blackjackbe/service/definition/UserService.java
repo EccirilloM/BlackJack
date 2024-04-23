@@ -18,4 +18,6 @@ public interface UserService {
     List<UserResponse> getAll();
 
     UserResponse aggiornaDatiUtente(AggiornaDatiRequest aggiornaRequest, Long userId);
+
+    void creaEconomo(RegistrazioneRequest request);
 }

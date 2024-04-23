@@ -5,6 +5,7 @@ import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.MessageResponse;
 import it.polimi.blackjackbe.dto.response.UserResponse;
 import it.polimi.blackjackbe.service.definition.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +56,14 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.aggiornaDatiUtente(aggiornaRequest, Long.parseLong(userId)));
+    }
+
+    @PostMapping("/creaEconomo")
+    public ResponseEntity<MessageResponse> creaEconomo(@Valid @RequestBody RegistrazioneRequest request) {
+        userService.creaEconomo(request);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new MessageResponse("Registrazione effettuata con successo"));
     }
 }

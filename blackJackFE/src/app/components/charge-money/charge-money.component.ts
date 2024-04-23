@@ -21,25 +21,14 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.map = L.map('map', {
-      center: [41.9027835, 12.4963655],
-      zoom: 10
-    });
-
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      minZoom: 3,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    });
-
-    tiles.addTo(this.map);
+    this.map = this.mapService.initMap(this.map);
   }
 
   ngOnInit(): void {
     console.log('ChargeMoneyComponent');
   }
 
-  //NOMINATIM
+  //NOMINATIM SECTION --------------------------------------------------------------
   searchNominatim(query: string) {
     if (query.length < 3) {
       this.searchResults = [];
@@ -63,5 +52,7 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     const lon = parseFloat(result.lon);
     this.map.flyTo([lat, lon], 15);
   }
+
+  // FINE COMPONENTE 
 
 }

@@ -50,7 +50,7 @@ public class AuthServiceImplementation implements AuthService {
         final LocalDateTime dataNascita = request.getDataNascita();
         final Ruolo ruolo = Ruolo.PLAYER;
 
-        checkUserData(List.of(nome, cognome, username, email, password, ruolo.name()));
+        checkUserData(List.of(nome, cognome, username, email, password));
 
         User user = new User();
         user.setNome(nome);

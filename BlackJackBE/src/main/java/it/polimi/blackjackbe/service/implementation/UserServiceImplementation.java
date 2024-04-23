@@ -13,10 +13,12 @@ import it.polimi.blackjackbe.model.User;
 import it.polimi.blackjackbe.repository.TabacchiRepository;
 import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.service.definition.UserService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -246,4 +248,49 @@ public class UserServiceImplementation implements UserService {
         );
     }
 
+    @Override
+    public void creaEconomo(RegistrazioneRequest request){
+        Optional<User> userAlreadyRegistered = userRepository.findByUsername(request.getUsername());
+
+        if (userAlreadyRegistered.isPresent()) {
+            throw new ConflictException("Username già registrato");
+        }
+
+        final String nome = request.getNome().trim();
+        final String cognome = request.getCognome().trim();
+        final String username = request.getUsername().trim().toLowerCase();
+        final String email = request.getEmail().trim().toLowerCase();
+        final String password = request.getPassword();
+        final LocalDateTime dataNascita = request.getDataNascita();
+        final Ruolo ruolo = Ruolo.ECONOMO;
+
+        checkUserData(List.of(nome, cognome, username, email, password));
+
+        User user = new User();
+        user.setNome(nome);
+        user.setCognome(cognome);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRuolo(ruolo);
+        user.setDataNascita(dataNascita);
+        user.setDataRegistrazione(LocalDateTime.now());
+        user.setSaldo(100.00);
+
+        userRepository.save(user);
+
+        Optional<User> userRegistered = userRepository.findByUsername(username);
+
+        if (userRegistered.isEmpty()) {
+            throw new InternalServerErrorException("Errore durante la registrazione");
+        }
+    }
+
+    private void checkUserData(@NonNull List<String> dataList) throws RuntimeException {
+        for (String data : dataList) {
+            if (data.isEmpty() || data.isBlank()) {
+                throw new BadRequestException("Dati mancanti");
+            }
+        }
+    }
 }

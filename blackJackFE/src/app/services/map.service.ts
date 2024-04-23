@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import * as L from 'leaflet';
 import { GetAllTabacchiResponse } from '../dto/response/getAllTabacchiResponse';
 import { globalBackendUrl } from 'environment';
 
@@ -10,7 +11,24 @@ import { globalBackendUrl } from 'environment';
 })
 export class MapService {
 
+
   constructor(private http: HttpClient) { }
+
+  initMap(map: any): any {
+    map = L.map('map', {
+      center: [41.9027835, 12.4963655],
+      zoom: 10
+    });
+
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      minZoom: 3,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+
+    tiles.addTo(map);
+    return map;
+  }
 
   private nominatimUrl = 'https://nominatim.openstreetmap.org';
   searchNominatimLocation(query: string): Observable<any> {
@@ -23,10 +41,7 @@ export class MapService {
     );
   }
 
-  getAllUsers(): Observable<GetAllTabacchiResponse[]> {
-    const header = this.getHeader();
-    return this.http.get<GetAllTabacchiResponse[]>(globalBackendUrl + "" + 'getAllTabacchi', { headers: header });
-  }
+
 
   //creo l'header con il token da mandare al backend
   private getHeader(): HttpHeaders {

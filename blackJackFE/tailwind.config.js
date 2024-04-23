@@ -2,7 +2,13 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "background":"#15202b",
+        "cardBackground":"#2d3741",
+        "cardDark":"#12161a",
+      }
+    },
   },
   plugins: [],
 }
