@@ -1,5 +1,6 @@
 export interface GetAllTabacchiResponse {
-    nome: string;
+    tabacchiId: number;
+    nomeTabacchi: string;
     lat: number;
     lng: number;
     userId: number;

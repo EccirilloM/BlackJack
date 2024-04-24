@@ -10,6 +10,7 @@ import { MessageResponse } from 'src/app/dto/response/messageResponse';
 import { MapService } from 'src/app/services/map.service';
 import { debounceTime } from 'rxjs';
 import { TabacchiService } from 'src/app/services/tabacchi.service';
+import { GetAllTabacchiResponse } from 'src/app/dto/response/getAllTabacchiResponse';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -39,6 +40,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   showRepeatPassword = false;
   economi: GetUserDataResponse[] = [];
   economoSelezionatoId: number = 0;
+
+  tabacchi: GetAllTabacchiResponse[] = [];
   // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
   nomeTabacchi: string = '';
   // lat: number = this.mapService.lat;
@@ -53,6 +56,17 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     console.log('Admin Dashboard initialized');
     this.loadUsers();
     this.loadAllEconomi();
+    this.tabacchiService.getAllTabacchi().subscribe({
+      next: (response: GetAllTabacchiResponse[]) => {
+        console.log(response);
+        this.tabacchi = response;
+        this.mapService.placeTabacchiMarkers(response, this.mapCreaTabacchi);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching users: ', error);
+        this.toastr.error('Error while fetching users');
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -141,6 +155,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       next: (res: MessageResponse) => {
         this.toastr.success(res.message);
         this.nomeTabacchi = '';
+        this.tabacchi.push({ nomeTabacchi: this.nomeTabacchi, lat: this.latMarker(), lng: this.lngMarker(), userId: this.economoSelezionatoId, tabacchiId: 0 });
+        this.mapService.placeTabacchiMarkers(this.tabacchi, this.mapCreaTabacchi);
       },
       error: (err: any) => {
         console.error(err);

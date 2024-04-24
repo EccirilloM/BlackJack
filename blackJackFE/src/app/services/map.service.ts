@@ -6,10 +6,10 @@ import * as L from 'leaflet';
 import { GetAllTabacchiResponse } from '../dto/response/getAllTabacchiResponse';
 import { globalBackendUrl } from 'environment';
 //configurazione dell'immagine del marker
-const iconUrl = 'assets/marker/marker_icon.png';
+const iconUrl = 'assets/marker/marker-icon.png';
 const iconDefault = L.icon({
   iconUrl,
-  iconSize: [40, 40],
+  iconSize: [25, 36],
   iconAnchor: [12, 41],
   shadowUrl: '',
   popupAnchor: [1, -34],
@@ -28,7 +28,7 @@ export class MapService {
 
   public lat: number = 0;
   public lng: number = 0;
-  private markersInMap: number = 0;
+  tabacchi: GetAllTabacchiResponse[] = [];
 
   constructor(private http: HttpClient) { }
 
@@ -45,6 +45,12 @@ export class MapService {
     });
 
     tiles.addTo(mapRicaricaDenaro);
+    mapRicaricaDenaro.eachLayer((layer: any) => {
+      if (layer instanceof L.Marker) {
+        mapRicaricaDenaro.removeLayer(layer);
+      }
+
+    });
     this.mapRicaricaDenaro = mapRicaricaDenaro;
     return mapRicaricaDenaro;
   }
@@ -62,25 +68,40 @@ export class MapService {
     });
 
     tiles.addTo(mapCreaTabacchi);
+
+    mapCreaTabacchi.eachLayer((layer: any) => {
+      if (layer instanceof L.Marker) {
+        mapCreaTabacchi.removeLayer(layer);
+      }
+
+    });
     mapCreaTabacchi.on('click', (e: any) => {
       this.lat = e.latlng.lat;
       this.lng = e.latlng.lng;
-      if (!this.markersInMap) {
-        this.markersInMap++;
-      } else {
-        mapCreaTabacchi.eachLayer((layer: any) => {
-          if (layer instanceof L.Marker) {
-            mapCreaTabacchi.removeLayer(layer);
-          }
 
-        });
-
-      }
       L.marker([this.lat, this.lng]).addTo(mapCreaTabacchi);
     });
 
+
+
+
     this.mapCreaTabacchi = mapCreaTabacchi;
     return mapCreaTabacchi;
+  }
+
+  placeTabacchiMarkers(tabacchi: GetAllTabacchiResponse[], mapCreaTabacchi: any): void {
+    mapCreaTabacchi.eachLayer((layer: any) => {
+      if (layer instanceof L.Marker) {
+        mapCreaTabacchi.removeLayer(layer);
+      }
+
+    });
+
+    this.tabacchi = tabacchi;
+    tabacchi.forEach((tabacchi: GetAllTabacchiResponse) => {
+      L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapCreaTabacchi).bindPopup(tabacchi.nomeTabacchi);
+    });
+    this.mapCreaTabacchi = mapCreaTabacchi;
   }
 
   private nominatimUrl = 'https://nominatim.openstreetmap.org';

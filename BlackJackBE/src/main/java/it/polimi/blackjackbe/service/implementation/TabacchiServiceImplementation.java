@@ -62,10 +62,6 @@ public class TabacchiServiceImplementation implements TabacchiService {
         //Prendo dal db tutti gli utenti.
         List<Tabacchi> tabacchis = tabacchiRepository.findAll();
 
-        //Se non è presente nessun utente lancio un'eccezione.
-        if(tabacchis.isEmpty()) {
-            throw new NotFoundException("Utenti non trovati");
-        }
 
         //Inizializzo la variabile di risposta.
         List<TabacchiResponse> response = new ArrayList<>();
