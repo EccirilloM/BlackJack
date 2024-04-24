@@ -78,7 +78,16 @@ public class TabacchiServiceImplementation implements TabacchiService {
         }
 
         return response;
+    }
 
+    @Override
+    public void deleteTabacchi(Long tabacchiId) {
+        Optional<Tabacchi> tabacchi = tabacchiRepository.findById(tabacchiId);
 
+        if(tabacchi.isEmpty()) {
+            throw new NotFoundException("Tabacchi non trovato");
+        }
+
+        tabacchiRepository.delete(tabacchi.get());
     }
 }

@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import * as L from 'leaflet';
 import { GetAllTabacchiResponse } from '../dto/response/getAllTabacchiResponse';
 import { globalBackendUrl } from 'environment';
+import { MessageResponse } from '../dto/response/messageResponse';
 //configurazione dell'immagine del marker
 const iconUrl = 'assets/marker/marker-icon.png';
 const iconDefault = L.icon({
@@ -23,12 +24,16 @@ L.Marker.prototype.options.icon = iconDefault;
   providedIn: 'root'
 })
 export class MapService {
+  private backendUrl: string = globalBackendUrl + 'tabacchi/';
+
+
   private mapCreaTabacchi: any;
   private mapRicaricaDenaro: any;
 
   public lat: number = 0;
   public lng: number = 0;
   tabacchi: GetAllTabacchiResponse[] = [];
+
 
   constructor(private http: HttpClient) { }
 
@@ -82,6 +87,10 @@ export class MapService {
       L.marker([this.lat, this.lng]).addTo(mapCreaTabacchi);
     });
 
+    mapCreaTabacchi.on('popupopen', (e: any) => {
+      this.handleEliminaTabacchi(e);
+
+    });
 
 
 
@@ -98,10 +107,41 @@ export class MapService {
     });
 
     this.tabacchi = tabacchi;
+    // Aggiungi un popup al marker con un pulsante
     tabacchi.forEach((tabacchi: GetAllTabacchiResponse) => {
-      L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapCreaTabacchi).bindPopup(tabacchi.nomeTabacchi);
+      let popupContent: string = `
+     <p>${tabacchi.nomeTabacchi}</p>
+     <button id="elimina-tabacchi" name="${tabacchi.tabacchiId}" class="p-2.5 text-sm font-medium text-black rounded-lg border border-3 border-red-800">
+       Elimina Tabacchi #${tabacchi.tabacchiId}
+     </button>
+   `;
+      L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapCreaTabacchi).bindPopup(popupContent);
     });
     this.mapCreaTabacchi = mapCreaTabacchi;
+  }
+
+  handleEliminaTabacchi(e: any): void {
+    const button = document.getElementById('elimina-tabacchi');
+    if (button) {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (e.target) {
+          const target = e.target as HTMLButtonElement;
+          this.eliminaTabacchiById(target.name.toString()).subscribe({
+            next: (response: MessageResponse) => {
+              this.tabacchi = this.tabacchi.filter((tabacchi: GetAllTabacchiResponse) => tabacchi.tabacchiId.toString() !== target.name);
+              this.placeTabacchiMarkers(this.tabacchi, this.mapCreaTabacchi);
+            }, error: (error: any) => {
+              console.error('Error while deleting tabacchi: ', error);
+            }
+          });
+        }
+      });
+    }
+  }
+
+  eliminaTabacchiById(tabacchiId: string): Observable<MessageResponse> {
+    return this.http.delete<MessageResponse>(this.backendUrl + 'eliminaTabacchi/' + tabacchiId, { headers: this.getHeader() });
   }
 
   private nominatimUrl = 'https://nominatim.openstreetmap.org';

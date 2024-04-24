@@ -10,4 +10,6 @@ public interface TabacchiService {
     void creaTabacchi(CreaTabacchiRequest request);
 
     List<TabacchiResponse> getAllTabacchi();
+
+    void deleteTabacchi(Long tabacchiId);
 }

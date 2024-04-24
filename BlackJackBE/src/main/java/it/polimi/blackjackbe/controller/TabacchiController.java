@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +36,14 @@ public class TabacchiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(tabacchiService.getAllTabacchi());
+    }
+
+    @DeleteMapping("eliminaTabacchi/{tabacchiId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MessageResponse> deleteTabacchi(@PathVariable String tabacchiId) {
+        tabacchiService.deleteTabacchi(Long.parseLong(tabacchiId));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new MessageResponse("Tabacchi eliminato con successo"));
     }
 }
