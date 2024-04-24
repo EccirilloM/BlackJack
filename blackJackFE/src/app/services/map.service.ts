@@ -25,10 +25,13 @@ L.Marker.prototype.options.icon = iconDefault;
 })
 export class MapService {
   private backendUrl: string = globalBackendUrl + 'tabacchi/';
-
+  public nomeTabacchiSelezionato: string = '';
 
   private mapCreaTabacchi: any;
   private mapRicaricaDenaro: any;
+
+  latMarkerSelezionato: number = 0;
+  lngMarkerSelezionato: number = 0;
 
   public lat: number = 0;
   public lng: number = 0;
@@ -50,12 +53,7 @@ export class MapService {
     });
 
     tiles.addTo(mapRicaricaDenaro);
-    mapRicaricaDenaro.eachLayer((layer: any) => {
-      if (layer instanceof L.Marker) {
-        mapRicaricaDenaro.removeLayer(layer);
-      }
 
-    });
     this.mapRicaricaDenaro = mapRicaricaDenaro;
     return mapRicaricaDenaro;
   }
@@ -98,6 +96,29 @@ export class MapService {
     return mapCreaTabacchi;
   }
 
+  placeTabacchiMarkersChargeMoney(tabacchi: GetAllTabacchiResponse[], mapRicaricaDenaro: any): void {
+    mapRicaricaDenaro.eachLayer((layer: any) => {
+      if (layer instanceof L.Marker) {
+        mapRicaricaDenaro.removeLayer(layer);
+      }
+
+    });
+
+    this.tabacchi = tabacchi;
+    // Aggiungi un popup al marker con un pulsante
+    tabacchi.forEach((tabacchi: GetAllTabacchiResponse) => {
+      let popupContent: string = `
+     <p id="nome-tabacchi">${tabacchi.nomeTabacchi}</p>
+   `;
+      L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapRicaricaDenaro).bindPopup(popupContent).on('click', (e: any) => {
+        this.latMarkerSelezionato = e.latlng.lat;
+        this.lngMarkerSelezionato = e.latlng.lng;
+      });
+    });
+    this.mapRicaricaDenaro = mapRicaricaDenaro;
+  }
+
+
   placeTabacchiMarkers(tabacchi: GetAllTabacchiResponse[], mapCreaTabacchi: any): void {
     mapCreaTabacchi.eachLayer((layer: any) => {
       if (layer instanceof L.Marker) {
@@ -118,6 +139,19 @@ export class MapService {
       L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapCreaTabacchi).bindPopup(popupContent);
     });
     this.mapCreaTabacchi = mapCreaTabacchi;
+  }
+
+  handleMostraNome(e: any): void {
+    const button = document.getElementById('nome-tabacchi');
+    if (button) {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (e.target) {
+          const target = e.target as HTMLButtonElement;
+          console.log(target.name);
+        }
+      });
+    }
   }
 
   handleEliminaTabacchi(e: any): void {
