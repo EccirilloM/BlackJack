@@ -108,7 +108,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.mapCreaTabacchi.flyTo([lat, lon], 15);
   }
 
-
   // FUNZIONI PER CREARE ECONOMO ----------------------------------------------------------------------------
   creaEconomo(): void {
     // Validazione semplice. Potresti voler aggiungere validazioni più specifiche

@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface TabacchiRepository extends JpaRepository<Tabacchi, Long> {
     List<Tabacchi> findAll();
+    List<Tabacchi> findAllByEconomo(User economo);
 
 }

@@ -16,14 +16,18 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ChargeMoneyComponent implements OnInit, AfterViewInit {
 
+  // VARIABILE PER NOMINATIM ----------------------------------------------------------------------------
   public searchResults: any[] = [];
-  location: string = "Roma";
+  // VARIABILI PER LA MAPPA ----------------------------------------------------------------------------
   private mapRicaricaDenaro: any;
   tabacchi: GetAllTabacchiResponse[] = [];
-  tabacchiNomeSelezionato: string = this.mapService.nomeTabacchiSelezionato;
-  tabacchiIdSelezionato: number = 0;
+  // VARIABILI PER IL TABACCHI SELEZIONATO ----------------------------------------------------------------------------
+  //Queste 2 variabili devono avere il valore aggiornato della funzione nel service findTabacchiByCoordinates, fai qualcosa perché ora non mi funziona
+
+  // VARIABILI PER LE COORDINATE DEL MARKER SELEZIONATO ----------------------------------------------------------------------------
   latMarkerSelezionato: number = this.mapService.latMarkerSelezionato;
   lngMarkerSelezionato: number = this.mapService.lngMarkerSelezionato;
+  // VARIABILE PER LA RICARICA DENARO ----------------------------------------------------------------------------
   importo: number = 0;
 
   // TODO: implementare la funzione che data latitudine e longitudine, ritorna il nome e l'id del tabacchi
@@ -77,8 +81,9 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     this.mapRicaricaDenaro.flyTo([lat, lon], 15);
   }
 
+  // METODI PER MANDARE LA RICHIESTA DI RICARICA DENARO --------------------------------------------------------------
   mandaRichiestaRicaricaDenaro() {
-    this.ricaricaService.richiediRicaricaDenaro(this.tabacchiIdSelezionato, this.importo).subscribe({
+    this.mapService.richiediRicaricaDenaro(this.importo).subscribe({
       next: (response: any) => {
         console.log(response);
         this.toastr.success('Richiesta effettuata con successo');
@@ -88,8 +93,26 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
         this.toastr.error('Error while fetching users');
       }
     });
+
   }
 
-  // FINE COMPONENTE 
+  // METODI CHE DATA UNA LATITUDINE E LONGITUDINE, RITORNA IL NOME E L'ID DEL TABACCHI --------------------------------
+  // findTabacchiByCoordinates(lat: number, lng: number): GetAllTabacchiResponse {
+  //   console.log(`Cerco tabacchi con lat: ${lat} e lng: ${lng}`);
+  //   const foundTabacchi = this.tabacchi.find(tabacchi =>
+  //     tabacchi.lat == lat && tabacchi.lng == lng
+  //   );
 
+  //   if (foundTabacchi) {
+  //     this.tabacchiIdSelezionato = foundTabacchi.tabacchiId;
+  //     this.tabacchiNomeSelezionato = foundTabacchi.nomeTabacchi;
+  //     console.log(`Trovato tabacchi: ${foundTabacchi.nomeTabacchi} con ID: ${foundTabacchi.tabacchiId}`);
+  //     return foundTabacchi;
+  //   } else {
+  //     console.log('Nessun tabacchi trovato con queste coordinate.');
+  //     this.toastr.error('Nessun tabacchi trovato con queste coordinate.');
+  //     return {} as GetAllTabacchiResponse;
+  //   }
+  // }
+  // FINE COMPONENTE ----------------------------------------------------------------------------
 }

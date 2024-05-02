@@ -14,12 +14,16 @@ import { globalBackendUrl } from 'environment';
   providedIn: 'root'
 })
 export class AuthService {
+  // Variabile che prende il valore dell'url globale e gli aggiunge l'atentificazione -------------------------------------
   private backendUrl: string = globalBackendUrl + 'auth/';
+  // VARIABILE PER IL CONTROLLO DELLO STATO DELL'UTENTE LOGGATO ---------------------------------------------------------
   private isAuthenticatedSource = new BehaviorSubject<boolean>(this.checkIsAuthenticatedInitial());
   isAuthenticated$ = this.isAuthenticatedSource.asObservable();
 
+  // COSTRUTTORE --------------------------------------------------------------------------------------------------------
   constructor(private http: HttpClient, private router: Router, private toastr: ToastrService) { }
 
+  // METODI PER IL CONTROLLO DELLO STATO DELL'UTENTE LOGGATO -----------------------------------------------------------
   // Rinominato per evitare confusione con il getter Observable
   private checkIsAuthenticatedInitial(): boolean {
     const token = localStorage.getItem('token');
@@ -35,15 +39,19 @@ export class AuthService {
     this.isAuthenticatedSource.next(value);
   }
 
+  // METODI PER IL LOGIN  -----------------------------------------------------------------------------
   login(request: LoginRequest): Observable<LoginResponse> {
+    this.setIsAuthenticated(true);
     return this.http.post<LoginResponse>(this.backendUrl + 'login', request);
   }
 
+  // METODI PER LA REGISTRAZIONE  -----------------------------------------------------------------------------
   registrazione(request: RegistrazioneRequest): Observable<MessageResponse> {
     console.log(request);
     return this.http.post<MessageResponse>(this.backendUrl + 'registrazionePlayer', request);
   }
 
+  // METODI PER IL LOGOUT  -----------------------------------------------------------------------------
   logout(): void {
     this.router.navigateByUrl('/login');
     localStorage.clear();
@@ -51,6 +59,7 @@ export class AuthService {
     this.setIsAuthenticated(false);
   }
 
+  // METODI PER IL RECUPERO DI DATI DELL'UTENTE LOGGATO  -----------------------------------------------------------------------------
   getHttpHeaders(): HttpHeaders {
     const token = this.getToken();
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);

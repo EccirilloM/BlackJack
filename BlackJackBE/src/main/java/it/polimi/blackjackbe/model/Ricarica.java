@@ -34,6 +34,9 @@ public class Ricarica {
     @Column(updatable = false)
     private LocalDateTime dataRicarica;
 
+    @Column(updatable = false)
+    private LocalDateTime dataRichiesta;
+
     @Column(nullable = false)
     private boolean richiesta;
 

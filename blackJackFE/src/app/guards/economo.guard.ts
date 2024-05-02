@@ -23,7 +23,7 @@ export class EconomoGuard implements CanActivate {
     const isAuthenticated = this.authService.checkIsAuthenticated();
     const ruolo = this.authService.getRole();
 
-    if (!isAuthenticated && ruolo !== Ruolo.ECONOMO || ruolo !== Ruolo.ADMIN) {
+    if (!isAuthenticated || ruolo !== Ruolo.ECONOMO) {
       this.toastr.error('Access Denied. You must be an economo to access this page.');
       this.router.navigate(['/homepage']);
       return false;

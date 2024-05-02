@@ -4,7 +4,7 @@ import { UpdateUserDataRequest } from '../dto/request/updateUserDataRequest';
 import { GetUserDataResponse } from '../dto/response/getUserDataResponse';
 import { globalBackendUrl } from 'environment';
 import { Observable } from 'rxjs';
-import { GetRichiestaRicaricaSaldoResponse } from '../dto/response/getRichiestaRicaricaSaldoResponse';
+import { GetRichiestaRicaricaSaldoResponse } from '../dto/response/getAllRichiestaRicaricaSaldoResponse';
 import { UserService } from './user.service';
 
 @Injectable({

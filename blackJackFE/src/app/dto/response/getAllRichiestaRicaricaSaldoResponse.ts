@@ -1,4 +1,6 @@
-export interface GetRichiestaRicaricaSaldoResponse {
+export interface GetAllRichiestaRicaricaSaldoResponse {
+    richiestaId: number;
+    playerId: number;
     nome: string;
     cognome: string;
     email: string;
