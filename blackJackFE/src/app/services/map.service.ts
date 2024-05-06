@@ -3,11 +3,11 @@ import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import * as L from 'leaflet';
-import { GetAllTabacchiResponse } from '../dto/response/getAllTabacchiResponse';
+import { GetAllTabacchiResponse } from '../dto/response/GetAllTabacchiResponse';
 import { globalBackendUrl } from 'environment';
-import { MessageResponse } from '../dto/response/messageResponse';
+import { MessageResponse } from '../dto/response/MessageResponse';
 import { ToastrService } from 'ngx-toastr';
-import { RicaricaSaldoRequest } from '../dto/request/ricaricaSaldoRequest';
+import { RicaricaSaldoRequest } from '../dto/request/RicaricaSaldoRequest';
 //configurazione dell'immagine del marker
 const iconUrl = 'assets/marker/marker-icon.png';
 const iconDefault = L.icon({
@@ -157,8 +157,6 @@ export class MapService {
   // CHIAMATA PER RICHIEDERE LA RICARICA DEL DENARO
   richiediRicaricaDenaro(importo: number): Observable<MessageResponse> {
     const request: RicaricaSaldoRequest = { tabacchiId: this.tabacchiIdSelezionato, importo: importo };
-    console.log('Richiesta di ricarica: ', request);
-    console.log(localStorage.getItem("id"));
     return this.http.post<MessageResponse>('http://localhost:8080/api/v1/ricarica/richiediRicarica/' + localStorage.getItem("id"), request, { headers: this.getHeader() });
   }
 

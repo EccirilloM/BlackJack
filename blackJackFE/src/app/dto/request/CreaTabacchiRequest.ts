@@ -1,4 +1,4 @@
-export interface creaTabacchiRequest {
+export interface CreaTabacchiRequest {
     nomeTabacchi: string;
     lat: number;
     lng: number;

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { LoginRequest } from 'src/app/dto/request/loginRequest';
-import { LoginResponse } from 'src/app/dto/response/loginResponse';
+import { LoginRequest } from 'src/app/dto/request/LoginRequest';
+import { LoginResponse } from 'src/app/dto/response/LoginResponse';
 
 @Component({
   selector: 'app-login',

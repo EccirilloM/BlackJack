@@ -2,15 +2,15 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { Chart, registerables } from 'chart.js';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { GetUserDataResponse } from 'src/app/dto/response/getUserDataResponse';
+import { GetUserDataResponse } from 'src/app/dto/response/GetUserDataResponse';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RegistrazioneRequest } from 'src/app/dto/request/registrazioneRequest';
+import { RegistrazioneRequest } from 'src/app/dto/request/RegistrazioneRequest';
 import { AuthService } from 'src/app/services/auth.service';
-import { MessageResponse } from 'src/app/dto/response/messageResponse';
+import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { MapService } from 'src/app/services/map.service';
 import { debounceTime } from 'rxjs';
 import { TabacchiService } from 'src/app/services/tabacchi.service';
-import { GetAllTabacchiResponse } from 'src/app/dto/response/getAllTabacchiResponse';
+import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiResponse';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -51,7 +51,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     Chart.register(...registerables);
   }
 
-  //NGONINIT E AFTERVIEWINIT ---------------------------------------------------------------------------- 
+  //NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
     this.loadUsers();

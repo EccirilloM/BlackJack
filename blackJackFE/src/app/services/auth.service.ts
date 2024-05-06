@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LoginRequest } from '../dto/request/loginRequest';
-import { RegistrazioneRequest } from '../dto/request/registrazioneRequest';
-import { LoginResponse } from '../dto/response/loginResponse';
+import { LoginRequest } from '../dto/request/LoginRequest';
+import { RegistrazioneRequest } from '../dto/request/RegistrazioneRequest';
+import { LoginResponse } from '../dto/response/LoginResponse';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { MessageResponse } from '../dto/response/messageResponse';
+import { MessageResponse } from '../dto/response/MessageResponse';
 import { globalBackendUrl } from 'environment';
 
 

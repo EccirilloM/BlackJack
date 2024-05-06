@@ -32,7 +32,7 @@ public class Messaggio {
     private String testo;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime dataInvio;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)

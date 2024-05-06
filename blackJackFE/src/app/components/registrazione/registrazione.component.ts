@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { RegistrazioneRequest } from 'src/app/dto/request/registrazioneRequest';
-import { MessageResponse } from 'src/app/dto/response/messageResponse';
+import { RegistrazioneRequest } from 'src/app/dto/request/RegistrazioneRequest';
+import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 
 @Component({
   selector: 'app-registrazione',

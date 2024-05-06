@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UpdateUserDataRequest } from '../dto/request/updateUserDataRequest';
-import { GetUserDataResponse } from '../dto/response/getUserDataResponse';
+import { UpdateUserDataRequest } from '../dto/request/UpdateUserDataRequest';
+import { GetUserDataResponse } from '../dto/response/GetUserDataResponse';
 import { globalBackendUrl } from 'environment';
 import { Observable } from 'rxjs';
-import { RicaricaSaldoRequest } from '../dto/request/ricaricaSaldoRequest';
-import { MessageResponse } from '../dto/response/messageResponse';
-import { RegistrazioneRequest } from '../dto/request/registrazioneRequest';
+import { RicaricaSaldoRequest } from '../dto/request/RicaricaSaldoRequest';
+import { MessageResponse } from '../dto/response/MessageResponse';
+import { RegistrazioneRequest } from '../dto/request/RegistrazioneRequest';
 
 @Injectable({
   providedIn: 'root'

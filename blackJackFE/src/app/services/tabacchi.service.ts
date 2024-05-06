@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { globalBackendUrl } from 'environment';
 import { HttpClient, HttpHeaders } from "@angular/common/http"
-import { creaTabacchiRequest } from '../dto/request/creaTabacchiRequest';
+import { CreaTabacchiRequest } from '../dto/request/CreaTabacchiRequest';
 import { Observable } from 'rxjs';
-import { MessageResponse } from '../dto/response/messageResponse';
-import { GetAllTabacchiResponse } from '../dto/response/getAllTabacchiResponse';
+import { MessageResponse } from '../dto/response/MessageResponse';
+import { GetAllTabacchiResponse } from '../dto/response/GetAllTabacchiResponse';
 
 
 @Injectable({
@@ -19,7 +19,7 @@ export class TabacchiService {
   // CHIAMATE AL BACKEND PER IL TABACCHI -----------------------------------------------------------------------------
   // METODO PER CREARE UN TABACCHI
   creaTabacchi(nomeTabacchi: string, lat: number, lng: number, economoId: number): Observable<MessageResponse> {
-    const request: creaTabacchiRequest = { nomeTabacchi, lat, lng, economoId };
+    const request: CreaTabacchiRequest = { nomeTabacchi, lat, lng, economoId };
     return this.http.post<MessageResponse>(this.backendUrl + 'creaTabacchi', request, { headers: this.getHeader() });
   }
 

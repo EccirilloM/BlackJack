@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { globalBackendUrl } from 'environment';
-import { MessageResponse } from '../dto/response/messageResponse';
+import { MessageResponse } from '../dto/response/MessageResponse';
 import { Observable } from 'rxjs';
-import { GetAllRichiestaRicaricaSaldoResponse } from '../dto/response/getAllRichiestaRicaricaSaldoResponse';
+import { GetAllRichiestaRicaricaSaldoResponse } from '../dto/response/GetAllRichiestaRicaricaSaldoResponse';
 import { AccettaRichiestaRequest } from '../dto/request/AccettaRichiestaRequest';
 
 @Injectable({

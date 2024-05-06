@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GetAllRichiestaRicaricaSaldoResponse } from 'src/app/dto/response/getAllRichiestaRicaricaSaldoResponse';
+import { GetAllRichiestaRicaricaSaldoResponse } from 'src/app/dto/response/GetAllRichiestaRicaricaSaldoResponse';
 import { RicaricaService } from 'src/app/services/ricarica.service';
 
 @Component({

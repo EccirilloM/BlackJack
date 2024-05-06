@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UpdateUserDataRequest } from '../dto/request/updateUserDataRequest';
-import { GetUserDataResponse } from '../dto/response/getUserDataResponse';
+import { UpdateUserDataRequest } from '../dto/request/UpdateUserDataRequest';
+import { GetUserDataResponse } from '../dto/response/GetUserDataResponse';
 import { globalBackendUrl } from 'environment';
 import { Observable } from 'rxjs';
-import { GetRichiestaRicaricaSaldoResponse } from '../dto/response/getAllRichiestaRicaricaSaldoResponse';
 import { UserService } from './user.service';
 
 @Injectable({

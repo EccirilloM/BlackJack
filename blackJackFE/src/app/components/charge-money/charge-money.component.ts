@@ -3,7 +3,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime } from 'rxjs';
-import { GetAllTabacchiResponse } from 'src/app/dto/response/getAllTabacchiResponse';
+import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiResponse';
 import { MapService } from 'src/app/services/map.service';
 import { RicaricaService } from 'src/app/services/ricarica.service';
 import { TabacchiService } from 'src/app/services/tabacchi.service';
