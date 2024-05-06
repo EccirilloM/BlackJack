@@ -4,10 +4,8 @@ import it.polimi.blackjackbe.dto.request.RichiestaRicaricaRequest;
 import it.polimi.blackjackbe.dto.response.GetAllRichiesteRicaricaSaldoResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
 import it.polimi.blackjackbe.exception.NotFoundException;
-import it.polimi.blackjackbe.model.Ricarica;
-import it.polimi.blackjackbe.model.Ruolo;
-import it.polimi.blackjackbe.model.Tabacchi;
-import it.polimi.blackjackbe.model.User;
+import it.polimi.blackjackbe.model.*;
+import it.polimi.blackjackbe.repository.NotificaRepository;
 import it.polimi.blackjackbe.repository.RicaricaRepository;
 import it.polimi.blackjackbe.repository.TabacchiRepository;
 import it.polimi.blackjackbe.repository.UserRepository;
@@ -27,6 +25,7 @@ public class RicaricaServiceImplementation implements RicaricaService {
     private final RicaricaRepository ricaricaRepository;
     private final UserRepository userRepository;
     private final TabacchiRepository tabacchiRepository;
+    private final NotificaRepository notificaRepository;
 
     @Override
     public void richiediRicarica(Long userId, RichiestaRicaricaRequest request) {
@@ -143,6 +142,12 @@ public class RicaricaServiceImplementation implements RicaricaService {
         playerExists.get().setSaldo(playerExists.get().getSaldo() + ricarica.getImporto());
 
         userRepository.save(playerExists.get());
+
+        notificaRepository.save(Notifica.builder()
+                .data(LocalDateTime.now())
+                .testo("Ricarica di " + ricarica.getImporto() + "€ accettata")
+                .player(playerExists.get())
+                .build());
     }
 
     @Override
@@ -160,6 +165,12 @@ public class RicaricaServiceImplementation implements RicaricaService {
         Ricarica ricarica = ricaricaExists.get();
 
         ricaricaRepository.delete(ricarica);
+
+        notificaRepository.save(Notifica.builder()
+                .data(LocalDateTime.now())
+                .testo("Ricarica di " + ricarica.getImporto() + "€ rifiutata")
+                .player(ricarica.getPlayer())
+                .build());
     }
 
 

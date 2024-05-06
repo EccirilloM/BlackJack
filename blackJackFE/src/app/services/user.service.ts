@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { RicaricaSaldoRequest } from '../dto/request/RicaricaSaldoRequest';
 import { MessageResponse } from '../dto/response/MessageResponse';
 import { RegistrazioneRequest } from '../dto/request/RegistrazioneRequest';
+import { AdminUpdateUserDataRequest } from '../dto/request/adminUpdateUserData';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,13 @@ export class UserService {
     return this.http.put<GetUserDataResponse>(this.backendUrl + 'aggiornaDatiUtente/' + localStorage.getItem('id')?.toString(), request, { headers: header });
   }
 
+  adminAggiornaDatiUtente(id: number, nome: string, cognome: string, email: string, username: string): Observable<GetUserDataResponse> {
+    const header = this.getHeader();
+    const request: AdminUpdateUserDataRequest = { nome, cognome, email, username };
+
+    return this.http.put<GetUserDataResponse>(this.backendUrl + 'adminAggiornaDatiUtente/' + id.toString(), request, { headers: header });
+  }
+
   // METODO PER RICHIEDERE TUTTI GLI UTENTI DELL'APPLICAZIONE
   getAllUsers(): Observable<GetUserDataResponse[]> {
     const header = this.getHeader();
@@ -38,18 +46,26 @@ export class UserService {
     return this.http.get<GetUserDataResponse[]>(this.backendUrl + 'getAllByRuolo/' + ruolo, { headers: header });
   }
 
-  // METODO PER RICHIEDERE IL SALDO
-  // TODO: CHIEDERE A FABRIZIO SE E' CORRETTO
-  richiediRicaricaSaldo(tabacchiId: number, importo: number): Observable<RicaricaSaldoRequest> {
+  getUserDataById(id: number): Observable<GetUserDataResponse> {
     const header = this.getHeader();
-    const request: RicaricaSaldoRequest = { tabacchiId, importo };
-    return this.http.post<RicaricaSaldoRequest>(globalBackendUrl + "ricarica/richiediRicarica/" + localStorage.getItem("id")?.toString(), request, { headers: header });
+    return this.http.get<GetUserDataResponse>(this.backendUrl + 'getUserDataById/' + id, { headers: header });
   }
 
   // METODO PER CREARE UN ECONOMO
   creaEconomo(request: RegistrazioneRequest): Observable<MessageResponse> {
     const header = this.getHeader();
     return this.http.post<MessageResponse>(this.backendUrl + 'creaEconomo', request, { headers: header });
+  }
+
+  // METODO PER CREARE UN UTENTE
+  creaUtente(request: RegistrazioneRequest): Observable<MessageResponse> {
+    const header = this.getHeader();
+    return this.http.post<MessageResponse>(this.backendUrl + 'creaUtente', request, { headers: header });
+  }
+
+  deleteUser(userId: number): Observable<MessageResponse> {
+    const header = this.getHeader();
+    return this.http.delete<MessageResponse>(this.backendUrl + 'delete/' + userId, { headers: header });
   }
 
   //creo l'header con il token da mandare al backend

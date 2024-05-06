@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.dto.request.AdminAggiornaDatiUtenteRequest;
 import it.polimi.blackjackbe.dto.request.AggiornaDatiRequest;
 import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.UserResponse;
@@ -32,7 +33,7 @@ public class UserServiceImplementation implements UserService {
     private final TabacchiRepository tabacchiRepository;
 
     @Override
-    public UserResponse getUserData(Long userId) {
+    public UserResponse getUserDataById(Long userId) {
         if(userId < 1){
             throw new BadRequestException("Id non Valido");
         }
@@ -73,7 +74,7 @@ public class UserServiceImplementation implements UserService {
         List<Tabacchi> listaTabacchi = tabacchiRepository.findAll();
         for(Tabacchi tabacchi : listaTabacchi){
             if(tabacchi.getEconomo().getUserId() == userId){
-                throw new ConflictException("l'utente è associato ad un tabacchi.");
+                throw new ConflictException("l'utente è associato ad un tabacchi. Elinina prima il tabacchi.");
             }
         }
 
@@ -248,6 +249,54 @@ public class UserServiceImplementation implements UserService {
                 userExists.get().getSaldo()
         );
     }
+
+    @Override
+    public UserResponse adminAggiornaDatiUtente(AdminAggiornaDatiUtenteRequest aggiornaRequest, Long userId) {
+        //Prendo l'utente dal db con quell'id.
+        Optional<User> userExists = userRepository.findByUserId(userId);
+
+        //Se non esiste un utente con quell'id, lancio un'eccezione.
+        if(userExists.isEmpty()) {
+            throw new NotFoundException("Utente non trovato");
+        }
+
+        if(!aggiornaRequest.getNome().isBlank() && !aggiornaRequest.getNome().isEmpty()){
+            userExists.get().setNome(aggiornaRequest.getNome());
+        }
+
+        if(!aggiornaRequest.getCognome().isBlank() && !aggiornaRequest.getCognome().isEmpty()){
+            userExists.get().setCognome(aggiornaRequest.getCognome());
+        }
+
+        if(!aggiornaRequest.getEmail().isBlank() && !aggiornaRequest.getEmail().isEmpty()){
+            userExists.get().setEmail(aggiornaRequest.getEmail());
+        }
+
+        if(!aggiornaRequest.getUsername().isBlank() && !aggiornaRequest.getUsername().isEmpty() &&
+                !aggiornaRequest.getUsername().equals(userExists.get().getUsername())){
+            Optional<User> userExistsByUsername = userRepository.findByUsername(aggiornaRequest.getUsername());
+            if(userExistsByUsername.isPresent()){
+                throw new BadRequestException("Username già in uso");
+            }
+            userExists.get().setUsername(aggiornaRequest.getUsername());
+        }
+
+        //Salvo le modifiche nel db.
+        userRepository.save(userExists.get());
+
+        return new UserResponse(
+                userExists.get().getUserId(),
+                userExists.get().getNome(),
+                userExists.get().getCognome(),
+                userExists.get().getEmail(),
+                userExists.get().getUsername(),
+                userExists.get().getRuolo(),
+                userExists.get().getDataNascita(),
+                userExists.get().getDataRegistrazione(),
+                userExists.get().getSaldo()
+        );
+    }
+
 
     @Override
     public void creaEconomo(RegistrazioneRequest request){

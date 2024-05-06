@@ -71,10 +71,4 @@ export class LoginComponent {
   goToRegistration(): void {
     this.router.navigate(['/registrazione']);
   }
-
-  // METODI PER IL RECUPERO PASSWORD ----------------------------------------------------------------------------
-  forgotPassword(): void {
-    // Implementa la logica per il recupero della password qui
-    console.log('Funzionalità di recupero password non implementata.');
-  }
 }

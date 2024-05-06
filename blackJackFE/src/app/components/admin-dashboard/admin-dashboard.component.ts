@@ -46,6 +46,9 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   nomeTabacchi: string = '';
   // lat: number = this.mapService.lat;
   // lng: number = this.mapService.lng;
+
+  showEditDataUserByAdmin: boolean = false
+  idSelected: number = 0;
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService, private mapService: MapService, private tabacchiService: TabacchiService) {
     Chart.register(...registerables);
@@ -63,8 +66,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         this.mapService.placeTabacchiMarkers(response, this.mapCreaTabacchi);
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error while fetching users: ', error);
-        this.toastr.error('Error while fetching users');
+        console.error('Error while fetching tabacchi: ', error);
+        this.toastr.error('Error while fetching tabacchi');
       }
     });
   }
@@ -82,6 +85,25 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   lngMarker(): number {
     return this.mapService.lng;
   }
+
+  adminEditUserData() {
+    this.userService.adminAggiornaDatiUtente(this.idSelected, this.nome, this.cognome, this.email, this.username)
+      .subscribe({
+        next: (res) => {
+          this.toastr.success("Dati modificati con successo");
+          this.showEditDataUserByAdmin = false;
+        },
+        error: (err: HttpErrorResponse) => {
+          this.toastr.error(err.error.message);
+        }
+      });
+  }
+
+  toggleModalEditUserData(id: number) {
+    this.showEditDataUserByAdmin = !this.showEditDataUserByAdmin;
+    this.idSelected = id;
+  }
+
 
   //NOMINATIM SECTION --------------------------------------------------------------
   searchNominatim(query: string) {
@@ -186,16 +208,27 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         this.economi = response;
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error while fetching users: ', error);
-        this.toastr.error('Error while fetching users');
+        console.error('Error while fetching Economi: ', error);
+        this.toastr.error('Error while fetching Economi');
       }
     });
 
   }
 
   // FUNZIONE PER ELIMINARE UN UTENTE ----------------------------------------------------------------------------
-  deleteUser(id: number): void {
-    console.log('Eliminazione utente con id: ', id);
+  deleteUser(userId: number): void {
+    console.log('Eliminazione utente con id: ', userId);
+    this.userService.deleteUser(userId).subscribe({
+      next: (response: MessageResponse) => {
+        console.log(response);
+        this.loadUsers(); // Ricarica la lista degli utenti dopo l'eliminazione
+        this.toastr.success(response.message);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while deleting user: ', error);
+        this.toastr.error('Error while deleting user');
+      }
+    });
   }
 
   // FUNZIONE PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------

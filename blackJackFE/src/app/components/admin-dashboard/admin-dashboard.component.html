@@ -60,19 +60,20 @@
         </div>
       </div>
       <!-- FIne dati statistici generali -->
-      <!-- Inizio Dati Statistici Singolari DATI STATISTICI SINGOLARI -->
-      <div id="singolar-incomes">
-        <h1 class="font-bold py-4 uppercase">Singolar incomes</h1>
-        <div id="stats" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          <div class="bg-black/60 to-white/5 rounded-lg">
-            <div class="flex flex-row items-center">
-              <div class="text-3xl p-4">💰</div>
-              <div class="p-2">
-                <p class="text-xl font-bold">348$</p>
-                <p class="text-gray-500 font-medium">Amber Gates</p>
-                <p class="text-gray-500 text-sm">24 Nov 2022</p>
+      <!-- UTILIZZA QUESTO CODICE ADATTANDOLO PER L?ELENCO DELLE INCOMES -->
+      <div class="relative w-full max-w-4xl mx-auto h-72 bg-[#15202b]">
+        <div id="singolar-incomes" class="absolute inset-0 overflow-hidden">
+          <h1 class="font-bold py-4 text-slate-100 text-center uppercase">SINGOLAR INCOMES</h1>
+          <div class="flex overflow-x-auto py-2 px-4 space-x-4 scrollbar-thin h-48">
+            <!-- <div *ngFor="let notifica of notifiche" class="bg-black/60 rounded-lg flex-none w-64 h-full">
+              <div class="flex items-center p-4 space-x-4 h-full">
+                <div class="text-3xl">💰</div>
+                <div class="flex flex-col justify-center">
+                  <p class="text-xl text-gray-300 font-bold">{{ notifica.messaggio }}</p>
+                  <p class="text-gray-500 text-sm">{{ notifica.data }}</p>
+                </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -116,9 +117,10 @@
                 <td class="py-3 px-2">
                   <div class="inline-flex items-center space-x-3">
                     <a title="Edit User Data" class="cursor-pointer">
-                      <span class="material-icons text-white text-lg hover:text-blue-500">lock_person</span>
+                      <span class="material-icons text-white text-lg hover:text-blue-500"
+                        (click)="toggleModalEditUserData(utente.userId)">lock_person</span>
                     </a>
-                    <a title="Delete User" class="cursor-pointer">
+                    <a title="Delete User" class="cursor-pointer" (click)="deleteUser(utente.userId)">
                       <span class="material-icons text-white text-lg hover:text-red-600">block_flipped</span>
                     </a>
                   </div>
@@ -272,3 +274,68 @@
       </div>
     </div>
   </div>
+
+
+
+  <!-- MODALE che appare se cliccato un bottone per i filtri avanzati -->
+  <div *ngIf="showEditDataUserByAdmin"
+    class="overflow-x-hidden overflow-y-auto fixed inset-0 z-[451] outline-none focus:outline-none justify-center items-center flex text-sm">
+    <div class="relative mx-auto w-[70vw] h-[90%]">
+      <!-- INIZIA DA QUI -->
+      <div
+        class="border-0 rounded-lg shadow-lg relative flex flex-col w-full p-3 bg-white outline-none focus:outline-none ">
+        <!--header-->
+        <div class="flex items-center justify-between p-3 border-solid mb-3 border-slate-200 rounded-lg bg-gray-900">
+          <h3 class="text-xl font-semibold text-white">
+            Edit User Data
+          </h3>
+          <button
+            class="flex items-center justify-center w-10 h-10 bg-white rounded text-midnight border-midnight hover:bg-gray-100 shadow-lg"
+            (click)="showEditDataUserByAdmin=!showEditDataUserByAdmin;">
+            <span class="material-icons text-sky-800">
+              close
+            </span>
+          </button>
+        </div>
+        <!--body-->
+        <!-- Nome -->
+        <div>
+          <label for="nome" class="block text-sm font-medium text-gray-900">Nome</label>
+          <input type="text" name="nome" id="nome" autocomplete="given-name" class="mt-1 w-full inputBox"
+            [(ngModel)]="nome">
+        </div>
+
+        <!-- Cognome -->
+        <div>
+          <label for="cognome" class="block text-sm font-medium text-gray-900">Cognome</label>
+          <input type="text" name="cognome" id="cognome" autocomplete="cognome" class="mt-1 w-full inputBox"
+            [(ngModel)]="cognome">
+        </div>
+
+        <!-- Username -->
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-900">Username</label>
+          <input type="text" name="username" id="username" class="mt-1 w-full inputBox" [(ngModel)]="email">
+        </div>
+
+        <!-- Email-->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-900">Email</label>
+          <input type="email" name="email" id="email" class="mt-1 w-full inputBox" [(ngModel)]="username">
+        </div>
+        <!-- FOOTER -->
+        <div
+          class="flex justify-end items-center gap-4 p-1 border-t border-solid border-slate-200 rounded-b w-full bg-white">
+          <!-- Contenitore per tutti i bottoni -->
+          <div class="flex gap-4 w-full max-w-lg justify-end">
+            <button class="buttonBlueAction w-full flex items-center justify-center" type="button"
+              (click)="adminEditUserData(); showEditDataUserByAdmin=!showEditDataUserByAdmin;">
+              Conferma <span class="material-icons">filter_alt</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showEditDataUserByAdmin" class="opacity-25 fixed inset-0 z-[450] bg-black"></div>

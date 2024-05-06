@@ -1,5 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { NotificaResponse } from 'src/app/dto/response/NotificaResponse';
+import { NotificheService } from 'src/app/services/notifiche.service';
 
 @Component({
   selector: 'app-personal-info',
@@ -20,8 +23,10 @@ export class PersonalInfoComponent implements OnInit {
   email: string = "";
   daysAgo: number = 0;
 
+  notifiche: NotificaResponse[] = [];
+
   // COSTRUTTORE -----------------------------------------------------------------------------------
-  constructor() {
+  constructor(private notificheService: NotificheService) {
     this.initializeUserInfo();
     Chart.register(...registerables);
   }
@@ -29,6 +34,7 @@ export class PersonalInfoComponent implements OnInit {
   // NGONINIT E AFTERVIEWINIT -----------------------------------------------------------------------------------
   ngOnInit(): void {
     console.log('PersonalInfoComponent initialized');
+    this.loadNotifiche();
   }
 
   ngAfterViewInit(): void {
@@ -48,6 +54,20 @@ export class PersonalInfoComponent implements OnInit {
     const nome = localStorage.getItem('nome') ?? '';
     const cognome = localStorage.getItem('cognome') ?? '';
     return `${nome} ${cognome}`;
+  }
+
+  loadNotifiche(): void {
+    console.log('Caricamento notifiche');
+    this.notificheService.getAllByUserId().subscribe({
+      next: (response: NotificaResponse[]) => {
+        response.forEach((notifica: NotificaResponse) => {
+          this.notifiche.push({ data: new Date(notifica.data), messaggio: notifica.messaggio });
+        });
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      }
+    });
   }
 
   private formatDate(dateString: string | null): string {

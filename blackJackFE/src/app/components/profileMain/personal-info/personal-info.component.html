@@ -29,7 +29,23 @@
 
       </div>
 
-      <!-- End Personal Info -->
+      <div class="relative w-full max-w-4xl mx-auto h-72 bg-[#15202b]">
+        <div id="singolar-incomes" class="absolute inset-0 overflow-hidden">
+          <h1 class="font-bold py-4 text-slate-100 text-center uppercase">Notifiche</h1>
+          <div class="flex overflow-x-auto py-2 px-4 space-x-4 scrollbar-thin h-48">
+            <div *ngFor="let notifica of notifiche" class="bg-black/60 rounded-lg flex-none w-64 h-full">
+              <div class="flex items-center p-4 space-x-4 h-full">
+                <div class="text-3xl">💰</div>
+                <div class="flex flex-col justify-center">
+                  <p class="text-xl text-gray-300 font-bold">{{ notifica.messaggio }}</p>
+                  <p class="text-gray-500 text-sm">{{ notifica.data }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       <!-- Begin Statistiche -->
       <div class="flex flex-col w-full">

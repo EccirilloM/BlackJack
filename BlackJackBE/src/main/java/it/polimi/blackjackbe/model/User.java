@@ -70,7 +70,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
     private List<Tavolo> tavoli; //Tavoli in cui ha giocato il player
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Messaggio> messaggi; //Messaggi inviati dall'utente
 
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
@@ -78,6 +78,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "economo", fetch = FetchType.LAZY)
     private List<Tabacchi> tabacchi; //Tabacchi gestiti dall'economo
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    private List<Notifica> notifiche; //Notifiche ricevute dal player
 
     @Override
     public String getPassword() {

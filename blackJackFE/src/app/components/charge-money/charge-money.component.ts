@@ -50,8 +50,8 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
         this.mapService.placeTabacchiMarkersChargeMoney(response, this.mapRicaricaDenaro);
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error while fetching users: ', error);
-        this.toastr.error('Error while fetching users');
+        console.error('Error while fetching tabacchi: ', error);
+        this.toastr.error('Error while fetching Tabacchi');
       }
     });
   }

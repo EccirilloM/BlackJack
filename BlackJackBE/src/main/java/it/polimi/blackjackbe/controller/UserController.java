@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.controller;
 
+import it.polimi.blackjackbe.dto.request.AdminAggiornaDatiUtenteRequest;
 import it.polimi.blackjackbe.dto.request.AggiornaDatiRequest;
 import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.MessageResponse;
@@ -24,7 +25,7 @@ public class UserController {
     public ResponseEntity<UserResponse> getUserDataById(@PathVariable String userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                        .body(userService.getUserData(Long.parseLong(userId)));
+                        .body(userService.getUserDataById(Long.parseLong(userId)));
     }
 
     @DeleteMapping("delete/{userId}")
@@ -55,6 +56,14 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.aggiornaDatiUtente(aggiornaRequest, Long.parseLong(userId)));
+    }
+
+    @PutMapping("/adminAggiornaDatiUtente/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponse> adminAggiornaDatiUtente(@RequestBody AdminAggiornaDatiUtenteRequest request, @PathVariable String userId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(userService.adminAggiornaDatiUtente(request, Long.parseLong(userId)));
     }
 
     @PostMapping("/creaEconomo")
