@@ -28,7 +28,7 @@ public class UserController {
                         .body(userService.getUserDataById(Long.parseLong(userId)));
     }
 
-    @DeleteMapping("delete/{userId}")
+    @DeleteMapping("/delete/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> deleteAccount(@PathVariable String userId) {
         userService.deleteUser(Long.parseLong(userId));
@@ -37,21 +37,21 @@ public class UserController {
                 .body(new MessageResponse("Account eliminato con successo"));
     }
 
-    @GetMapping("getAllUsers")
+    @GetMapping("/getAllUsers")
     public ResponseEntity<List<UserResponse>> getAll() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getAll());
     }
 
-    @GetMapping("getAllByRuolo/{ruolo}")
+    @GetMapping("/getAllByRuolo/{ruolo}")
     public ResponseEntity<List<UserResponse>> getAllByRuolo(@PathVariable String ruolo) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.getAllByRuolo(ruolo));
     }
 
-    @PutMapping("aggiornaDatiUtente/{userId}")
+    @PutMapping("/aggiornaDatiUtente/{userId}")
     public ResponseEntity<UserResponse> aggiornaDatiUtente(@RequestBody AggiornaDatiRequest aggiornaRequest, @PathVariable String userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GetAllRichiestaRicaricaSaldoResponse } from 'src/app/dto/response/GetAllRichiestaRicaricaSaldoResponse';
+import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { RicaricaService } from 'src/app/services/ricarica.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-economo-dashboard',
@@ -11,7 +14,7 @@ export class EconomoDashboardComponent implements OnInit {
   richieste: GetAllRichiestaRicaricaSaldoResponse[] = [];
   nomeEconomo: string = localStorage.getItem('nome') || '';
 
-  constructor(private ricaricaService: RicaricaService) { }
+  constructor(private ricaricaService: RicaricaService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     console.log('EconomoDashboardComponent');
@@ -26,7 +29,7 @@ export class EconomoDashboardComponent implements OnInit {
         console.log(response);
         this.richieste = response;
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error while fetching richieste: ', error);
       }
     });
@@ -36,12 +39,13 @@ export class EconomoDashboardComponent implements OnInit {
     console.log('Accetto richiesta: ');
     console.log(richiesta);
     this.ricaricaService.accettaRichiesta(richiesta.richiestaId, richiesta.playerId).subscribe({
-      next: (response: any) => {
+      next: (response: MessageResponse) => {
         console.log(response);
         this.loadRichieste();
+        this.toastr.success('Richiesta accettata', 'Successo');
       },
-      error: (error: any) => {
-        console.error('Error while accepting richiesta: ', error);
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error('Errore durante l\'accettazione della richiesta', 'Errore');
       }
     });
   }
@@ -50,12 +54,14 @@ export class EconomoDashboardComponent implements OnInit {
     console.log('Rifiuto richiesta: ');
     console.log(richiesta);
     this.ricaricaService.rifiutaRichiesta(richiesta.richiestaId).subscribe({
-      next: (response: any) => {
+      next: (response: MessageResponse) => {
         console.log(response);
         this.loadRichieste();
+        this.toastr.success('Richiesta rifiutata', 'Successo');
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error while refusing richiesta: ', error);
+        this.toastr.error('Errore durante il rifiuto della richiesta', 'Errore');
       }
     });
   }

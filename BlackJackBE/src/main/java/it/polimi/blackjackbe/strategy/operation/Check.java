@@ -11,4 +11,6 @@ public class Check implements SceltaStrategy {
     public void esegui() {
         System.out.println("Controllo");
     }
+
+    //TODO: chiamare il singleton per controllare chi vince o perde
 }

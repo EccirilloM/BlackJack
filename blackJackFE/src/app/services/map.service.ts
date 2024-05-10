@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http"
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http"
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import * as L from 'leaflet';
 import { GetAllTabacchiResponse } from '../dto/response/GetAllTabacchiResponse';
@@ -28,6 +28,9 @@ L.Marker.prototype.options.icon = iconDefault;
 export class MapService {
   // Variabile che prende il valore dell'url globale e gli aggiunge IL tabacchi -------------------------------------
   private backendUrl: string = globalBackendUrl + 'tabacchi/';
+
+  private selectedTabacchiSource = new BehaviorSubject<GetAllTabacchiResponse | null>(null);
+  selectedTabacchi$ = this.selectedTabacchiSource.asObservable();
 
   // VARIABILI PER IL CURRENT TABACCHI --------------------------------------------------------------------------------
   latMarkerSelezionato: number = 0;
@@ -113,28 +116,49 @@ export class MapService {
   }
 
   // METODI PER CARICARE I MARKER DEI TABACCHI IN CHARGE MONEY -----------------------------------------------------------------------------
+  // placeTabacchiMarkersChargeMoney(tabacchi: GetAllTabacchiResponse[], mapRicaricaDenaro: any): void {
+  //   mapRicaricaDenaro.eachLayer((layer: any) => {
+  //     if (layer instanceof L.Marker) {
+  //       mapRicaricaDenaro.removeLayer(layer);
+  //     }
+
+  //   });
+
+  //   this.tabacchi = tabacchi;
+  //   // Aggiungi un popup al marker con un pulsante
+  //   tabacchi.forEach((tabacchi: GetAllTabacchiResponse) => {
+  //     let popupContent: string = `
+  //    <p id="nome-tabacchi">${tabacchi.nomeTabacchi}</p>
+  //  `;
+  //     L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapRicaricaDenaro).bindPopup(popupContent).on('click', (e: any) => {
+  //       this.latMarkerSelezionato = e.latlng.lat;
+  //       this.lngMarkerSelezionato = e.latlng.lng;
+  //       //TODO Chiamare la funzione
+  //       this.findTabacchiByCoordinates(this.latMarkerSelezionato, this.lngMarkerSelezionato);
+  //     });
+  //   });
+  //   this.mapRicaricaDenaro = mapRicaricaDenaro;
+  // }
+
   placeTabacchiMarkersChargeMoney(tabacchi: GetAllTabacchiResponse[], mapRicaricaDenaro: any): void {
+    // Clears existing markers
     mapRicaricaDenaro.eachLayer((layer: any) => {
       if (layer instanceof L.Marker) {
         mapRicaricaDenaro.removeLayer(layer);
       }
-
     });
 
-    this.tabacchi = tabacchi;
-    // Aggiungi un popup al marker con un pulsante
+    // Add new markers
     tabacchi.forEach((tabacchi: GetAllTabacchiResponse) => {
-      let popupContent: string = `
-     <p id="nome-tabacchi">${tabacchi.nomeTabacchi}</p>
-   `;
-      L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapRicaricaDenaro).bindPopup(popupContent).on('click', (e: any) => {
-        this.latMarkerSelezionato = e.latlng.lat;
-        this.lngMarkerSelezionato = e.latlng.lng;
-        //TODO Chiamare la funzione
-        this.findTabacchiByCoordinates(this.latMarkerSelezionato, this.lngMarkerSelezionato);
+      let marker = L.marker([tabacchi.lat, tabacchi.lng])
+        .addTo(mapRicaricaDenaro)
+        .bindPopup(`<p>${tabacchi.nomeTabacchi}</p>`);
+
+      marker.on('click', () => {
+        this.selectedTabacchiSource.next(tabacchi);  // Update the BehaviorSubject
+        this.toastr.info(`Tabacchi ${tabacchi.nomeTabacchi} selezionato`);
       });
     });
-    this.mapRicaricaDenaro = mapRicaricaDenaro;
   }
 
   // METODI CHE DATA UNA LATITUDINE E LONGITUDINE, RITORNA IL NOME E L'ID DEL TABACCHI --------------------------------
@@ -155,10 +179,22 @@ export class MapService {
   }
 
   // CHIAMATA PER RICHIEDERE LA RICARICA DEL DENARO
+  // richiediRicaricaDenaro(importo: number): Observable<MessageResponse> {
+  //   const request: RicaricaSaldoRequest = { tabacchiId: this.tabacchiIdSelezionato, importo: importo };
+  //   return this.http.post<MessageResponse>('http://localhost:8080/api/v1/ricarica/richiediRicarica/' + localStorage.getItem("id"), request, { headers: this.getHeader() });
+  // }
+
   richiediRicaricaDenaro(importo: number): Observable<MessageResponse> {
-    const request: RicaricaSaldoRequest = { tabacchiId: this.tabacchiIdSelezionato, importo: importo };
+    const tabacchiId = this.selectedTabacchiSource.value?.tabacchiId;
+    if (tabacchiId === undefined) {
+      this.toastr.error('Nessun tabacchi selezionato!');
+      throw new Error('Nessun tabacchi selezionato!'); // Lancia un errore o gestisci come preferisci
+    }
+
+    const request: RicaricaSaldoRequest = { tabacchiId, importo };
     return this.http.post<MessageResponse>('http://localhost:8080/api/v1/ricarica/richiediRicarica/' + localStorage.getItem("id"), request, { headers: this.getHeader() });
   }
+
 
   // METODI PER CARICARE I MARKER DEI TABACCHI IN CREATE TABACCHI -----------------------------------------------------------------------------
   placeTabacchiMarkers(tabacchi: GetAllTabacchiResponse[], mapCreaTabacchi: any): void {
@@ -209,7 +245,7 @@ export class MapService {
             next: (response: MessageResponse) => {
               this.tabacchi = this.tabacchi.filter((tabacchi: GetAllTabacchiResponse) => tabacchi.tabacchiId.toString() !== target.name);
               this.placeTabacchiMarkers(this.tabacchi, this.mapCreaTabacchi);
-            }, error: (error: any) => {
+            }, error: (error: HttpErrorResponse) => {
               console.error('Error while deleting tabacchi: ', error);
             }
           });

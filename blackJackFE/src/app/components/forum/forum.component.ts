@@ -1,9 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GetAllMessagesByTipoTavoloResponse } from 'src/app/dto/response/GetAllMessagesByTipoTavoloResponse';
 import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { ForumService } from 'src/app/services/forum.service';
 import { Tavolo } from 'src/app/types/tavolo';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-forum',
@@ -19,7 +21,8 @@ export class ForumComponent implements OnInit {
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(
     private forumService: ForumService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService
   ) { }
 
   // NGONINIT ----------------------------------------------------------------------------
@@ -44,9 +47,12 @@ export class ForumComponent implements OnInit {
       next: (response: MessageResponse) => {
         console.log(response);
         this.loadMessages();
+        this.testoMessaggio = '';
+        this.toastr.success('Messaggio inviato', 'Successo');
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error while sending message: ', error);
+        this.toastr.error('Errore durante l\'invio del messaggio', 'Errore');
       }
     });
   }
@@ -58,8 +64,9 @@ export class ForumComponent implements OnInit {
         console.log(response);
         this.messaggi = response;
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error while fetching messages: ', error);
+        this.toastr.error('Errore durante il caricamento dei messaggi', 'Errore');
       }
     });
   }

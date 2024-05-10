@@ -28,19 +28,20 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   private mapCreaTabacchi: any;
   saldoString: string = localStorage.getItem('saldo') || '0';
   saldo: number = parseFloat(this.saldoString);
-  // VARIABILI PER Creare Economo ----------------------------------------------------------------------------
+  // VARIABILI PER Creare Economo Oppure Modificare Dati di un User----------------------------------------------------------------------------
   nome = '';
   cognome = '';
   email = '';
   username = '';
   password = '';
   passwordRipetuta = '';
-  dataNascita = new Date(); // Assicurati di gestire correttamente la formattazione della data per il backend
+  dataNascita = new Date();
   showPassword = false;
   showRepeatPassword = false;
   economi: GetUserDataResponse[] = [];
   economoSelezionatoId: number = 0;
 
+  // VARIABILI PER Tabacchi ----------------------------------------------------------------------------
   tabacchi: GetAllTabacchiResponse[] = [];
   // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
   nomeTabacchi: string = '';
@@ -59,17 +60,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     console.log('Admin Dashboard initialized');
     this.loadUsers();
     this.loadAllEconomi();
-    this.tabacchiService.getAllTabacchi().subscribe({
-      next: (response: GetAllTabacchiResponse[]) => {
-        console.log(response);
-        this.tabacchi = response;
-        this.mapService.placeTabacchiMarkers(response, this.mapCreaTabacchi);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('Error while fetching tabacchi: ', error);
-        this.toastr.error('Error while fetching tabacchi');
-      }
-    });
+    this.loadAllTabacchi();
+
   }
 
   ngAfterViewInit(): void {
@@ -86,9 +78,11 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     return this.mapService.lng;
   }
 
+  // METODI PER Modificare i dati di un utente ----------------------------------------------------------------------------
   adminEditUserData() {
     this.userService.adminAggiornaDatiUtente(this.idSelected, this.nome, this.cognome, this.email, this.username)
       .subscribe({
+        //TODO: Vedere con fabrizio perché è così la res e non c'è un message response
         next: (res) => {
           this.toastr.success("Dati modificati con successo");
           this.showEditDataUserByAdmin = false;
@@ -111,7 +105,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       this.searchResults = [];
       return;
     }
-
     //LASCIA COSì il debounce Fidati
     this.mapService.searchNominatimLocation(query).pipe(debounceTime(5000)).subscribe({
       next: (results) => {
@@ -162,8 +155,9 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         this.password = '';
         this.passwordRipetuta = '';
         this.dataNascita = new Date();
+        this.toastr.success("Economo creato con successo");
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error(err);
         this.toastr.error(err.error.message || 'Errore durante la registrazione');
       }
@@ -178,8 +172,9 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         this.nomeTabacchi = '';
         this.tabacchi.push({ nomeTabacchi: this.nomeTabacchi, lat: this.latMarker(), lng: this.lngMarker(), userId: this.economoSelezionatoId, tabacchiId: 0 });
         this.mapService.placeTabacchiMarkers(this.tabacchi, this.mapCreaTabacchi);
+        this.toastr.success("Tabacchi creato con successo");
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error(err);
         this.toastr.error(err.error.message || 'Errore durante la creazione del tabacchi');
       }
@@ -192,16 +187,15 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       next: (response: GetUserDataResponse[]) => {
         console.log(response);
         this.utenti = response;
-        this.numberOfUsers = this.utenti.length;  // Aggiorna qui il numero di utenti
+        this.numberOfUsers = this.utenti.length;
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error while fetching users: ', error);
         this.toastr.error('Error while fetching users');
       }
     });
   }
 
-  // Funzione per caricare tutti gli Economo ----------------------------------------------------------------------------
+  // Funzione per caricare tutti gli Economi ----------------------------------------------------------------------------
   loadAllEconomi(): void {
     this.userService.getAllByRuolo('ECONOMO').subscribe({
       next: (response: GetUserDataResponse[]) => {
@@ -215,14 +209,29 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   }
 
+  // Funzione per caricare tutti i Tabacchi ----------------------------------------------------------------------------
+  loadAllTabacchi(): void {
+    this.tabacchiService.getAllTabacchi().subscribe({
+      next: (response: GetAllTabacchiResponse[]) => {
+        console.log(response);
+        this.tabacchi = response;
+        this.mapService.placeTabacchiMarkers(response, this.mapCreaTabacchi);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching tabacchi: ', error);
+        this.toastr.error('Error while fetching tabacchi');
+      }
+    });
+  }
+
   // FUNZIONE PER ELIMINARE UN UTENTE ----------------------------------------------------------------------------
   deleteUser(userId: number): void {
     console.log('Eliminazione utente con id: ', userId);
     this.userService.deleteUser(userId).subscribe({
       next: (response: MessageResponse) => {
         console.log(response);
-        this.loadUsers(); // Ricarica la lista degli utenti dopo l'eliminazione
-        this.toastr.success(response.message);
+        this.loadUsers();
+        this.toastr.success("Utente eliminato con successo");
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while deleting user: ', error);
@@ -231,7 +240,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // FUNZIONE PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------
+  // FUNZIONi PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------
   private initializeCharts(): void {
     this.initializeUsersChart();
     this.initializeCommercesChart();
@@ -286,6 +295,5 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
   // FINE COMPONETE ----------------------------------------------------------------------------
 }

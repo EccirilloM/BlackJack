@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -61,7 +62,8 @@ public class User implements UserDetails {
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataNascita;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false,insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @CreationTimestamp
     private LocalDateTime dataRegistrazione;
 
     @Column(nullable = false)

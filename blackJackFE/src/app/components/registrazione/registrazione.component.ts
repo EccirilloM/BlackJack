@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { RegistrazioneRequest } from 'src/app/dto/request/RegistrazioneRequest';
 import { MessageResponse } from 'src/app/dto/response/MessageResponse';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-registrazione',
@@ -57,7 +58,7 @@ export class RegistrazioneComponent {
         this.toastr.success(res.message);
         this.router.navigateByUrl('/login');
       },
-      error: (err: any) => {
+      error: (err: HttpErrorResponse) => {
         console.error(err);
         this.toastr.error(err.error.message || 'Errore durante la registrazione');
       }

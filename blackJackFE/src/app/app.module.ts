@@ -10,10 +10,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrazioneComponent } from './components/registrazione/registrazione.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TavoloComponent } from './components/tavolo/tavolo.component';
-import { ConfirmChangeOperationComponent } from './components/confirm-change-operation/confirm-change-operation.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FormsModule } from '@angular/forms';
-import { StatisticsComponent } from './components/statistics/statistics.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { PersonalInfoComponent } from './components/profileMain/personal-info/personal-info.component';
@@ -32,9 +30,7 @@ import { EconomoDashboardComponent } from './components/economo-dashboard/econom
     RegistrazioneComponent,
     DashboardComponent,
     TavoloComponent,
-    ConfirmChangeOperationComponent,
     NotFoundComponent,
-    StatisticsComponent,
     NavbarComponent,
     HomepageComponent,
     RegistrazioneComponent,

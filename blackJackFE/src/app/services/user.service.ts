@@ -4,10 +4,9 @@ import { UpdateUserDataRequest } from '../dto/request/UpdateUserDataRequest';
 import { GetUserDataResponse } from '../dto/response/GetUserDataResponse';
 import { globalBackendUrl } from 'environment';
 import { Observable } from 'rxjs';
-import { RicaricaSaldoRequest } from '../dto/request/RicaricaSaldoRequest';
 import { MessageResponse } from '../dto/response/MessageResponse';
 import { RegistrazioneRequest } from '../dto/request/RegistrazioneRequest';
-import { AdminUpdateUserDataRequest } from '../dto/request/adminUpdateUserData';
+import { AdminUpdateUserDataRequest } from '../dto/request/AdminUpdateUserData';
 
 @Injectable({
   providedIn: 'root'
