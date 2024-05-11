@@ -6,11 +6,12 @@ import it.polimi.blackjackbe.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class MessaggioBuilder {
     private Long messaggioId;
     private String testo;

@@ -6,11 +6,12 @@ import it.polimi.blackjackbe.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class TabacchiBuilder {
     private Long tabacchiId;
     private String nome;

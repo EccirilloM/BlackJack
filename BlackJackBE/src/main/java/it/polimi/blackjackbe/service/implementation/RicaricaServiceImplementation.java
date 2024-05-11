@@ -1,5 +1,7 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.builder.NotificaBuilder;
+import it.polimi.blackjackbe.builder.RicaricaBuilder;
 import it.polimi.blackjackbe.dto.request.RichiestaRicaricaRequest;
 import it.polimi.blackjackbe.dto.response.GetAllRichiesteRicaricaSaldoResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
@@ -57,7 +59,7 @@ public class RicaricaServiceImplementation implements RicaricaService {
             throw new NotFoundException("Tabacchi non trovato");
         }
 
-        Ricarica ricarica = Ricarica.builder()
+        Ricarica ricarica = new RicaricaBuilder()
                 .richiesta(true)
                 .dataRichiesta(LocalDateTime.now())
                 .importo(request.getImporto())
@@ -143,7 +145,7 @@ public class RicaricaServiceImplementation implements RicaricaService {
 
         userRepository.save(playerExists.get());
 
-        notificaRepository.save(Notifica.builder()
+        notificaRepository.save(new NotificaBuilder()
                 .data(LocalDateTime.now())
                 .testo("Ricarica di " + ricarica.getImporto() + "€ accettata")
                 .player(playerExists.get())
@@ -166,7 +168,7 @@ public class RicaricaServiceImplementation implements RicaricaService {
 
         ricaricaRepository.delete(ricarica);
 
-        notificaRepository.save(Notifica.builder()
+        notificaRepository.save(new NotificaBuilder()
                 .data(LocalDateTime.now())
                 .testo("Ricarica di " + ricarica.getImporto() + "€ rifiutata")
                 .player(ricarica.getPlayer())

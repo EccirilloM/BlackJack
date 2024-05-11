@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.builder.UserBuilder;
 import it.polimi.blackjackbe.dto.request.LoginRequest;
 import it.polimi.blackjackbe.dto.request.RegistrazioneRequest;
 import it.polimi.blackjackbe.dto.response.LoginResponse;
@@ -52,16 +53,17 @@ public class AuthServiceImplementation implements AuthService {
 
         checkUserData(List.of(nome, cognome, username, email, password));
 
-        User user = new User();
-        user.setNome(nome);
-        user.setCognome(cognome);
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
-        user.setRuolo(ruolo);
-        user.setDataNascita(dataNascita);
-        user.setDataRegistrazione(LocalDateTime.now());
-        user.setSaldo(100.00);
+        User user = new UserBuilder()
+                .nome(nome)
+                .cognome(cognome)
+                .username(username)
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .ruolo(ruolo)
+                .dataNascita(dataNascita)
+                .dataRegistrazione(LocalDateTime.now())
+                .saldo(100.00)
+                .build();
 
         userRepository.save(user);
 

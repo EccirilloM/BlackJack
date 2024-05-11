@@ -3,9 +3,10 @@ package it.polimi.blackjackbe.builder;
 import it.polimi.blackjackbe.model.Carta;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class CartaBuilder {
     private String seme;
     private String valore;

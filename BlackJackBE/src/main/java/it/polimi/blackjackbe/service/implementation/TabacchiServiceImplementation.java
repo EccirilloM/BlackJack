@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.builder.TabacchiBuilder;
 import it.polimi.blackjackbe.dto.request.CreaTabacchiRequest;
 import it.polimi.blackjackbe.dto.response.TabacchiResponse;
 import it.polimi.blackjackbe.dto.response.UserResponse;
@@ -48,7 +49,7 @@ public class TabacchiServiceImplementation implements TabacchiService {
             throw new IllegalArgumentException("Economo non trovato");
         }
 
-        Tabacchi tabacchi = Tabacchi.builder()
+        Tabacchi tabacchi = new TabacchiBuilder()
                 .nome(request.getNomeTabacchi())
                 .lng(Double.valueOf(request.getLng()))
                 .lat(Double.valueOf(request.getLat()))

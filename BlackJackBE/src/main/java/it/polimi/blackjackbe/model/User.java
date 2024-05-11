@@ -62,8 +62,7 @@ public class User implements UserDetails {
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataNascita;
 
-    @Column(nullable = false, updatable = false,insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime dataRegistrazione;
 
     @Column(nullable = false)

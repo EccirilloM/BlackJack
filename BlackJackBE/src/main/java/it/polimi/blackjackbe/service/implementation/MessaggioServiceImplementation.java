@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.builder.MessaggioBuilder;
 import it.polimi.blackjackbe.dto.request.MessaggioRequest;
 import it.polimi.blackjackbe.dto.response.GetAllMessagesByTipoTavoloResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
@@ -79,7 +80,7 @@ public class MessaggioServiceImplementation implements MessaggioService {
             throw new BadRequestException("Ruolo non valido");
         }
 
-        Messaggio messaggio = Messaggio.builder()
+        Messaggio messaggio = new MessaggioBuilder()
                 .testo(messaggioRequest.getTesto())
                 .user(userExists.get())
                 .createdAt(LocalDateTime.now())

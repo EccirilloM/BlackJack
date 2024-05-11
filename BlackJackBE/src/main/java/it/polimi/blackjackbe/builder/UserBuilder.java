@@ -3,13 +3,14 @@ package it.polimi.blackjackbe.builder;
 import it.polimi.blackjackbe.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class UserBuilder {
     private long userId;
     private String nome;
