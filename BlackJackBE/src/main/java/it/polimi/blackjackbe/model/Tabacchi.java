@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.TabacchiBuilder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,4 +43,14 @@ public class Tabacchi {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User economo; //Economo che gestisce il tabacchi
+
+    public Tabacchi(TabacchiBuilder tabacchiBuilder) {
+        this.tabacchiId = tabacchiBuilder.getTabacchiId();
+        this.nome = tabacchiBuilder.getNome();
+        this.lat = tabacchiBuilder.getLat();
+        this.lng = tabacchiBuilder.getLng();
+        this.ricariche = tabacchiBuilder.getRicariche();
+        this.economo = tabacchiBuilder.getEconomo();
+    }
+
 }

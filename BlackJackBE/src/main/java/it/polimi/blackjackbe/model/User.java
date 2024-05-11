@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.UserBuilder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User implements UserDetails {
     @Id
     @SequenceGenerator(
@@ -83,6 +83,24 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
     private List<Notifica> notifiche; //Notifiche ricevute dal player
+
+    public User (UserBuilder userBuilder) {
+        this.userId = userBuilder.getUserId();
+        this.nome = userBuilder.getNome();
+        this.cognome = userBuilder.getCognome();
+        this.email = userBuilder.getEmail();
+        this.password = userBuilder.getPassword();
+        this.username = userBuilder.getUsername();
+        this.ruolo = userBuilder.getRuolo();
+        this.dataNascita = userBuilder.getDataNascita();
+        this.dataRegistrazione = userBuilder.getDataRegistrazione();
+        this.saldo = userBuilder.getSaldo();
+        this.tavoli = userBuilder.getTavoli();
+        this.messaggi = userBuilder.getMessaggi();
+        this.ricariche = userBuilder.getRicariche();
+        this.tabacchi = userBuilder.getTabacchi();
+        this.notifiche = userBuilder.getNotifiche();
+    }
 
     @Override
     public String getPassword() {

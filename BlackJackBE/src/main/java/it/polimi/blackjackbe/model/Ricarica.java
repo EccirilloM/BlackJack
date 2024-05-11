@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.RicaricaBuilder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -50,5 +50,16 @@ public class Ricarica {
     @ManyToOne
     @JoinColumn(name = "tabacchi_id")
     private Tabacchi tabacchi;
+
+    public Ricarica(RicaricaBuilder ricaricaBuilder) {
+        this.ricaricaId = ricaricaBuilder.getRicaricaId();
+        this.importo = ricaricaBuilder.getImporto();
+        this.dataRicarica = ricaricaBuilder.getDataRicarica();
+        this.dataRichiesta = ricaricaBuilder.getDataRichiesta();
+        this.richiesta = ricaricaBuilder.isRichiesta();
+        this.accettata = ricaricaBuilder.isAccettata();
+        this.player = ricaricaBuilder.getPlayer();
+        this.tabacchi = ricaricaBuilder.getTabacchi();
+    }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.NotificaBuilder;
 import it.polimi.blackjackbe.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Notifica")
@@ -36,4 +36,12 @@ public class Notifica {
 
     @ManyToOne
     private User player;
+
+    public Notifica(NotificaBuilder builder) {
+        this.notificaId = builder.getNotificaId();
+        this.data = builder.getData();
+        this.testo = builder.getTesto();
+        this.player = builder.getPlayer();
+    }
+
 }

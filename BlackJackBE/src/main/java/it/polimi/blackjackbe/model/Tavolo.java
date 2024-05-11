@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.TavoloBuilder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,6 +51,17 @@ public class Tavolo {
 
     @Transient
     private Carta cartaDealer;
+
+    public Tavolo(TavoloBuilder tavoloBuilder) {
+        this.tavoloId = tavoloBuilder.getTavoloId();
+        this.tipoTavolo = tavoloBuilder.getTipoTavolo();
+        this.vittoriaUser = tavoloBuilder.isVittoriaUser();
+        this.plotUser = tavoloBuilder.getPlotUser();
+        this.player = tavoloBuilder.getPlayer();
+        this.carte = tavoloBuilder.getCarte();
+        this.carteSingolaMano = tavoloBuilder.getCarteSingolaMano();
+        this.cartaDealer = tavoloBuilder.getCartaDealer();
+    }
 
 
     public void initCarte(){

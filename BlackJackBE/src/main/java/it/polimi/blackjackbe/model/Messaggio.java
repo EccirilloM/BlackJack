@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.MessaggioBuilder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,4 +41,12 @@ public class Messaggio {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user; // user che ha inviato il messaggio
+
+    public Messaggio(MessaggioBuilder messaggioBuilder) {
+        this.messaggioId = messaggioBuilder.getMessaggioId();
+        this.testo = messaggioBuilder.getTesto();
+        this.createdAt = messaggioBuilder.getCreatedAt();
+        this.tipoTavolo = messaggioBuilder.getTipoTavolo();
+        this.user = messaggioBuilder.getUser();
+    }
 }

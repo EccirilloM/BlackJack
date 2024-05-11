@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.CartaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -10,6 +11,9 @@ public class Carta {
     private String valore;
     private int punteggio;
 
-
-
+    public Carta(CartaBuilder builder) {
+        this.seme = builder.getSeme();
+        this.valore = builder.getValore();
+        this.punteggio = builder.getPunteggio();
+    }
 }
