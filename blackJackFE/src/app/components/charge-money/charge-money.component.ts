@@ -27,8 +27,6 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
   lngMarkerSelezionato: number = this.mapService.lngMarkerSelezionato;
   // VARIABILE PER LA RICARICA DENARO ----------------------------------------------------------------------------
   importo: number = 0;
-
-  // TODO: implementare la funzione che data latitudine e longitudine, ritorna il nome e l'id del tabacchi
   tabacchiSelezionatoNome: string = '';
   private tabacchiSub!: Subscription;  // Subscription to handle observable
 

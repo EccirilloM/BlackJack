@@ -82,8 +82,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   adminEditUserData() {
     this.userService.adminAggiornaDatiUtente(this.idSelected, this.nome, this.cognome, this.email, this.username)
       .subscribe({
-        //TODO: Vedere con fabrizio perché è così la res e non c'è un message response
-        next: (res) => {
+        next: (res: GetUserDataResponse) => {
           this.toastr.success("Dati modificati con successo");
           this.showEditDataUserByAdmin = false;
         },

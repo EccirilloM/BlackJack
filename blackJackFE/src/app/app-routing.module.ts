@@ -15,6 +15,7 @@ import { EconomoDashboardComponent } from './components/economo-dashboard/econom
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { EconomoGuard } from './guards/economo.guard';
+import { TavoloComponent } from './components/tavolo/tavolo.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
@@ -49,6 +50,9 @@ const routes: Routes = [
       },
       {
         path: "economoDashboard", component: EconomoDashboardComponent, canActivate: [AuthGuard, EconomoGuard]
+      },
+      {
+        path: "tavolo/:tipoTavolo", component: TavoloComponent
       }
 
     ]

@@ -1,38 +1,108 @@
-<div id="wrapper">
-  <div id="game">
-    <div id="alert" class="alert alert-error hide"><span></span></div>
-    <div id="dealer">
-      <div id="dhand"></div>
+<div class="flex flex-col items-center justify-center h-screen bg-gray-800 px-10">
+  <!-- Header con il bottone Close -->
+  <div class="w-full flex justify-end p-2">
+    <button
+      class="flex items-center justify-center w-10 h-10 bg-white rounded-lg text-blue-500 hover:bg-gray-100 focus:outline-none"
+      (click)="goToHomePage()">
+      <span class="material-icons">close</span>
+    </button>
+  </div>
+
+  <!-- Player and Dealer Section -->
+  <div class="flex justify-between items-center w-full my-8">
+    <!-- Player Card -->
+    <div class="cardWhite flex-1 mx-3 p-6 flex flex-col justify-start items-center" style="height: 600px;">
+      <h2 class="text-3xl font-bold mb-4 self-center">Player: <span>{{ playerUsername }}</span></h2>
+      <div class="self-center">
+        <h3 class="text-2xl font-bold mb-2">Carte:</h3>
+        <ng-container *ngFor="let carta of cartePlayer">
+          <div class="flex items-center justify-center mb-2">
+            <div
+              class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-yellow-500/20 text-yellow-600 py-2 px-4 text-base rounded-md">
+              <span>Seme: {{ carta.seme }}</span>
+            </div>
+            <div
+              class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-purple-500/20 text-purple-600 py-2 px-4 text-base rounded-md ml-2">
+              <span>Valore: {{ carta.valore }}</span>
+            </div>
+          </div>
+        </ng-container>
+        <div class="mt-4 self-center">
+          <h3 class="text-2xl font-bold">Score:</h3>
+          <div class="w-max">
+            <div
+              class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-600 py-3 px-5 text-lg rounded-md">
+              <span>{{ scorePlayer }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="player">
-      <div id="phand"></div>
+
+    <!-- Warning Card, vertically centered -->
+    <div class="cardGrey w-48 p-4 self-center h-32">
+      <p>{{ warningMessage }}</p>
     </div>
-    <div id="money">
-      <span id="cash">Cash: $<span></span></span>
-      <div id="bank">Winnings: $<span></span></div>
+
+    <!-- Dealer Card -->
+    <div class="cardWhite flex-1 mx-3 p-6 flex flex-col justify-start items-center" style="height: 600px;">
+      <h2 class="text-3xl font-bold mb-4 self-center">Dealer</h2>
+      <div class="self-center">
+        <h3 class="text-2xl font-bold mb-2">Carte:</h3>
+        <ng-container *ngFor="let carta of carteDealer">
+          <div class="flex items-center justify-center mb-2">
+            <div
+              class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-yellow-500/20 text-yellow-600 py-2 px-4 text-base rounded-md">
+              <span>Seme: {{ carta.seme }}</span>
+            </div>
+            <div
+              class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-purple-500/20 text-purple-600 py-2 px-4 text-base rounded-md ml-2">
+              <span>Valore: {{ carta.valore }}</span>
+            </div>
+          </div>
+        </ng-container>
+        <div class="mt-4 self-center">
+          <h3 class="text-2xl font-bold">Score:</h3>
+          <div class="w-max">
+            <div
+              class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-green-500/20 text-green-600 py-3 px-5 text-lg rounded-md">
+              <span>{{ scoreDealer }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div id="actions">
-    <button id="deal" class="btn">Deal!</button>
-    <button id="hit" class="btn" disabled>Hit</button>
-    <button id="stand" class="btn" disabled>Stand</button>
-    <button id="double" class="btn" disabled>Double Down</button>
-    <button id="split" class="btn" disabled>Split</button>
-    <button id="insurance" class="btn" disabled>Insurance</button>
-    <strong>Wager:</strong> $<input id="wager" class="input-small" type="text" />
-  </div>
-</div>
-<div id="myModal" class="modal hide fade">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Out of cash!</h3>
-  </div>
-  <div class="modal-body">
-    <p>You ran out of cash, but you spot an ATM nearby. Would you like to withdraw another $1,000 and try your luck
-      again?</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#" id="cancel" class="btn">Nah</a>
-    <a href="#" id="newGame" class="btn btn-primary">Yes!</a>
+
+
+  <!-- Control Buttons, Wager, and Cash/Winning Section -->
+  <div class="flex items-end w-full">
+    <!-- Wager -->
+    <div class="flex flex-col items-center mr-12">
+      <label for="wager" class="text-white mb-2">Wager:</label>
+      <input type="number" id="wager" [(ngModel)]="wager" class="inputBox w-48" placeholder="Enter your wager">
+    </div>
+
+    <!-- Game Control Buttons -->
+    <div class="flex space-x-4 mr-12">
+      <button class="buttonBlueAction text-lg px-6 py-3" (click)="deal()">Deal</button>
+      <button class="buttonBlueAction text-lg px-6 py-3" (click)="hit()">Hit</button>
+      <button class="buttonBlueAction text-lg px-6 py-3" (click)="stand()">Stand</button>
+      <button class="buttonBlueAction text-lg px-6 py-3" (click)="double()">Double</button>
+    </div>
+
+    <!-- Cash/Winning Card -->
+    <div class="cardWhite p-6 h-20 w-96">
+      <div class="flex justify-between">
+        <div>
+          <h3 class="text-lg font-medium">Cash:</h3>
+          <p>{{ playerCash }}</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-medium">Winning:</h3>
+          <p>{{ playerWinning }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

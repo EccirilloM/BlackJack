@@ -148,6 +148,7 @@ public class Tavolo {
             return carta;
         }
     }
+
     @Transient
     public int punteggioDealer(){
         if(cartaDealer==null)return 0;
@@ -158,7 +159,6 @@ public class Tavolo {
             punteggio+=carta.getPunteggio();
         }
         return punteggio;
-
     }
 
     @Transient
@@ -172,6 +172,7 @@ public class Tavolo {
         }
         return punteggio;
     }
+
     @Transient
     public int getPunteggio(){
         if(carteSingolaMano==null||carteSingolaMano.isEmpty()){
@@ -187,8 +188,5 @@ public class Tavolo {
     public void end(){
         carteSingolaMano.clear();
         cartaDealer=null;
-
     }
-
-
 }

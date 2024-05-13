@@ -25,7 +25,7 @@ public class SingletonTavoli {
         tavoliAttivi.put(user.getUserId(),tavolo);
     }
 
-    private Tavolo getTable(User user){
+    public Tavolo getTable(User user){
         return tavoliAttivi.get(user.getUserId());
     }
 
