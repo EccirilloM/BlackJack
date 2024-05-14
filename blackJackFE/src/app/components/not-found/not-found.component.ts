@@ -11,7 +11,7 @@ export class NotFoundComponent {
   constructor(private router: Router) { }
 
   // METODI PER LA NAVIGAZIONE ----------------------------------------------------------------------------
-  goHome() {
-    this.router.navigate(['/homepage']);
+  goToLogin() {
+    this.router.navigate(['/login']);
   }
 }

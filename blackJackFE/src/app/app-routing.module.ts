@@ -1,7 +1,7 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { RegistrazioneComponent } from './components/registrazione/registrazione.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
@@ -11,16 +11,16 @@ import { ChangeProfileDataComponent } from './components/profileMain/change-prof
 import { ChargeMoneyComponent } from './components/charge-money/charge-money.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-import { EconomoDashboardComponent } from './components/economo-dashboard/economo-dashboard.component';
+import { EconomistDashboardComponent } from './components/economist-dashboard/economist-dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { EconomoGuard } from './guards/economo.guard';
-import { TavoloComponent } from './components/tavolo/tavolo.component';
+import { TableComponent } from './components/table/table.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
   { path: "login", component: LoginComponent },
-  { path: 'registrazione', component: RegistrazioneComponent },
+  { path: 'registrazione', component: RegistrationComponent },
   {
     path: 'homepage',
     component: HomepageComponent,
@@ -49,10 +49,10 @@ const routes: Routes = [
         path: "adminDashboard", component: AdminDashboardComponent, canActivate: [AuthGuard, AdminGuard]
       },
       {
-        path: "economoDashboard", component: EconomoDashboardComponent, canActivate: [AuthGuard, EconomoGuard]
+        path: "economoDashboard", component: EconomistDashboardComponent, canActivate: [AuthGuard, EconomoGuard]
       },
       {
-        path: "tavolo/:tipoTavolo", component: TavoloComponent
+        path: "table/:tipoTavolo", component: TableComponent
       }
 
     ]

@@ -7,9 +7,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { RegistrazioneComponent } from './components/registrazione/registrazione.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { TavoloComponent } from './components/tavolo/tavolo.component';
+import { TableComponent } from './components/table/table.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -21,19 +21,19 @@ import { ProfileContainerComponent } from './components/profileMain/profile-cont
 import { ChargeMoneyComponent } from './components/charge-money/charge-money.component';
 import { ForumComponent } from './components/forum/forum.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
-import { EconomoDashboardComponent } from './components/economo-dashboard/economo-dashboard.component';
+import { EconomistDashboardComponent } from './components/economist-dashboard/economist-dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegistrazioneComponent,
+    RegistrationComponent,
     DashboardComponent,
-    TavoloComponent,
+    TableComponent,
     NotFoundComponent,
     NavbarComponent,
     HomepageComponent,
-    RegistrazioneComponent,
+    RegistrationComponent,
     PersonalInfoComponent,
     ChangeProfileDataComponent,
     ProfileSideBarComponent,
@@ -41,7 +41,7 @@ import { EconomoDashboardComponent } from './components/economo-dashboard/econom
     ChargeMoneyComponent,
     ForumComponent,
     AdminDashboardComponent,
-    EconomoDashboardComponent
+    EconomistDashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -7,11 +7,11 @@ import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-registrazione',
-  templateUrl: './registrazione.component.html',
-  styleUrls: ['./registrazione.component.css']
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.css']
 })
-export class RegistrazioneComponent {
+export class RegistrationComponent {
 
   // VARIABILI PER LA REGISTRAZIONE -----------------------------------------------------------------------------------
   nome = '';
@@ -60,7 +60,7 @@ export class RegistrazioneComponent {
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
-        this.toastr.error(err.error.message || 'Errore durante la registrazione');
+        this.toastr.error(err.error.message || 'Errore durante la registration');
       }
     });
   }

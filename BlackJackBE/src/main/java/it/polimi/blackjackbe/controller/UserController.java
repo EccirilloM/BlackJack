@@ -67,6 +67,7 @@ public class UserController {
     }
 
     @PostMapping("/creaEconomo")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> creaEconomo(@Valid @RequestBody RegistrazioneRequest request) {
         userService.creaEconomo(request);
 

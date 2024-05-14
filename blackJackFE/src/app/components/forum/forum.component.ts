@@ -58,7 +58,7 @@ export class ForumComponent implements OnInit {
   }
 
   loadMessages(): void {
-    console.log('Carico i messaggi del tavolo');
+    console.log('Carico i messaggi del table');
     this.forumService.getAllMessagesByTipoTavolo(this.tipoTavolo?.toString()).subscribe({
       next: (response: GetAllMessagesByTipoTavoloResponse[]) => {
         console.log(response);

@@ -14,16 +14,16 @@
     <div class="cardWhite flex-1 mx-3 p-6 flex flex-col justify-start items-center" style="height: 600px;">
       <h2 class="text-3xl font-bold mb-4 self-center">Player: <span>{{ playerUsername }}</span></h2>
       <div class="self-center">
-        <h3 class="text-2xl font-bold mb-2">Carte:</h3>
+        <h3 class="text-2xl font-bold mb-2">Cards: </h3>
         <ng-container *ngFor="let carta of cartePlayer">
           <div class="flex items-center justify-center mb-2">
             <div
               class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-yellow-500/20 text-yellow-600 py-2 px-4 text-base rounded-md">
-              <span>Seme: {{ carta.seme }}</span>
+              <span>Suit: {{ carta.seme }}</span>
             </div>
             <div
               class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-purple-500/20 text-purple-600 py-2 px-4 text-base rounded-md ml-2">
-              <span>Valore: {{ carta.valore }}</span>
+              <span>Value: {{ carta.valore }}</span>
             </div>
           </div>
         </ng-container>
@@ -53,11 +53,11 @@
           <div class="flex items-center justify-center mb-2">
             <div
               class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-yellow-500/20 text-yellow-600 py-2 px-4 text-base rounded-md">
-              <span>Seme: {{ carta.seme }}</span>
+              <span>Suit: {{ carta.seme }}</span>
             </div>
             <div
               class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none bg-purple-500/20 text-purple-600 py-2 px-4 text-base rounded-md ml-2">
-              <span>Valore: {{ carta.valore }}</span>
+              <span>Value: {{ carta.valore }}</span>
             </div>
           </div>
         </ng-container>

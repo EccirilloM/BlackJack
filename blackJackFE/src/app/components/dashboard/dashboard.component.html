@@ -1,7 +1,7 @@
 <!-- Dashboard Component -->
 <!-- Headbar -->
 <div class="bg-white rounded-lg mx-3 my-4 p-2 text-center shadow">
-  <p class="text-base font-medium leading-7 text-dark-grey-600">SELEZIONA IL TAVOLO A CUI VUOI GIOCARE</p>
+  <p class="text-base font-medium leading-7 text-dark-grey-600">SELECT THE TABLE YOU WANT TO PLAY AT</p>
 </div>
 <!-- Card dei tavoli -->
 <div
@@ -21,7 +21,7 @@
                 <div class="w-full flex-none text-xs text-blue-700 font-medium ">
                   BlackJack Safer
                 </div>
-                <h2 class="flex-auto text-lg font-medium">Tavolo Base</h2>
+                <h2 class="flex-auto text-lg font-medium">Base Table</h2>
               </div>
               <p class="mt-3"></p>
               <div class="flex py-4  text-sm text-gray-500">
@@ -48,7 +48,7 @@
                         attach_money
                       </span>
                     </span>
-                    <span>puntata minima: {{puntataMinimaTavoloBase}}</span>
+                    <span>Minimum Bet {{puntataMinimaTavoloBase}}</span>
                   </button>
                 </div>
                 <button (click)="goToTable(Tavolo.BASE)"
@@ -72,7 +72,7 @@
                 <div class="w-full flex-none text-xs text-blue-700 font-medium ">
                   BlackJack Safer
                 </div>
-                <h2 class="flex-auto text-lg font-medium">Tavolo Premium</h2>
+                <h2 class="flex-auto text-lg font-medium">Premium Table</h2>
               </div>
               <p class="mt-3"></p>
               <div class="flex py-4  text-sm text-gray-500">
@@ -99,7 +99,7 @@
                         attach_money
                       </span>
                     </span>
-                    <span>Puntata Minima: {{puntataMinimaTavoloPremium}}</span>
+                    <span>Minimum Bet: {{puntataMinimaTavoloPremium}}</span>
                   </button>
                 </div>
                 <button (click)="goToTable(Tavolo.PREMIUM)"
@@ -123,7 +123,7 @@
                 <div class="w-full flex-none text-xs text-blue-700 font-medium ">
                   BlackJack Safer
                 </div>
-                <h2 class="flex-auto text-lg font-medium">Tavolo Vip</h2>
+                <h2 class="flex-auto text-lg font-medium">Vip Table</h2>
               </div>
               <p class="mt-3"></p>
               <div class="flex py-4  text-sm text-gray-500">
@@ -150,7 +150,7 @@
                         attach_money
                       </span>
                     </span>
-                    <span>Puntata Minima: {{puntataMinimaTavoloVip}}</span>
+                    <span>Minimum Bet: {{puntataMinimaTavoloVip}}</span>
                   </button>
                 </div>
                 <button (click)="goToTable(Tavolo.VIP)"
@@ -174,7 +174,7 @@
                 <div class="w-full flex-none text-xs text-blue-700 font-medium ">
                   BlackJack Safer
                 </div>
-                <h2 class="flex-auto text-lg font-medium">Tavolo Exclusive</h2>
+                <h2 class="flex-auto text-lg font-medium">Exclusive Table</h2>
               </div>
               <p class="mt-3"></p>
               <div class="flex py-4  text-sm text-gray-500">
@@ -201,7 +201,7 @@
                         attach_money
                       </span>
                     </span>
-                    <span>Puntata Minima: {{puntataMinimaTavoloExclusive}}</span>
+                    <span>Minimum Bet: {{puntataMinimaTavoloExclusive}}</span>
                   </button>
                 </div>
                 <button (click)="goToTable(Tavolo.EXCLUSIVE)"

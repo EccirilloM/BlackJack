@@ -4,21 +4,21 @@
     <!-- Card -->
     <div class="w-full flex flex-col">
       <div class="flex-1 cardWhite p-8 w-full">
-        <h4 class="text-xl text-gray-900 font-bold">Modifica i tuoi dati</h4>
+        <h4 class="text-xl text-gray-900 font-bold">Edit Your Data</h4>
 
         <!-- Form Fields -->
         <form class="mt-4 grid grid-cols-1 gap-y-6">
           <!-- TODO: controllare che i campi non siano vuoti, e mettere il gap -->
           <!-- Nome -->
           <div>
-            <label for="nome" class="block text-sm font-medium text-gray-900">Nome</label>
+            <label for="nome" class="block text-sm font-medium text-gray-900">Name</label>
             <input type="text" name="nome" id="nome" [(ngModel)]="userData.nome" autocomplete="given-name"
               class="mt-1 w-full inputBox">
           </div>
 
           <!-- Cognome -->
           <div>
-            <label for="cognome" class="block text-sm font-medium text-gray-900">Cognome</label>
+            <label for="cognome" class="block text-sm font-medium text-gray-900">Surname</label>
             <input type="text" name="cognome" id="cognome" autocomplete="cognome" [(ngModel)]="userData.cognome"
               class="mt-1 w-full inputBox">
           </div>
@@ -38,21 +38,21 @@
 
           <!-- Vecchia Password -->
           <div>
-            <label for="old-password" class="block text-sm font-medium text-gray-900">Vecchia Password*</label>
+            <label for="old-password" class="block text-sm font-medium text-gray-900">Old Password*</label>
             <input type="password" name="old-password" id="old-password" [(ngModel)]="userData.vecchiaPassword"
               class="mt-1 w-full inputBox">
           </div>
 
           <!-- Nuova Password -->
           <div>
-            <label for="new-password" class="block text-sm font-medium text-gray-900">Nuova Password</label>
+            <label for="new-password" class="block text-sm font-medium text-gray-900">New Password</label>
             <input type="password" name="new-password" id="new-password" [(ngModel)]="userData.nuovaPassword"
               class="mt-1 w-full inputBox">
           </div>
 
           <!-- Buttons -->
           <div class="flex items-center justify-end gap-4">
-            <button type="button" (click)="aggiornaDatiUtente()" class="buttonBlueAction">Salva</button>
+            <button type="button" (click)="aggiornaDatiUtente()" class="buttonBlueAction">Save</button>
           </div>
         </form>
       </div>

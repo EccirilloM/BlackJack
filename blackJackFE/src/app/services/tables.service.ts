@@ -9,7 +9,7 @@ import { MessageResponse } from '../dto/response/MessageResponse';
   providedIn: 'root'
 })
 export class TablesService {
-  private backendUrl: string = globalBackendUrl + 'tavolo';
+  private backendUrl: string = globalBackendUrl + 'table';
 
   constructor(private http: HttpClient) { }
 

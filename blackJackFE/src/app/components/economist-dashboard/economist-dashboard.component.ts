@@ -6,18 +6,18 @@ import { RicaricaService } from 'src/app/services/ricarica.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'app-economo-dashboard',
-  templateUrl: './economo-dashboard.component.html',
-  styleUrls: ['./economo-dashboard.component.css']
+  selector: 'app-economist-dashboard',
+  templateUrl: './economist-dashboard.component.html',
+  styleUrls: ['./economist-dashboard.component.css']
 })
-export class EconomoDashboardComponent implements OnInit {
+export class EconomistDashboardComponent implements OnInit {
   richieste: GetAllRichiestaRicaricaSaldoResponse[] = [];
   nomeEconomo: string = localStorage.getItem('nome') || '';
 
   constructor(private ricaricaService: RicaricaService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    console.log('EconomoDashboardComponent');
+    console.log('EconomistDashboardComponent');
     this.loadRichieste();
   }
 

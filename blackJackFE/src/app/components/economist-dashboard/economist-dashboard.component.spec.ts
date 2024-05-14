@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EconomoDashboardComponent } from './economo-dashboard.component';
+import { EconomistDashboardComponent } from './economist-dashboard.component';
 
 describe('EconomoDashboardComponent', () => {
-  let component: EconomoDashboardComponent;
-  let fixture: ComponentFixture<EconomoDashboardComponent>;
+  let component: EconomistDashboardComponent;
+  let fixture: ComponentFixture<EconomistDashboardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EconomoDashboardComponent ]
+      declarations: [ EconomistDashboardComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EconomoDashboardComponent);
+    fixture = TestBed.createComponent(EconomistDashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

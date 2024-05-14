@@ -74,13 +74,13 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Messaggio> messaggi; //Messaggi inviati dall'utente
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ricarica> ricariche; //Ricariche effettuate dall'utente
 
-    @OneToMany(mappedBy = "economo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "economo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tabacchi> tabacchi; //Tabacchi gestiti dall'economo
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notifica> notifiche; //Notifiche ricevute dal player
 
     public User (UserBuilder userBuilder) {

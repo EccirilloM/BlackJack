@@ -17,12 +17,12 @@ export class ForumService {
 
   constructor(private http: HttpClient) { }
 
-  // Metodo per aggiornare il tipo di tavolo selezionato
+  // Metodo per aggiornare il tipo di table selezionato
   changeTavolo(tipoTavolo: Tavolo): void {
     this.currentTavolo.next(tipoTavolo);
   }
 
-  // Metodo per ottenere l'Observable del tipo di tavolo attuale
+  // Metodo per ottenere l'Observable del tipo di table attuale
   getCurrentTavolo(): Observable<Tavolo | null> {
     return this.currentTavolo.asObservable();
   }

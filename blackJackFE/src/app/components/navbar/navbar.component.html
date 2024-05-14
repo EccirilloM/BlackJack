@@ -85,13 +85,13 @@
         </button>
 
         <!-- Economo -->
-        <button *ngIf="isEconomo() || isAdmin()" (click)="goToEconomo()"
+        <button *ngIf="isEconomo() || isAdmin()" (click)="goToEconomist()"
           [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'home', 'bg-gray-700 text-gray-400': currentRoute !== 'home' }"
           class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
           <span class="material-icons">
             price_check
           </span>
-          Economo
+          Economist
         </button>
 
         <!-- Profile -->

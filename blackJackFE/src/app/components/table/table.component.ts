@@ -7,11 +7,11 @@ import { TablesService } from 'src/app/services/tables.service';
 import { Tavolo } from 'src/app/types/tavolo';
 
 @Component({
-  selector: 'app-tavolo',
-  templateUrl: './tavolo.component.html',
-  styleUrls: ['./tavolo.component.css']
+  selector: 'app-table',
+  templateUrl: './table.component.html',
+  styleUrls: ['./table.component.css']
 })
-export class TavoloComponent implements OnInit {
+export class TableComponent implements OnInit {
 
   playerUsername: string = localStorage.getItem('username') || '';
   warningMessage: string = '';
@@ -41,8 +41,8 @@ export class TavoloComponent implements OnInit {
       if (tipoTavoloParam && tipoTavoloParam in Tavolo) {
         this.tipoTavolo = Tavolo[tipoTavoloParam as keyof typeof Tavolo];
       } else {
-        console.error('Tipo di tavolo non valido o mancante:', tipoTavoloParam);
-        // Qui potresti gestire il caso di un tipo di tavolo non valido o mancante, es. reindirizzando l'utente
+        console.error('Tipo di table non valido o mancante:', tipoTavoloParam);
+        // Qui potresti gestire il caso di un tipo di table non valido o mancante, es. reindirizzando l'utente
       }
     });
   }

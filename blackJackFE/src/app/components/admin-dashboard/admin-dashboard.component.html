@@ -28,7 +28,7 @@
                 <span class="material-icons text-white text-4xl">account_balance_wallet</span>
               </div>
               <div>
-                <p class="text-teal-300 text-sm font-medium uppercase leading-4">Saldo</p>
+                <p class="text-teal-300 text-sm font-medium uppercase leading-4">Balance</p>
                 <p class="text-white font-bold text-2xl inline-flex items-center space-x-2">
                   <span>${{ saldo }}</span>
                   <span *ngIf="saldo > 0" class="material-icons text-white text-lg">trending_up</span>
@@ -41,7 +41,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2 p-2">
           <!-- Grafico percentuale vincita casinò -->
           <div class="bg-white p-4 rounded-md">
-            <h2 class="text-gray-500 text-lg font-semibold pb-1">Percentuale Vittorie Casinò</h2>
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Casino Win Percentage</h2>
             <div class="my1-"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px  mb-6"></div> <!-- Línea con gradiente -->
             <div class="chart-container" style="position: relative; height:150px; width:100%">
@@ -50,7 +50,7 @@
           </div>
           <!-- Grafico frequenza media di gioco per Utente -->
           <div class="bg-white p-4 rounded-md">
-            <h2 class="text-gray-500 text-lg font-semibold pb-1">Frequenda media di gioco per Utente</h2>
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Average Play Frequency per User</h2>
             <div class="my-1"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
             <div class="chart-container" style="position: relative; height:150px; width:100%">
@@ -96,9 +96,9 @@
               <tr>
                 <th class="text-left py-3 px-2 rounded-l-lg">Name</th>
                 <th class="text-left py-3 px-2">Email</th>
-                <th class="text-left py-3 px-2">Ruolo</th>
-                <th class="text-left py-3 px-2">Data di Nascita</th>
-                <th class="text-left py-3 px-2">Saldo</th>
+                <th class="text-left py-3 px-2">Role</th>
+                <th class="text-left py-3 px-2">Date of Birth</th>
+                <th class="text-left py-3 px-2">Balance</th>
                 <th class="text-left py-3 px-2 rounded-r-lg">Actions</th>
               </tr>
             </thead>
@@ -134,11 +134,11 @@
 
       <!-- Inizio Gestione Tabacchi -->
       <div id="Tabacchi">
-        <h1 class="font-bold py-4 uppercase">Manage Tabacchi</h1>
+        <h1 class="font-bold py-4 uppercase">Manage ATM</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
           <!-- MAPPA PER EVENTALE ELIMINAZIONE -->
           <div class="bg-cardDark p-4 rounded-md h-auto">
-            <h2 class="text-gray-500 text-lg font-semibold pb-1">Mappa</h2>
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Map</h2>
             <div class="my1-"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px  mb-6"></div> <!-- Línea con gradiente -->
             <!-- Campo Nome -->
@@ -171,33 +171,33 @@
 
           <!-- FORM PER CREAZIONE DI UN TABACCHI -->
           <div class="bg-cardDark p-4 rounded-md">
-            <h2 class="text-gray-500 text-lg font-semibold pb-1">Form Per Creazione Tabacchi</h2>
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Form to Creating an ATM</h2>
             <div class="my-1"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
             <!-- Campo Nome Tabacchi -->
             <div class="mt-3">
-              <label class="block text-sm text-white" for="nome">Nome Tabacchi</label>
+              <label class="block text-sm text-white" for="nome">ATM Name</label>
               <input class="w-full inputBox" [(ngModel)]="nomeTabacchi" name="NomeTabacchi" id="NomeTabacchi"
                 placeholder="Inserisci il nome del Tabacchi" required>
             </div>
 
             <!-- Campo Latitudine Tabacchi -->
             <div class="mt-3">
-              <label class="block text-sm text-white" for="cognome">Latitudine</label>
+              <label class="block text-sm text-white" for="cognome">Latitude</label>
               <input type="number" class="w-full inputBox" [value]="latMarker()" name="lat" id="lat" placeholder=""
                 required>
             </div>
 
             <!-- Campo Longitudine Tabacchi -->
             <div class="mt-3">
-              <label class="block text-sm text-white" for="lng">Longitudine</label>
+              <label class="block text-sm text-white" for="lng">Longitude</label>
               <input type="number" class="w-full inputBox" [value]="lngMarker()" name="lng" id="lng" placeholder=""
                 required>
             </div>
 
             <!-- Campo Economo Associato -->
             <div class="mt-3">
-              <label class="block text-sm text-white">Economo Associato</label>
+              <label class="block text-sm text-white">Associated Economist</label>
               <select name="economo" id="economi" [(ngModel)]="economoSelezionatoId">
                 <option value="" selected></option>
                 <ng-container *ngFor="let economo of economi">
@@ -210,45 +210,45 @@
                 placeholder="Inserisci il tuo username" required> -->
             </div>
             <!-- Bottone di Creazione -->
-            <button class="buttonBlueAction mt-3" (click)="creaTabacchi()">Crea Tabacchi</button>
+            <button class="buttonBlueAction mt-3" (click)="creaTabacchi()">Create ATM</button>
           </div>
 
           <!-- FORM PER CREAZIONE DI ECONOMO -->
           <div class="bg-cardDark p-4 rounded-md">
-            <h2 class="text-gray-500 text-lg font-semibold pb-1">Form per creare un Economo</h2>
+            <h2 class="text-gray-500 text-lg font-semibold pb-1">Form to Create an Economist</h2>
             <div class="my-1"></div> <!-- Espacio de separación -->
             <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
             <!-- Campo Nome -->
             <div>
-              <label class="block text-sm text-white" for="nome">Nome</label>
+              <label class="block text-sm text-white" for="nome">Name</label>
               <input class="w-full inputBox" [(ngModel)]="nome" name="nome" id="nome"
-                placeholder="Inserisci il tuo nome" required>
+                placeholder="Insert the Name" required>
             </div>
 
             <!-- Campo Cognome -->
             <div>
-              <label class="block text-sm text-white" for="cognome">Cognome</label>
+              <label class="block text-sm text-white" for="cognome">Surname</label>
               <input class="w-full inputBox" [(ngModel)]="cognome" name="cognome" id="cognome"
-                placeholder="Inserisci il tuo cognome" required>
+                placeholder="Insert the Surname" required>
             </div>
 
             <!-- Campo Email -->
             <div>
               <label class="block text-sm text-white" for="email">Email</label>
               <input class="w-full inputBox" [(ngModel)]="email" name="email" id="email"
-                placeholder="Inserisci la tua email" required>
+                placeholder="Insert the email" required>
             </div>
 
             <!-- Campo Username -->
             <div>
               <label class="block text-sm text-white" for="username">Username</label>
               <input class="w-full inputBox" [(ngModel)]="username" name="username" id="username"
-                placeholder="Inserisci il tuo username" required>
+                placeholder="Insert the username" required>
             </div>
 
             <!-- Campo Data di Nascita -->
             <div class="mt-2">
-              <label class="block text-sm text-white" for="dataNascita">Data di Nascita</label>
+              <label class="block text-sm text-white" for="dataNascita">Date of Birth</label>
               <input type="date" class="w-full inputBox" [(ngModel)]="dataNascita" name="dataNascita" id="dataNascita"
                 required>
             </div>
@@ -257,18 +257,18 @@
             <div class="mt-2">
               <label class="block text-sm text-white" for="password">Password</label>
               <input type="password" class="w-full inputBox" [(ngModel)]="password" name="password" id="password"
-                placeholder="Digita la tua password" required>
+                placeholder="Enter the password" required>
             </div>
 
             <!-- Campo Ripeti Password -->
             <div class="mt-2">
-              <label class="block text-sm text-white" for="ripeti_password">Ripeti Password</label>
+              <label class="block text-sm text-white" for="ripeti_password">Repeated Password</label>
               <input type="password" class="w-full inputBox" [(ngModel)]="passwordRipetuta" name="ripeti_password"
-                id="ripeti_password" placeholder="Ripeti la tua password" required>
+                id="ripeti_password" placeholder="Repeat the Password" required>
             </div>
 
             <!-- Bottone di Creazione -->
-            <button class="buttonBlueAction" (click)="creaEconomo()">Crea Economo</button>
+            <button class="buttonBlueAction" (click)="creaEconomo()">Create Economist</button>
           </div>
         </div>
       </div>
@@ -300,14 +300,14 @@
         <!--body-->
         <!-- Nome -->
         <div>
-          <label for="nome" class="block text-sm font-medium text-gray-900">Nome</label>
+          <label for="nome" class="block text-sm font-medium text-gray-900">Name</label>
           <input type="text" name="nome" id="nome" autocomplete="given-name" class="mt-1 w-full inputBox"
             [(ngModel)]="nome">
         </div>
 
         <!-- Cognome -->
         <div>
-          <label for="cognome" class="block text-sm font-medium text-gray-900">Cognome</label>
+          <label for="cognome" class="block text-sm font-medium text-gray-900">Surname</label>
           <input type="text" name="cognome" id="cognome" autocomplete="cognome" class="mt-1 w-full inputBox"
             [(ngModel)]="cognome">
         </div>
@@ -330,7 +330,7 @@
           <div class="flex gap-4 w-full max-w-lg justify-end">
             <button class="buttonBlueAction w-full flex items-center justify-center" type="button"
               (click)="adminEditUserData(); showEditDataUserByAdmin=!showEditDataUserByAdmin;">
-              Conferma <span class="material-icons">filter_alt</span>
+              Confirm <span class="material-icons">filter_alt</span>
             </button>
           </div>
         </div>

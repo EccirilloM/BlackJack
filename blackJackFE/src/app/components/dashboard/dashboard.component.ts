@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
   }
 
   goToTable(tipoTavolo: Tavolo) {
-    this.router.navigate(['/homepage/tavolo', tipoTavolo]);
+    this.router.navigate(['/homepage/table', tipoTavolo]);
   }
 
 }

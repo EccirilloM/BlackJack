@@ -158,7 +158,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
-        this.toastr.error(err.error.message || 'Errore durante la registrazione');
+        this.toastr.error(err.error.message || 'Errore durante la registration');
       }
     });
   }

@@ -69,7 +69,7 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/homepage/adminDashboard']);
   }
 
-  goToEconomo(): void {
+  goToEconomist(): void {
     this.router.navigate(['/homepage/economoDashboard']);
   }
 

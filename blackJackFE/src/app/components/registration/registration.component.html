@@ -2,15 +2,15 @@
   <div class="container mx-auto h-full flex flex-1 justify-center items-center">
     <div class="w-full max-w-lg">
       <div class="leading-loose">
-        <!-- Rimossi (ngSubmit) e [formGroup], usiamo (click) sul bottone di registrazione -->
+        <!-- Rimossi (ngSubmit) e [formGroup], usiamo (click) sul bottone di registration -->
         <div class="max-w-sm m-4 p-10 bg-white bg-opacity-25 rounded shadow-xl">
-          <p class="text-white text-center text-lg font-bold">REGISTRAZIONE</p>
+          <p class="text-white text-center text-lg font-bold">REGISTRATION</p>
 
           <!-- Aggiornato per utilizzare [(ngModel)] e name -->
           <!-- Campo Nome -->
           <div>
             <label class="block text-sm text-white" for="nome">Nome</label>
-            <input class="w-full inputBox" [(ngModel)]="nome" name="nome" id="nome" placeholder="Inserisci il tuo nome"
+            <input class="w-full inputBox" [(ngModel)]="nome" name="nome" id="nome" placeholder="Insert your Name"
               required>
           </div>
 
@@ -18,26 +18,26 @@
           <div>
             <label class="block text-sm text-white" for="cognome">Cognome</label>
             <input class="w-full inputBox" [(ngModel)]="cognome" name="cognome" id="cognome"
-              placeholder="Inserisci il tuo cognome" required>
+              placeholder="Insert you Surname" required>
           </div>
 
           <!-- Campo Email -->
           <div>
             <label class="block text-sm text-white" for="email">Email</label>
             <input class="w-full inputBox" [(ngModel)]="email" name="email" id="email"
-              placeholder="Inserisci la tua email" required>
+              placeholder="Insert your Email" required>
           </div>
 
           <!-- Campo Username -->
           <div>
             <label class="block text-sm text-white" for="username">Username</label>
             <input class="w-full inputBox" [(ngModel)]="username" name="username" id="username"
-              placeholder="Inserisci il tuo username" required>
+              placeholder="Insert your username" required>
           </div>
 
           <!-- Campo Data di Nascita -->
           <div class="mt-2">
-            <label class="block text-sm text-white" for="dataNascita">Data di Nascita</label>
+            <label class="block text-sm text-white" for="dataNascita">Date of Birth</label>
             <input type="date" class="w-full inputBox" [(ngModel)]="dataNascita" name="dataNascita" id="dataNascita"
               required>
           </div>
@@ -46,22 +46,21 @@
           <div class="mt-2">
             <label class="block text-sm text-white" for="password">Password</label>
             <input type="password" class="w-full inputBox" [(ngModel)]="password" name="password" id="password"
-              placeholder="Digita la tua password" required>
+              placeholder="Enter your Password" required>
           </div>
 
           <!-- Campo Ripeti Password -->
           <div class="mt-2">
-            <label class="block text-sm text-white" for="ripeti_password">Ripeti Password</label>
+            <label class="block text-sm text-white" for="ripeti_password">Repeat Password</label>
             <input type="password" class="w-full inputBox" [(ngModel)]="passwordRipetuta" name="ripeti_password"
-              id="ripeti_password" placeholder="Ripeti la tua password" required>
+              id="ripeti_password" placeholder="Repeat the password" required>
           </div>
 
           <!-- Bottone di Registrazione -->
           <div class="mt-4 items-center flex justify-between">
             <button [disabled]="password!=passwordRipetuta" (click)="register()"
-              class="buttonBlueAction">Registra</button>
-            <button (click)="goToLogin()" class="buttonBlueAction">Vai al
-              Login</button>
+              class="buttonBlueAction">Register</button>
+            <button (click)="goToLogin()" class="buttonBlueAction">Go to Login</button>
           </div>
         </div>
       </div>
