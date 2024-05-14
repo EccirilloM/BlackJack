@@ -31,5 +31,4 @@ public class CartaBuilder {
         return new Carta(this);
     }
 
-
 }

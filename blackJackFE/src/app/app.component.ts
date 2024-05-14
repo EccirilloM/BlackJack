@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("INIZIO DELL'APP")
+    console.log("BEGIN OF THE APP")
     // this.authService.logout();
     // window.addEventListener('beforeunload', (event) => {
     //   this.authService.logout();
