@@ -48,7 +48,7 @@
     <div class="cardWhite flex-1 mx-3 p-6 flex flex-col justify-start items-center" style="height: 600px;">
       <h2 class="text-3xl font-bold mb-4 self-center">Dealer</h2>
       <div class="self-center">
-        <h3 class="text-2xl font-bold mb-2">Carte:</h3>
+        <h3 class="text-2xl font-bold mb-2">Cards:</h3>
         <ng-container *ngFor="let carta of carteDealer">
           <div class="flex items-center justify-center mb-2">
             <div
@@ -85,15 +85,23 @@
 
     <!-- Game Control Buttons -->
     <div class="flex space-x-4 mr-12">
-      <button class="buttonBlueAction text-lg px-6 py-3" (click)="deal()">Deal</button>
-      <button class="buttonBlueAction text-lg px-6 py-3" (click)="hit()">Hit</button>
-      <button class="buttonBlueAction text-lg px-6 py-3" (click)="stand()">Stand</button>
-      <button class="buttonBlueAction text-lg px-6 py-3" (click)="double()">Double</button>
+      <button
+        [class]="wager<puntataMinima || !dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
+        [disabled]="wager<puntataMinima || !dealAttivo" (click)="deal()">Deal</button>
+      <button
+        [class]="dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
+        [disabled]="dealAttivo" (click)="hit()">Hit</button>
+      <button
+        [class]="dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
+        [disabled]="dealAttivo" (click)="stand()">Stand</button>
+      <button
+        [class]="dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
+        [disabled]="dealAttivo" (click)="double()">Double</button>
     </div>
 
     <!-- Cash/Winning Card -->
     <div class="cardWhite p-6 h-20 w-96">
-      <div class="flex justify-between">
+      <div class="flex justify-around text-center -mt-2">
         <div>
           <h3 class="text-lg font-medium">Cash:</h3>
           <p>{{ playerCash }}</p>

@@ -47,7 +47,9 @@ public class Tavolo {
     @Transient
     private List<Carta> carte;
     @Transient
-    private List<Carta> carteSingolaMano;
+    private List<Carta> carteSingolaManoPlayer;
+    @Transient
+    private List<Carta> carteSingolaManoDealer;
 
     @Transient
     private Carta cartaDealer;
@@ -59,7 +61,7 @@ public class Tavolo {
         this.plotUser = tavoloBuilder.getPlotUser();
         this.player = tavoloBuilder.getPlayer();
         this.carte = tavoloBuilder.getCarte();
-        this.carteSingolaMano = tavoloBuilder.getCarteSingolaMano();
+        this.carteSingolaManoPlayer = tavoloBuilder.getCarteSingolaMano();
         this.cartaDealer = tavoloBuilder.getCartaDealer();
     }
 
@@ -133,18 +135,18 @@ public class Tavolo {
     @Transient
     public Carta pescaCarta(){
         initCarte();
-        if(carteSingolaMano==null||carteSingolaMano.isEmpty()){
-            carteSingolaMano=new ArrayList<>();
+        if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
+            carteSingolaManoPlayer=new ArrayList<>();
             Carta carta=carte.remove(0);
-            carteSingolaMano.add(carta);
+            carteSingolaManoPlayer.add(carta);
             cartaDealer=carte.remove(0);
             return carta;
-        }else if(carteSingolaMano.stream().mapToInt(Carta::getPunteggio).sum()>21){
-            carteSingolaMano.clear();
+        }else if(carteSingolaManoPlayer.stream().mapToInt(Carta::getPunteggio).sum()>21){
+            carteSingolaManoPlayer.clear();
             return null;
         }else{
             Carta carta=carte.remove(0);
-            carteSingolaMano.add(carta);
+            carteSingolaManoPlayer.add(carta);
             return carta;
         }
     }
@@ -154,7 +156,7 @@ public class Tavolo {
         if(cartaDealer==null)return 0;
         int punteggio=cartaDealer.getPunteggio();
         while(punteggio<17){
-            initCarte();
+            initCarte(); //TODO Fix this
             Carta carta=carte.remove(0);
             punteggio+=carta.getPunteggio();
         }
@@ -163,11 +165,11 @@ public class Tavolo {
 
     @Transient
     public int punteggioUtente(){
-        if(carteSingolaMano==null||carteSingolaMano.isEmpty()){
+        if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
             return 0;
         }
         int punteggio=0;
-        for(Carta carta:carteSingolaMano){
+        for(Carta carta:carteSingolaManoPlayer){
             punteggio+=carta.getPunteggio();
         }
         return punteggio;
@@ -175,18 +177,18 @@ public class Tavolo {
 
     @Transient
     public int getPunteggio(){
-        if(carteSingolaMano==null||carteSingolaMano.isEmpty()){
+        if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
             return 0;
         }
         int punteggio=0;
-        for(Carta carta:carteSingolaMano){
+        for(Carta carta:carteSingolaManoPlayer){
             punteggio+=carta.getPunteggio();
         }
         return punteggio;
     }
 
     public void end(){
-        carteSingolaMano.clear();
+        carteSingolaManoPlayer.clear();
         cartaDealer=null;
     }
 }

@@ -29,7 +29,6 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> deleteAccount(@PathVariable String userId) {
         userService.deleteUser(Long.parseLong(userId));
         return ResponseEntity
@@ -59,7 +58,6 @@ public class UserController {
     }
 
     @PutMapping("/adminAggiornaDatiUtente/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> adminAggiornaDatiUtente(@RequestBody AdminAggiornaDatiUtenteRequest request, @PathVariable String userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -67,7 +65,6 @@ public class UserController {
     }
 
     @PostMapping("/creaEconomo")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MessageResponse> creaEconomo(@Valid @RequestBody RegistrazioneRequest request) {
         userService.creaEconomo(request);
 

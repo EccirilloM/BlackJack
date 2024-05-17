@@ -33,8 +33,14 @@
           </span>
           <div class="flex-grow">
             <div class="flex justify-between">
-              <h2 class="text-lg font-semibold text-slate-800" *ngIf="messaggio.usernameMittente">
-                {{ messaggio.usernameMittente }}</h2>
+              <h2 class="text-lg font-semibold" [ngClass]="{
+        'text-black': messaggio.ruoloMittente === 'PLAYER',
+        'text-yellow-700': messaggio.ruoloMittente === 'ECONOMO',
+        'text-red-700': messaggio.ruoloMittente === 'ADMIN'
+    }">
+                {{ messaggio.usernameMittente }}
+              </h2>
+
             </div>
             <p class="mt-1 text-slate-800 text-sm">
               {{ messaggio.testoMessaggio }}

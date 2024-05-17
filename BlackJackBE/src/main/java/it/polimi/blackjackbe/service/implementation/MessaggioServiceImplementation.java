@@ -45,7 +45,9 @@ public class MessaggioServiceImplementation implements MessaggioService {
             response.add(new GetAllMessagesByTipoTavoloResponse(
                     messaggio.getTesto(),
                     messaggio.getCreatedAt(),
-                    messaggio.getUser().getUsername()));
+                    messaggio.getUser().getUsername(),
+                    messaggio.getUser().getRuolo().toString())
+            );
         }
 
         return response;
@@ -74,10 +76,6 @@ public class MessaggioServiceImplementation implements MessaggioService {
 
         if(userExists.isEmpty()){
             throw new NotFoundException("Utente non trovato");
-        }
-
-        if(!userExists.get().getRuolo().equals(Ruolo.PLAYER)){
-            throw new BadRequestException("Ruolo non valido");
         }
 
         Messaggio messaggio = new MessaggioBuilder()
