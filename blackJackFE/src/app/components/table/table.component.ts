@@ -38,7 +38,7 @@ export class TableComponent implements OnInit {
   tipoTavoloParam: string = '';
 
   conteggio: number = 0;
-
+  carteGiocate: number = 0; // Tieni traccia delle carte giocate
 
 
   constructor(private route: ActivatedRoute, private tablesService: TablesService, private router: Router, private toastr: ToastrService) { }
@@ -51,22 +51,27 @@ export class TableComponent implements OnInit {
     });
   }
 
+  numeroDiMazzi: number = 6; // Default al valore massimo se non specificato
+
   configureTableType(tipoTavoloParam: string): void {
     const puntate = {
-      'BASE': 1,
-      'PREMIUM': 5,
-      'VIP': 10,
-      'EXCLUSIVE': 20
+      'BASE': { minima: 1, mazzi: 6 },
+      'PREMIUM': { minima: 5, mazzi: 4 },
+      'VIP': { minima: 10, mazzi: 3 },
+      'EXCLUSIVE': { minima: 20, mazzi: 2 }
     };
 
-    if (tipoTavoloParam in puntate) {
-      this.puntataMinima = puntate[tipoTavoloParam as keyof typeof puntate];
+    const config = puntate[tipoTavoloParam as keyof typeof puntate];
+    if (config) {
+      this.puntataMinima = config.minima;
+      this.numeroDiMazzi = config.mazzi;
       this.wager = this.puntataMinima;
     } else {
       this.toastr.error('Tipo di tavolo non valido o mancante', 'Errore');
-      this.router.navigate(['/homepage/dashboard']); // Rotta di errore o homepage
+      this.router.navigate(['/homepage/dashboard']);
     }
   }
+
 
 
   initTavolo(tipoTavolo: string): void {
@@ -181,24 +186,34 @@ export class TableComponent implements OnInit {
     }
   }
 
+
+  //TODO: Fixare il conteggio
+  // Aggiungi alla funzione di aggiornamento del conteggio:
   updateConteggio(carte: CartaResponse[]): void {
     carte.forEach(carta => {
-      const valore = carta.valore; // Assumo che il valore sia una stringa come '2', '3', ..., '10', 'J', 'Q', 'K', 'A'
+      // Aggiorna il conteggio delle carte giocate
+      this.carteGiocate += 1;
+
+      const valore = carta.valore;
       if (['2', '3', '4', '5', '6'].includes(valore)) {
         this.conteggio += 1;
       } else if (['10', 'J', 'Q', 'K', 'A'].includes(valore)) {
         this.conteggio -= 1;
       }
-      // Le carte 7, 8, 9 non modificano il conteggio
     });
 
+    // Calcola i mazzi rimanenti
+    const mazziRimasti = Math.max(this.numeroDiMazzi - (this.carteGiocate / 52), 0.5); // Evita divisione per zero
+    const valoreReale = this.conteggio / mazziRimasti;
+
     // Controlla se il conteggio è alto e mostra un messaggio
-    if (this.conteggio > 6) {
+    if (valoreReale > 6) {
       this.toastr.info('Il Mazzo è carico! Aumenta la puntata!', 'Informazione', {
         timeOut: 3000
       });
     }
   }
+
 
   end(): void {
     console.log('Fine della partita');
