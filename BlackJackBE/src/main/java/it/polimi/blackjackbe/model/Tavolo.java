@@ -37,7 +37,7 @@ public class Tavolo {
     @Column(nullable = false, updatable = false)
     private boolean vittoriaUser;
 
-    @Column(nullable = false, updatable = false)
+   @Transient
     private Double plotUser; //Quanto punta l'utente
 
     @ManyToOne
@@ -49,20 +49,16 @@ public class Tavolo {
     @Transient
     private List<Carta> carteSingolaManoPlayer;
     @Transient
-    private List<Carta> carteSingolaManoDealer;
-
-    @Transient
-    private Carta cartaDealer;
+    private List<Carta> carteSingolaManoDealer = new ArrayList<>();
 
     public Tavolo(TavoloBuilder tavoloBuilder) {
         this.tavoloId = tavoloBuilder.getTavoloId();
         this.tipoTavolo = tavoloBuilder.getTipoTavolo();
         this.vittoriaUser = tavoloBuilder.isVittoriaUser();
-        this.plotUser = tavoloBuilder.getPlotUser();
         this.player = tavoloBuilder.getPlayer();
         this.carte = tavoloBuilder.getCarte();
         this.carteSingolaManoPlayer = tavoloBuilder.getCarteSingolaMano();
-        this.cartaDealer = tavoloBuilder.getCartaDealer();
+        this.carteSingolaManoDealer = tavoloBuilder.getCartaDealer();
     }
 
 
@@ -139,7 +135,6 @@ public class Tavolo {
             carteSingolaManoPlayer=new ArrayList<>();
             Carta carta=carte.remove(0);
             carteSingolaManoPlayer.add(carta);
-            cartaDealer=carte.remove(0);
             return carta;
         }else if(carteSingolaManoPlayer.stream().mapToInt(Carta::getPunteggio).sum()>21){
             carteSingolaManoPlayer.clear();
@@ -152,13 +147,24 @@ public class Tavolo {
     }
 
     @Transient
+    public Carta pescaDealer(){
+        Carta carta = carte.remove(0);
+        carteSingolaManoDealer.add(carta);
+        return carta;
+    }
+
+    @Transient
     public int punteggioDealer(){
-        if(cartaDealer==null)return 0;
-        int punteggio=cartaDealer.getPunteggio();
+        if(carteSingolaManoDealer==null)return 0;
+        int punteggio=carteSingolaManoDealer.stream().mapToInt(Carta::getPunteggio).sum();
         while(punteggio<17){
-            initCarte(); //TODO Fix this
             Carta carta=carte.remove(0);
+            carteSingolaManoDealer.add(carta);
             punteggio+=carta.getPunteggio();
+            while (punteggio>21 && carteSingolaManoDealer.stream().anyMatch(i -> i.getPunteggio()==11)){
+                carteSingolaManoDealer.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);
+                punteggio-=10;
+            }
         }
         return punteggio;
     }
@@ -189,6 +195,6 @@ public class Tavolo {
 
     public void end(){
         carteSingolaManoPlayer.clear();
-        cartaDealer=null;
+        carteSingolaManoDealer=null;
     }
 }

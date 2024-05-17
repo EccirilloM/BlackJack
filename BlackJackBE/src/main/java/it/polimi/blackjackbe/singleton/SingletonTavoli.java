@@ -19,10 +19,11 @@ public class SingletonTavoli {
 
     private Map<Long, Tavolo> tavoliAttivi=new HashMap<>();
 
-    public void createTable(User user, TipoTavolo tipoTavolo){
+    public Tavolo createTable(User user, TipoTavolo tipoTavolo){
         Tavolo tavolo=new Tavolo();
         tavolo.setTipoTavolo(tipoTavolo);
         tavoliAttivi.put(user.getUserId(),tavolo);
+        return tavoliAttivi.get(user.getUserId());
     }
 
     public Tavolo getTable(User user){

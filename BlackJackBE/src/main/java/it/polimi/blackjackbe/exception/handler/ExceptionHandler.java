@@ -84,5 +84,11 @@ public class ExceptionHandler {
         return new ResponseEntity<>(customException, HttpStatus.BAD_REQUEST);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = java.lang.Exception.class)
+    public ResponseEntity<java.lang.Exception> exception(java.lang.Exception e) {
+        String message = e.getMessage();
+        e.printStackTrace();
 
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

@@ -1,6 +1,14 @@
 <div class="flex flex-col items-center justify-center h-screen bg-gray-800 px-10">
-  <!-- Header con il bottone Close -->
+  <!-- Header con il bottone Close e la card del conteggio -->
   <div class="w-full flex justify-end p-2">
+    <!-- Card Conteggio -->
+    <div
+      class="flex items-center justify-center mr-2 bg-white rounded-lg text-blue-500 px-4 py-2 hover:bg-gray-100 focus:outline-none">
+      <span class="material-icons">assessment</span>
+      <span class="ml-2">Conteggio: {{ conteggio }}</span>
+    </div>
+
+    <!-- Bottone Close -->
     <button
       class="flex items-center justify-center w-10 h-10 bg-white rounded-lg text-blue-500 hover:bg-gray-100 focus:outline-none"
       (click)="goToHomePage()">
@@ -40,9 +48,18 @@
     </div>
 
     <!-- Warning Card, vertically centered -->
-    <div class="cardGrey w-48 p-4 self-center h-32">
-      <p>{{ warningMessage }}</p>
+    <!-- Warning Card with dynamic styling based on game outcome -->
+    <div
+      class="relative grid items-center font-sans font-bold uppercase whitespace-nowrap select-none py-2 px-4 text-base rounded-md"
+      [ngClass]="{
+  'bg-green-500/20 text-green-600': warningMessage === 'Hai vinto!',
+  'bg-red-500/20 text-red-600': warningMessage === 'Hai perso!',
+  'bg-gray-500/20 text-gray-600': warningMessage === 'Pareggio!',
+  'hidden': !warningMessage
+}">
+      <span>{{ warningMessage }}</span>
     </div>
+
 
     <!-- Dealer Card -->
     <div class="cardWhite flex-1 mx-3 p-6 flex flex-col justify-start items-center" style="height: 600px;">

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CartaResponse } from 'src/app/dto/response/CartaResponse';
 import { MessageResponse } from 'src/app/dto/response/MessageResponse';
+import { TavoloStatusResponse } from 'src/app/dto/response/TavoloStatusResponse';
 import { TablesService } from 'src/app/services/tables.service';
 import { Tavolo } from 'src/app/types/tavolo';
 
@@ -35,6 +36,10 @@ export class TableComponent implements OnInit {
   dealAttivo: boolean = true;
 
   tipoTavoloParam: string = '';
+
+  conteggio: number = 0;
+
+
 
   constructor(private route: ActivatedRoute, private tablesService: TablesService, private router: Router, private toastr: ToastrService) { }
 
@@ -76,18 +81,24 @@ export class TableComponent implements OnInit {
     });
   }
 
-  // Funzione per iniziare una nuova partita
+  // Funzione per iniziare una nuova Mano
   deal() {
     this.carteDealer = [];
     this.scoreDealer = 0;
     this.cartePlayer = [];
     this.scorePlayer = 0;
+    this.warningMessage = '';
 
     console.log('Inizio della partita');
-    this.tablesService.deal().subscribe({
-      next: (data) => {
+    this.tablesService.deal(this.puntataPlayer).subscribe({
+      next: (data: TavoloStatusResponse) => {
         console.log('deal', data);
         this.dealAttivo = false;
+        this.cartePlayer = data.cartePlayer;
+        this.scorePlayer = data.punteggioPlayer;
+        this.carteDealer = data.carteDealer;
+        this.scoreDealer = data.punteggioDealer;
+        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
       error: (err: HttpErrorResponse) => {
         this.toastr.error(err.error.message, 'Errore');
@@ -99,17 +110,13 @@ export class TableComponent implements OnInit {
   hit() {
     console.log('Pesca una carta');
     this.tablesService.hit().subscribe({
-      next: (data: CartaResponse) => {
+      next: (data: TavoloStatusResponse) => {
         console.log('hit', data);
-        this.cartePlayer.push(data);
-        this.scorePlayer += data.punteggio;
-        /*TODO quando la mano finisce bisogna solo fare:
-          this.deakAttivo = true;
-          così, l'unico pulsante cliccabile è "deal" e appena si clicca
-          si riazzera tutto e si può iniziare una nuova mano*/
+        this.handleTavoloStatus(data);
+        this.updateConteggio(data.cartePlayer);
       },
       error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error.message, 'Errore');
+        this.toastr.error(err.error, 'Errore');
         this.router.navigate(['/homepage/dashboard']);
       }
     });
@@ -118,8 +125,10 @@ export class TableComponent implements OnInit {
   stand() {
     console.log('Stai');
     this.tablesService.stand().subscribe({
-      next: (data) => {
+      next: (data: TavoloStatusResponse) => {
         console.log('stand', data);
+        this.handleTavoloStatus(data);
+        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
       error: (err: HttpErrorResponse) => {
         this.toastr.error(err.error.message, 'Errore');
@@ -131,14 +140,64 @@ export class TableComponent implements OnInit {
   double() {
     console.log('Raddoppia la puntata');
     this.tablesService.double().subscribe({
-      next: (data) => {
+      next: (data: TavoloStatusResponse) => {
         console.log('double', data);
+        this.handleTavoloStatus(data);
+        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
       error: (err: HttpErrorResponse) => {
         this.toastr.error(err.error.message, 'Errore');
         this.router.navigate(['/homepage/dashboard']);
       }
     });
+  }
+
+  private handleTavoloStatus(response: TavoloStatusResponse): void {
+    this.cartePlayer = response.cartePlayer;
+    this.scorePlayer = response.punteggioPlayer;
+    this.carteDealer = response.carteDealer;
+    this.scoreDealer = response.punteggioDealer;
+
+    switch (response.tavoloStatus) {
+      case 'PLAYER_WIN':
+        this.warningMessage = 'Hai vinto!';
+        this.dealAttivo = true;
+        break;
+      case 'PLAYER_LOSE':
+        this.warningMessage = 'Hai perso!';
+        this.dealAttivo = true;
+        break;
+      case 'DRAW':
+        this.warningMessage = 'Pareggio!';
+        this.dealAttivo = true;
+        break;
+      case 'CONTINUE':
+        this.warningMessage = '';
+        this.dealAttivo = false;
+        break;
+      default:
+        this.toastr.error('Stato tavolo sconosciuto', 'Errore');
+        break;
+    }
+  }
+
+  updateConteggio(carte: CartaResponse[]): void {
+    carte.forEach(carta => {
+      const valore = carta.valore; // Assumo che il valore sia una stringa come '2', '3', ..., '10', 'J', 'Q', 'K', 'A'
+      if (['2', '3', '4', '5', '6'].includes(valore)) {
+        this.conteggio += 1;
+      } else if (['10', 'J', 'Q', 'K', 'A'].includes(valore)) {
+        this.conteggio -= 1;
+      }
+      // Le carte 7, 8, 9 non modificano il conteggio
+    });
+
+    // Controlla se il conteggio è alto e mostra un messaggio
+    if (this.conteggio > 6) {
+      this.toastr.info('Il Mazzo è carico! Aumenta la puntata!', 'Informazione', {
+        timeOut: 3000
+      });
+    }
   }
 
   end(): void {

@@ -1,40 +1,42 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { globalBackendUrl } from 'environment';
 import { CartaResponse } from '../dto/response/CartaResponse';
 import { MessageResponse } from '../dto/response/MessageResponse';
+import { TavoloStatusResponse } from '../dto/response/TavoloStatusResponse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TablesService {
-  private backendUrl: string = globalBackendUrl + 'table';
+  private backendUrl: string = globalBackendUrl + 'tavolo/';
 
   constructor(private http: HttpClient) { }
 
   initTavolo(tipoTavolo: string): Observable<MessageResponse> {
-    return this.http.get<MessageResponse>(`${this.backendUrl}/init/` + tipoTavolo + `/` + localStorage.getItem('id')?.toString(), { headers: this.getHeader() });
+    return this.http.get<MessageResponse>(this.backendUrl + "init/" + tipoTavolo + "/" + localStorage.getItem('id')?.toString(), { headers: this.getHeader() });
   }
 
-  getGameStatus(): Observable<any> {
-    return this.http.get<any>(`${this.backendUrl}/status`, { headers: this.getHeader() });
+  deal(plot: number): Observable<TavoloStatusResponse> {
+    const userId = localStorage.getItem('id')?.toString();
+    const params = new HttpParams().set('plot', plot.toString());
+    return this.http.post<TavoloStatusResponse>(`${this.backendUrl}deal/${userId}`, {}, { headers: this.getHeader(), params: params });
   }
 
-  deal(): Observable<any> {
-    return this.http.post<any>(`${this.backendUrl}/deal`, { headers: this.getHeader() });
+  hit(): Observable<TavoloStatusResponse> {
+    const userId = localStorage.getItem('id')?.toString();
+    return this.http.post<TavoloStatusResponse>(`${this.backendUrl}hit/${userId}`, {}, { headers: this.getHeader() });
   }
 
-  hit(): Observable<CartaResponse> {
-    return this.http.post<CartaResponse>(`${this.backendUrl}/hit/` + localStorage.getItem('id')?.toString(), { headers: this.getHeader() });
+  stand(): Observable<TavoloStatusResponse> {
+    const userId = localStorage.getItem('id')?.toString();
+    return this.http.post<TavoloStatusResponse>(`${this.backendUrl}stand/${userId}`, {}, { headers: this.getHeader() });
   }
 
-  stand(): Observable<any> {
-    return this.http.post<any>(`${this.backendUrl}/stand`, { headers: this.getHeader() });
-  }
-
-  double(): Observable<any> {
-    return this.http.post<any>(`${this.backendUrl}/double`, { headers: this.getHeader() });
+  double(): Observable<TavoloStatusResponse> {
+    const userId = localStorage.getItem('id')?.toString();
+    return this.http.post<TavoloStatusResponse>(`${this.backendUrl}double/${userId}`, {}, { headers: this.getHeader() });
   }
 
   end(): Observable<MessageResponse> {

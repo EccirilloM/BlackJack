@@ -20,11 +20,10 @@ public class TavoloBuilder {
     private Long tavoloId;
     private TipoTavolo tipoTavolo;
     private boolean vittoriaUser;
-    private Double plotUser; //Quanto punta l'utente
     private User player;
     private List<Carta> carte;
     private List<Carta> carteSingolaMano;
-    private Carta cartaDealer;
+    private List<Carta> cartaDealer;
 
     public TavoloBuilder tavoloId(Long tavoloId) {
         this.tavoloId = tavoloId;
@@ -38,11 +37,6 @@ public class TavoloBuilder {
 
     public TavoloBuilder vittoriaUser(boolean vittoriaUser) {
         this.vittoriaUser = vittoriaUser;
-        return this;
-    }
-
-    public TavoloBuilder plotUser(Double plotUser) {
-        this.plotUser = plotUser;
         return this;
     }
 
@@ -61,7 +55,7 @@ public class TavoloBuilder {
         return this;
     }
 
-    public TavoloBuilder cartaDealer(Carta cartaDealer) {
+    public TavoloBuilder cartaDealer(List<Carta> cartaDealer) {
         this.cartaDealer = cartaDealer;
         return this;
     }
