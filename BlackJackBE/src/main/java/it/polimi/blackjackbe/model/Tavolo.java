@@ -177,18 +177,10 @@ public class Tavolo {
         int punteggio=0;
         for(Carta carta:carteSingolaManoPlayer){
             punteggio+=carta.getPunteggio();
-        }
-        return punteggio;
-    }
-
-    @Transient
-    public int getPunteggio(){
-        if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
-            return 0;
-        }
-        int punteggio=0;
-        for(Carta carta:carteSingolaManoPlayer){
-            punteggio+=carta.getPunteggio();
+            while (punteggio>21 && carteSingolaManoDealer.stream().anyMatch(i -> i.getPunteggio()==11)){
+                carteSingolaManoDealer.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);
+                punteggio-=10;
+            }
         }
         return punteggio;
     }

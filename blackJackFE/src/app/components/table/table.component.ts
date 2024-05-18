@@ -103,6 +103,7 @@ export class TableComponent implements OnInit {
         this.scorePlayer = data.punteggioPlayer;
         this.carteDealer = data.carteDealer;
         this.scoreDealer = data.punteggioDealer;
+        this.handleTavoloStatus(data);
         this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
       error: (err: HttpErrorResponse) => {
