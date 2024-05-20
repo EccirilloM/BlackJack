@@ -90,7 +90,6 @@ public class TavoloServiceImplementation implements TavoloService {
             throw new IllegalStateException("The plot is higer then the balance");
 
         user.get().setSaldo(user.get().getSaldo() - plot);
-        userRepository.save(user.get());
 
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user.get());
         tavolo.setPlotUser(plot);
@@ -133,7 +132,18 @@ public class TavoloServiceImplementation implements TavoloService {
     @Override
     public TavoloStatusResponse doubleCommand(Long userId){
         Tavolo tavolo = getTavolo(userId);
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isEmpty()) {
+            throw new BadRequestException("User not found");
+        }
+        if(user.get().getSaldo() < tavolo.getPlotUser())
+            throw new IllegalStateException("The plot is higer then the balance");
+
+        user.get().setSaldo(user.get().getSaldo() - tavolo.getPlotUser());
+
         tavolo.setPlotUser(tavolo.getPlotUser()*2);
+
         return hit(userId);
     }
 
@@ -209,7 +219,5 @@ public class TavoloServiceImplementation implements TavoloService {
         else if (tavoloStatus ==TavoloStatus.DRAW)
             user.setSaldo(user.getSaldo() + plot);
 
-        userRepository.save(user);
-        userRepository.save(admin);
     }
 }

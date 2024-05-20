@@ -95,7 +95,8 @@ export class TableComponent implements OnInit {
     this.warningMessage = '';
 
     console.log('Inizio della partita');
-    this.tablesService.deal(this.puntataPlayer).subscribe({
+
+    this.tablesService.deal(this.wager).subscribe({
       next: (data: TavoloStatusResponse) => {
         console.log('deal', data);
         this.dealAttivo = false;
