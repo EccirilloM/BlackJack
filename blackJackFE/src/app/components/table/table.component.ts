@@ -38,10 +38,15 @@ export class TableComponent implements OnInit {
   tipoTavoloParam: string = '';
 
   conteggio: number = 0;
-  carteGiocate: number = 0; // Tieni traccia delle carte giocate
+  carteUnicheGiocate: Set<number> = new Set();
+
+  valoreReale: number = 0;
 
 
-  constructor(private route: ActivatedRoute, private tablesService: TablesService, private router: Router, private toastr: ToastrService) { }
+  constructor(private route: ActivatedRoute, private tablesService: TablesService, private router: Router, private toastr: ToastrService) {
+    const saldo = localStorage.getItem('saldo');
+    this.playerCash = saldo ? parseFloat(saldo) : 0;
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -104,6 +109,8 @@ export class TableComponent implements OnInit {
         this.scorePlayer = data.punteggioPlayer;
         this.carteDealer = data.carteDealer;
         this.scoreDealer = data.punteggioDealer;
+        this.playerCash = data.saldo;
+        this.playerWinning = data.winning;
         this.handleTavoloStatus(data);
         this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
@@ -119,6 +126,8 @@ export class TableComponent implements OnInit {
     this.tablesService.hit().subscribe({
       next: (data: TavoloStatusResponse) => {
         console.log('hit', data);
+        this.playerCash = data.saldo;
+        this.playerWinning = data.winning;
         this.handleTavoloStatus(data);
         this.updateConteggio(data.cartePlayer);
       },
@@ -134,6 +143,8 @@ export class TableComponent implements OnInit {
     this.tablesService.stand().subscribe({
       next: (data: TavoloStatusResponse) => {
         console.log('stand', data);
+        this.playerCash = data.saldo;
+        this.playerWinning = data.winning;
         this.handleTavoloStatus(data);
         this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
@@ -150,6 +161,8 @@ export class TableComponent implements OnInit {
       next: (data: TavoloStatusResponse) => {
         console.log('double', data);
         this.handleTavoloStatus(data);
+        this.playerCash = data.saldo;
+        this.playerWinning = data.winning;
         this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
       },
       error: (err: HttpErrorResponse) => {
@@ -190,27 +203,29 @@ export class TableComponent implements OnInit {
 
 
   //TODO: Fixare il conteggio
-  // Aggiungi alla funzione di aggiornamento del conteggio:
   updateConteggio(carte: CartaResponse[]): void {
     carte.forEach(carta => {
-      // Aggiorna il conteggio delle carte giocate
-      this.carteGiocate += 1;
-
-      const valore = carta.valore;
-      if (['2', '3', '4', '5', '6'].includes(valore)) {
-        this.conteggio += 1;
-      } else if (['10', 'J', 'Q', 'K', 'A'].includes(valore)) {
-        this.conteggio -= 1;
+      if (!this.carteUnicheGiocate.has(carta.order)) {
+        this.carteUnicheGiocate.add(carta.order);
+        const valore = carta.valore;
+        if (['2', '3', '4', '5', '6'].includes(valore)) {
+          this.conteggio += 1;
+        } else if (['10', 'J', 'Q', 'K', 'A'].includes(valore)) {
+          this.conteggio -= 1;
+        }
+        // Le carte 7, 8, 9 non modificano il conteggio
       }
     });
 
-    // Calcola i mazzi rimanenti
-    const mazziRimasti = Math.max(this.numeroDiMazzi - (this.carteGiocate / 52), 0.5); // Evita divisione per zero
-    const valoreReale = this.conteggio / mazziRimasti;
+    const mazziRimasti = Math.max(this.numeroDiMazzi - (this.carteUnicheGiocate.size / 52), 0.5); // Evita la divisione per zero
+    this.valoreReale = this.conteggio / mazziRimasti; // Calcola il valore reale
 
-    // Controlla se il conteggio è alto e mostra un messaggio
-    if (valoreReale > 6) {
+    if (this.valoreReale > 4) { // Cambio soglia per mostrare il messaggio
       this.toastr.info('Il Mazzo è carico! Aumenta la puntata!', 'Informazione', {
+        timeOut: 3000
+      });
+    } else if (this.valoreReale < -4) {
+      this.toastr.info('Il Mazzo è scarico! Diminuisci la puntata!', 'Informazione', {
         timeOut: 3000
       });
     }

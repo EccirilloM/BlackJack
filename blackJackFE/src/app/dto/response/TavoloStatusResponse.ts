@@ -6,4 +6,6 @@ export interface TavoloStatusResponse {
     carteDealer: CartaResponse[];
     punteggioDealer: number;
     tavoloStatus: string;
+    saldo: number;
+    winning: number;
 }
