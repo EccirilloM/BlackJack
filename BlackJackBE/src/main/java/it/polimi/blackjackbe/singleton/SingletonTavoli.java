@@ -22,6 +22,7 @@ public class SingletonTavoli {
     public Tavolo createTable(User user, TipoTavolo tipoTavolo){
         Tavolo tavolo=new Tavolo();
         tavolo.setTipoTavolo(tipoTavolo);
+        tavolo.setPlayer(user);
         tavoliAttivi.put(user.getUserId(),tavolo);
         return tavoliAttivi.get(user.getUserId());
     }

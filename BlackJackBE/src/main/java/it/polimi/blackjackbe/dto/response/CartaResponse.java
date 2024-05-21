@@ -9,4 +9,5 @@ public class CartaResponse {
     private String seme;
     private String valore;
     private int punteggio;
+    private int order;
 }

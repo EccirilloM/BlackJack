@@ -97,7 +97,8 @@
     <!-- Wager -->
     <div class="flex flex-col items-center mr-12">
       <label for="wager" class="text-white mb-2">Wager:</label>
-      <input type="number" id="wager" [(ngModel)]="wager" class="inputBox w-48" placeholder="Enter your wager">
+      <input type="number" id="wager" [(ngModel)]="wager" class="inputBox w-48" placeholder="Enter your wager"
+        [disabled]="!dealAttivo">
     </div>
 
     <!-- Game Control Buttons -->

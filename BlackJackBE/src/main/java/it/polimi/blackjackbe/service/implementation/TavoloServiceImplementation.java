@@ -34,7 +34,7 @@ public class TavoloServiceImplementation implements TavoloService {
             throw new BadRequestException("User not found");
         }
         Carta carta = strategyManager.executeStrategy(user.get(), new ChiediCarta());
-        CartaResponse response = new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio());
+        CartaResponse response = new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder());
         return response;
     }
 
@@ -101,7 +101,7 @@ public class TavoloServiceImplementation implements TavoloService {
         TavoloStatus tavoloStatus = TavoloStatus.CONTINUE;
         if(tavolo.punteggioUtente() == 21){
             tavoloStatus = TavoloStatus.PLAYER_WIN;
-            processWin(userId, tavolo.getPlotUser(), tavoloStatus, true);
+            processWin(tavolo, tavoloStatus, true);
         }
 
         TavoloStatusResponse tavoloStatusResponse = getTavoloStatusResponse(tavolo, tavoloStatus);
@@ -123,7 +123,7 @@ public class TavoloServiceImplementation implements TavoloService {
         }
         TavoloStatusResponse tavoloStatusResponse = getTavoloStatusResponse(tavolo, tavoloStatus);
         if(tavoloStatusResponse.getTavoloStatus() != TavoloStatus.CONTINUE){
-            processWin(userId, tavolo.getPlotUser(), tavoloStatus);
+            processWin(tavolo, tavoloStatus);
             clearHands(tavolo);
         }
         return tavoloStatusResponse;
@@ -144,7 +144,11 @@ public class TavoloServiceImplementation implements TavoloService {
 
         tavolo.setPlotUser(tavolo.getPlotUser()*2);
 
-        return hit(userId);
+        TavoloStatusResponse tavoloStatusResponse = hit(userId);
+        if(tavoloStatusResponse.getTavoloStatus() != TavoloStatus.CONTINUE)
+            return tavoloStatusResponse;
+        else
+            return stay(userId);
     }
 
     @Override
@@ -159,13 +163,13 @@ public class TavoloServiceImplementation implements TavoloService {
         }else{
             if(Math.abs(punteggioUtente-21) < Math.abs(punteggioDealer-21)){
                 tavoloStatus = TavoloStatus.PLAYER_WIN;
-                processWin(userId, tavolo.getPlotUser(), tavoloStatus);
+                processWin(tavolo, tavoloStatus);
             }else if(Math.abs(punteggioUtente-21)== Math.abs(punteggioDealer-21)) {
                 tavoloStatus = TavoloStatus.DRAW;
-                processWin(userId, tavolo.getPlotUser(), tavoloStatus);
+                processWin(tavolo, tavoloStatus);
             }else{
                 tavoloStatus = TavoloStatus.PLAYER_LOSE;
-                processWin(userId, tavolo.getPlotUser(), tavoloStatus);
+                processWin(tavolo, tavoloStatus);
             }
         }
         TavoloStatusResponse tavoloStatusResponse = getTavoloStatusResponse(tavolo, tavoloStatus);
@@ -180,11 +184,13 @@ public class TavoloServiceImplementation implements TavoloService {
 
     private TavoloStatusResponse getTavoloStatusResponse(Tavolo tavolo, TavoloStatus tavoloStatus){
         return new TavoloStatusResponse(
-                tavolo.getCarteSingolaManoPlayer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio())).toList(),
+                tavolo.getCarteSingolaManoPlayer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder())).toList(),
                 tavolo.punteggioUtente(),
-                tavolo.getCarteSingolaManoDealer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio())).toList(),
+                tavolo.getCarteSingolaManoDealer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder())).toList(),
                 tavolo.getCarteSingolaManoDealer().stream().mapToInt(Carta::getPunteggio).sum(),
-                tavoloStatus
+                tavoloStatus,
+                tavolo.getPlayer().getSaldo(),
+                tavolo.getTotalWinning()
         );
     }
 
@@ -202,22 +208,23 @@ public class TavoloServiceImplementation implements TavoloService {
         return tavolo;
     }
 
-    private void processWin(Long userId, Double plot, TavoloStatus tavoloStatus){
-        processWin(userId, plot, tavoloStatus, false);
+    private void processWin(Tavolo tavolo,TavoloStatus tavoloStatus){
+        processWin(tavolo, tavoloStatus, false);
     }
 
-    private void processWin(Long userId, Double plot, TavoloStatus tavoloStatus, boolean blackJack){
-        User user = userRepository.findById(userId).get();
+    private void processWin(Tavolo tavolo, TavoloStatus tavoloStatus, boolean blackJack){
+        User user = userRepository.findById(tavolo.getPlayer().getUserId()).get();
         User admin = userRepository.findByRuolo(Ruolo.ADMIN).get();
         if(tavoloStatus == TavoloStatus.PLAYER_WIN){
-            user.setSaldo(user.getSaldo() + plot * (blackJack? 2.5 : 2 ));
-            admin.setSaldo(admin.getSaldo() - plot * (blackJack? 2.5 : 2 ));
+            user.setSaldo(user.getSaldo() + tavolo.getPlotUser() * (blackJack? 2.5 : 2 ));
+            admin.setSaldo(admin.getSaldo() - tavolo.getPlotUser() * (blackJack? 2.5 : 2 ));
+            tavolo.setTotalWinning(tavolo.getTotalWinning()+tavolo.getPlotUser() * (blackJack? 2.5 : 2 ));
         }
         else if(tavoloStatus == TavoloStatus.PLAYER_LOSE){
-            admin.setSaldo(admin.getSaldo() + plot);
+            admin.setSaldo(admin.getSaldo() + tavolo.getPlotUser());
         }
         else if (tavoloStatus ==TavoloStatus.DRAW)
-            user.setSaldo(user.getSaldo() + plot);
+            user.setSaldo(user.getSaldo() + tavolo.getPlotUser());
 
     }
 }

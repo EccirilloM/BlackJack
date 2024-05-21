@@ -3,7 +3,6 @@ package it.polimi.blackjackbe.model;
 import it.polimi.blackjackbe.builder.TavoloBuilder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -50,6 +49,10 @@ public class Tavolo {
     private List<Carta> carteSingolaManoPlayer;
     @Transient
     private List<Carta> carteSingolaManoDealer = new ArrayList<>();
+    @Transient
+    private Double totalWinning =0.0;
+    @Transient
+    private int order=0;
 
     public Tavolo(TavoloBuilder tavoloBuilder) {
         this.tavoloId = tavoloBuilder.getTavoloId();
@@ -130,11 +133,11 @@ public class Tavolo {
 
     @Transient
     public Carta pescaCarta(){
-        initCarte();
         if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
             carteSingolaManoPlayer=new ArrayList<>();
             Carta carta=carte.remove(0);
             carteSingolaManoPlayer.add(carta);
+            carta.setOrder(order++);
             return carta;
         }else if(carteSingolaManoPlayer.stream().mapToInt(Carta::getPunteggio).sum()>21){
             carteSingolaManoPlayer.clear();
@@ -142,6 +145,7 @@ public class Tavolo {
         }else{
             Carta carta=carte.remove(0);
             carteSingolaManoPlayer.add(carta);
+            carta.setOrder(order++);
             return carta;
         }
     }
@@ -150,6 +154,7 @@ public class Tavolo {
     public Carta pescaDealer(){
         Carta carta = carte.remove(0);
         carteSingolaManoDealer.add(carta);
+        carta.setOrder(order++);
         return carta;
     }
 
@@ -158,8 +163,7 @@ public class Tavolo {
         if(carteSingolaManoDealer==null)return 0;
         int punteggio=carteSingolaManoDealer.stream().mapToInt(Carta::getPunteggio).sum();
         while(punteggio<17){
-            Carta carta=carte.remove(0);
-            carteSingolaManoDealer.add(carta);
+            Carta carta=pescaDealer();
             punteggio+=carta.getPunteggio();
             while (punteggio>21 && carteSingolaManoDealer.stream().anyMatch(i -> i.getPunteggio()==11)){
                 carteSingolaManoDealer.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);

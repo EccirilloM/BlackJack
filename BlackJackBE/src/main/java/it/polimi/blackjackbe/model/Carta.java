@@ -10,6 +10,13 @@ public class Carta {
     private String seme;
     private String valore;
     private int punteggio;
+    private int order;
+
+    public Carta(String seme, String valore, int punteggio) {
+        this.seme = seme;
+        this.valore = valore;
+        this.punteggio = punteggio;
+    }
 
     public Carta(CartaBuilder builder) {
         this.seme = builder.getSeme();

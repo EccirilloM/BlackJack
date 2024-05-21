@@ -11,6 +11,7 @@ public class CartaBuilder {
     private String seme;
     private String valore;
     private int punteggio;
+    private int order;
 
     public CartaBuilder seme(String seme) {
         this.seme = seme;
@@ -24,6 +25,11 @@ public class CartaBuilder {
 
     public CartaBuilder punteggio(int punteggio) {
         this.punteggio = punteggio;
+        return this;
+    }
+
+    public CartaBuilder order(int order) {
+        this.order = order;
         return this;
     }
 
