@@ -11,7 +11,11 @@ import { MapService } from 'src/app/services/map.service';
 import { debounceTime } from 'rxjs';
 import { TabacchiService } from 'src/app/services/tabacchi.service';
 import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiResponse';
-
+/**
+ * Componente per visualizzare la dashboard dell'admin.
+ * implementa OnInit, un'interfaccia che espone il metodo ngOnInit() il quale 
+ * viene chiamato automaticamente quando il componente viene caricato.
+ */
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
@@ -39,15 +43,11 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   showPassword = false;
   showRepeatPassword = false;
   economi: GetUserDataResponse[] = [];
-  economoSelezionatoId: number = 0;
-
   // VARIABILI PER Tabacchi ----------------------------------------------------------------------------
   tabacchi: GetAllTabacchiResponse[] = [];
   // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
   nomeTabacchi: string = '';
-  // lat: number = this.mapService.lat;
-  // lng: number = this.mapService.lng;
-
+  economoSelezionatoId: number = 0;
   showEditDataUserByAdmin: boolean = false
   idSelected: number = 0;
   // COSTRUTTORE ----------------------------------------------------------------------------

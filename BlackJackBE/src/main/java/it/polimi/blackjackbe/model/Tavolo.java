@@ -43,6 +43,9 @@ public class Tavolo {
     @JoinColumn(name = "user_id")
     private User player;
 
+    @OneToMany(mappedBy = "tavolo", fetch = FetchType.LAZY)
+    private List<Mano> mani;
+
     @Transient
     private List<Carta> carte;
     @Transient
@@ -160,10 +163,17 @@ public class Tavolo {
 
     @Transient
     public int punteggioDealer(){
-        if(carteSingolaManoDealer==null)return 0;
-        int punteggio=carteSingolaManoDealer.stream().mapToInt(Carta::getPunteggio).sum();
-        while(punteggio<17){
-            Carta carta=pescaDealer();
+        return punteggio(carteSingolaManoDealer);
+    }
+
+    @Transient
+    public int punteggioUtente(){
+        return punteggio(carteSingolaManoPlayer);
+    }
+
+    private int punteggio(List<Carta> carte) {
+        int punteggio=0;
+        for(Carta carta:carte){
             punteggio+=carta.getPunteggio();
             while (punteggio>21 && carteSingolaManoDealer.stream().anyMatch(i -> i.getPunteggio()==11)){
                 carteSingolaManoDealer.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);
@@ -173,21 +183,6 @@ public class Tavolo {
         return punteggio;
     }
 
-    @Transient
-    public int punteggioUtente(){
-        if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
-            return 0;
-        }
-        int punteggio=0;
-        for(Carta carta:carteSingolaManoPlayer){
-            punteggio+=carta.getPunteggio();
-            while (punteggio>21 && carteSingolaManoDealer.stream().anyMatch(i -> i.getPunteggio()==11)){
-                carteSingolaManoDealer.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);
-                punteggio-=10;
-            }
-        }
-        return punteggio;
-    }
 
     public void end(){
         carteSingolaManoPlayer.clear();

@@ -4,6 +4,7 @@ import it.polimi.blackjackbe.dto.request.EndTavoloRequest;
 import it.polimi.blackjackbe.dto.response.CartaResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
 import it.polimi.blackjackbe.model.*;
+import it.polimi.blackjackbe.repository.ManoRepository;
 import it.polimi.blackjackbe.repository.TavoloRepository;
 import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.model.TavoloStatus;
@@ -16,6 +17,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,7 @@ public class TavoloServiceImplementation implements TavoloService {
     private final TavoloRepository tavoloRepository;
     private final StrategyManager strategyManager;
     private final UserRepository userRepository;
+    private final ManoRepository manoRepository;
 
 
     @Override
@@ -156,7 +159,7 @@ public class TavoloServiceImplementation implements TavoloService {
         Tavolo tavolo = getTavolo(userId);
 
         var punteggioUtente = tavolo.punteggioUtente();
-        var punteggioDealer = tavolo.punteggioDealer();
+        var punteggioDealer = stayDealer(tavolo);
         TavoloStatus tavoloStatus;
         if(punteggioDealer>21){
             tavoloStatus = TavoloStatus.PLAYER_WIN;
@@ -183,13 +186,14 @@ public class TavoloServiceImplementation implements TavoloService {
     }
 
     private TavoloStatusResponse getTavoloStatusResponse(Tavolo tavolo, TavoloStatus tavoloStatus){
+        User user = userRepository.findById(tavolo.getPlayer().getUserId()).get();
         return new TavoloStatusResponse(
                 tavolo.getCarteSingolaManoPlayer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder())).toList(),
                 tavolo.punteggioUtente(),
                 tavolo.getCarteSingolaManoDealer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder())).toList(),
-                tavolo.getCarteSingolaManoDealer().stream().mapToInt(Carta::getPunteggio).sum(),
+                tavolo.punteggioDealer(),
                 tavoloStatus,
-                tavolo.getPlayer().getSaldo(),
+                user.getSaldo(),
                 tavolo.getTotalWinning()
         );
     }
@@ -215,16 +219,34 @@ public class TavoloServiceImplementation implements TavoloService {
     private void processWin(Tavolo tavolo, TavoloStatus tavoloStatus, boolean blackJack){
         User user = userRepository.findById(tavolo.getPlayer().getUserId()).get();
         User admin = userRepository.findByRuolo(Ruolo.ADMIN).get();
+        Double importo = 0.0;
         if(tavoloStatus == TavoloStatus.PLAYER_WIN){
-            user.setSaldo(user.getSaldo() + tavolo.getPlotUser() * (blackJack? 2.5 : 2 ));
-            admin.setSaldo(admin.getSaldo() - tavolo.getPlotUser() * (blackJack? 2.5 : 2 ));
-            tavolo.setTotalWinning(tavolo.getTotalWinning()+tavolo.getPlotUser() * (blackJack? 2.5 : 2 ));
+            Double vincita = tavolo.getPlotUser() * (blackJack? 2.5 : 2 );
+            user.setSaldo(user.getSaldo() + vincita);
+            admin.setSaldo(admin.getSaldo() - vincita);
+            tavolo.setTotalWinning(tavolo.getTotalWinning()+vincita);
+            importo = -vincita;
         }
         else if(tavoloStatus == TavoloStatus.PLAYER_LOSE){
             admin.setSaldo(admin.getSaldo() + tavolo.getPlotUser());
+            tavolo.setTotalWinning(tavolo.getTotalWinning()-tavolo.getPlotUser());
+            importo = tavolo.getPlotUser();
         }
-        else if (tavoloStatus ==TavoloStatus.DRAW)
+        else if (tavoloStatus ==TavoloStatus.DRAW){
             user.setSaldo(user.getSaldo() + tavolo.getPlotUser());
+        }
 
+
+        Mano mano = new Mano(tavolo, LocalDateTime.now(), importo);
+
+        manoRepository.save(mano);
+
+    }
+
+    private int stayDealer(Tavolo tavolo) {
+        while(tavolo.punteggioDealer() <17) {
+            tavolo.punteggioDealer();
+        }
+        return tavolo.punteggioDealer();
     }
 }
