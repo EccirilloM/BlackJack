@@ -14,6 +14,7 @@ import { Tavolo } from 'src/app/types/tavolo';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
+  //TODO: Fixare bug che non mi salva la mano dello stand quando vinco e fixare il command
 
   playerUsername: string = localStorage.getItem('username') || '';
   warningMessage: string = '';
@@ -201,8 +202,6 @@ export class TableComponent implements OnInit {
     }
   }
 
-
-  //TODO: Fixare il conteggio
   updateConteggio(carte: CartaResponse[]): void {
     carte.forEach(carta => {
       if (!this.carteUnicheGiocate.has(carta.order)) {
