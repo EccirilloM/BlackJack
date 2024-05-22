@@ -245,7 +245,7 @@ public class TavoloServiceImplementation implements TavoloService {
 
     private int stayDealer(Tavolo tavolo) {
         while(tavolo.punteggioDealer() <17) {
-            tavolo.punteggioDealer();
+            tavolo.pescaDealer();
         }
         return tavolo.punteggioDealer();
     }
