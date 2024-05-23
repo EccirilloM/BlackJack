@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.model;
 
+import it.polimi.blackjackbe.builder.ManoBuilder;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,9 +36,10 @@ public class Mano {
     @Column(nullable = false, updatable = false)
     private Double importo; //Importo vinto o perso  dal casino
 
-    public Mano(Tavolo tavolo, LocalDateTime dataMano, Double importo) {
-        this.tavolo = tavolo;
-        this.dataMano = dataMano;
-        this.importo = importo;
+    public Mano(ManoBuilder builder) {
+        this.manoId = builder.getManoId();
+        this.tavolo = builder.getTavolo();
+        this.dataMano = builder.getDataMano();
+        this.importo = builder.getImporto();
     }
 }

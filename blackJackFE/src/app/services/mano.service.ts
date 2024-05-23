@@ -20,6 +20,10 @@ export class ManoService {
     return this.http.get<getAllManiResponse[]>(this.backendUrl + 'getAllMani', { headers: this.getHeader() });
   }
 
+  getAllManiByUserId(userId: number): Observable<getAllManiResponse[]> {
+    return this.http.get<getAllManiResponse[]>(this.backendUrl + 'getAllManiByUserId/' + userId, { headers: this.getHeader() });
+  }
+
   // METODI PER RECUPERARE I DATI DELL'UTENTE LOGGATO ---------------------------------------------------------------
   //creo l'header con il token da mandare al backend
   private getHeader(): HttpHeaders {

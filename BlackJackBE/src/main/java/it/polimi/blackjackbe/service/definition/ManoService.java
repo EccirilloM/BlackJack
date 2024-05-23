@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ManoService {
     List<GetAllManiResponse> getAllMani();
+
+    List<GetAllManiResponse> getAllManiByUserId(Long userId);
 }

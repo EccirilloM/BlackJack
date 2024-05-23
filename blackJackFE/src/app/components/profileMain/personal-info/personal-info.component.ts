@@ -2,8 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
+import { getAllManiResponse } from 'src/app/dto/response/GetAllManiResponse';
 import { GetUserDataResponse } from 'src/app/dto/response/GetUserDataResponse';
 import { NotificaResponse } from 'src/app/dto/response/NotificaResponse';
+import { ManoService } from 'src/app/services/mano.service';
 import { NotificheService } from 'src/app/services/notifiche.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -25,11 +27,18 @@ export class PersonalInfoComponent implements OnInit {
   joined: string = "";
   email: string = "";
   daysAgo: number = 0;
+  wonHands: number = 0;
+  sessionPlayed: number = 0;
 
   notifiche: NotificaResponse[] = [];
 
+  maniUtente: getAllManiResponse[] = [];
+
   // COSTRUTTORE -----------------------------------------------------------------------------------
-  constructor(private notificheService: NotificheService, private userService: UserService, private toastr: ToastrService) {
+  constructor(private notificheService: NotificheService,
+    private userService: UserService,
+    private toastr: ToastrService,
+    private manoService: ManoService) {
     this.initializeUserInfo();
     Chart.register(...registerables);
   }
@@ -39,6 +48,7 @@ export class PersonalInfoComponent implements OnInit {
     console.log('PersonalInfoComponent initialized');
     this.loadNotifiche();
     this.loadUserData(parseInt(localStorage.getItem('id') || '0'));
+    this.loadAllManiByUserId(parseInt(localStorage.getItem('id') || '0'));
   }
 
   ngAfterViewInit(): void {
@@ -48,8 +58,50 @@ export class PersonalInfoComponent implements OnInit {
   loadUserData(id: number): void {
     this.userService.getUserDataById(id).subscribe({
       next: (response: GetUserDataResponse) => {
-        console.log("RESPONSE: ", response);
         this.saldo = response.saldo;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching user data: ', error);
+        this.toastr.error('Error while fetching user data');
+      }
+    });
+  }
+
+  countWonHands(): void {
+    this.wonHands = this.maniUtente.filter((mano) => mano.importo < 0).length;
+  }
+
+  countSessionPlayed(): void {
+    if (!this.maniUtente || this.maniUtente.length === 0) {
+      console.log("No games played.");
+      return;
+    }
+
+    // Assicurati che le mani siano ordinate per data
+    this.maniUtente.sort((a, b) => new Date(a.dataMano).getTime() - new Date(b.dataMano).getTime());
+
+    let sessionCount = 1; // Inizia con una sessione
+    let lastSessionTime = new Date(this.maniUtente[0].dataMano).getTime();
+
+    this.maniUtente.forEach(mano => {
+      const currentTime = new Date(mano.dataMano).getTime();
+      // Se l'intervallo di tempo tra le mani è superiore a 20 minuti, consideralo una nuova sessione
+      if (currentTime - lastSessionTime > 1200000) { // 1200000 ms = 20 minuti
+        sessionCount++;
+        lastSessionTime = currentTime;
+      }
+    });
+    this.sessionPlayed = sessionCount;
+  }
+
+
+  loadAllManiByUserId(userId: number): void {
+    this.manoService.getAllManiByUserId(userId).subscribe({
+      next: (response: getAllManiResponse[]) => {
+        this.maniUtente = response;
+        this.countWonHands();
+        this.countSessionPlayed();
+        console.log('Mani utente: ', this.maniUtente);
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while fetching user data: ', error);

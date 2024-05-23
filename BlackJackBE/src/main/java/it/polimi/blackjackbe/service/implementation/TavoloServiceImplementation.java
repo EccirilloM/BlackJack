@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.service.implementation;
 
+import it.polimi.blackjackbe.builder.ManoBuilder;
 import it.polimi.blackjackbe.dto.request.EndTavoloRequest;
 import it.polimi.blackjackbe.dto.response.CartaResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
@@ -238,7 +239,11 @@ public class TavoloServiceImplementation implements TavoloService {
         }
 
 
-        Mano mano = new Mano(tavolo, LocalDateTime.now(), importo);
+        Mano mano = new ManoBuilder()
+                .tavolo(tavolo)
+                .dataMano(LocalDateTime.now())
+                .importo(importo)
+                .build();
 
         manoRepository.save(mano);
 
