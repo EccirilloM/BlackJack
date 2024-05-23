@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
 import { getAllManiResponse } from 'src/app/dto/response/GetAllManiResponse';
 import { GetUserDataResponse } from 'src/app/dto/response/GetUserDataResponse';
@@ -8,6 +7,7 @@ import { NotificaResponse } from 'src/app/dto/response/NotificaResponse';
 import { ManoService } from 'src/app/services/mano.service';
 import { NotificheService } from 'src/app/services/notifiche.service';
 import { UserService } from 'src/app/services/user.service';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-personal-info',
@@ -40,7 +40,6 @@ export class PersonalInfoComponent implements OnInit {
     private toastr: ToastrService,
     private manoService: ManoService) {
     this.initializeUserInfo();
-    Chart.register(...registerables);
   }
 
   // NGONINIT E AFTERVIEWINIT -----------------------------------------------------------------------------------
@@ -159,40 +158,6 @@ export class PersonalInfoComponent implements OnInit {
 
   // METODI PER IL GRAFICO -----------------------------------------------------------------------------------
   private initializeChart(): void {
-    if (this.chartCanvas && this.chartCanvas.nativeElement) {
-      const ctx = this.chartCanvas.nativeElement.getContext('2d');
-      if (ctx) {
-        const chart = new Chart(ctx, {
-          type: 'bar', // O qualsiasi altro tipo di grafico
-          data: {
-            labels: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile'], // Esempio di etichette
-            datasets: [{
-              label: 'Esempio di Dati',
-              data: [10, 20, 30, 40], // Esempio di dati
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
-          }
-        });
-      }
-    }
+
   }
 }

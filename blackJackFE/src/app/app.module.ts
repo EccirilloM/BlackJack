@@ -49,7 +49,7 @@ import { EconomistDashboardComponent } from './components/economist-dashboard/ec
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

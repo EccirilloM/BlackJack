@@ -42,22 +42,21 @@
           <!-- Grafico percentuale vincita casinò -->
           <div class="bg-white p-4 rounded-md">
             <h2 class="text-gray-500 text-lg font-semibold pb-1">Casino Win Percentage</h2>
-            <div class="my1-"></div> <!-- Espacio de separación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px  mb-6"></div> <!-- Línea con gradiente -->
-            <div class="chart-container" style="position: relative; height:150px; width:100%">
-              <canvas id="usersChart"></canvas>
-            </div>
+            <div class="my1-"></div>
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div>
+            <div class="chart-container" style="position: relative; height:360px; width:360px" #usersChart></div>
           </div>
           <!-- Grafico frequenza media di gioco per Utente -->
           <div class="bg-white p-4 rounded-md">
             <h2 class="text-gray-500 text-lg font-semibold pb-1">Average Play Frequency per User</h2>
-            <div class="my-1"></div> <!-- Espacio de separación -->
-            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div> <!-- Línea con gradiente -->
-            <div class="chart-container" style="position: relative; height:150px; width:100%">
-              <canvas id="commercesChart"></canvas>
-            </div>
+            <div class="my-1"></div>
+            <div class="bg-gradient-to-r from-cyan-300 to-cyan-500 h-px mb-6"></div>
+            <div class="chart-container" style="position: relative; height:360px; width:360px" #commercesChart></div>
           </div>
         </div>
+        <div id="tooltip" class="tooltip" style="opacity:0; position: absolute; pointer-events: none;"></div>
+
+
       </div>
       <!-- FIne dati statistici generali -->
       <!-- UTILIZZA QUESTO CODICE ADATTANDOLO PER L?ELENCO DELLE INCOMES -->

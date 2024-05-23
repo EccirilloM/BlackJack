@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
 import { UserService } from 'src/app/services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { GetUserDataResponse } from 'src/app/dto/response/GetUserDataResponse';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RegistrazioneRequest } from 'src/app/dto/request/RegistrazioneRequest';
-import { AuthService } from 'src/app/services/auth.service';
 import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { MapService } from 'src/app/services/map.service';
 import { debounceTime } from 'rxjs';
@@ -13,6 +11,7 @@ import { TabacchiService } from 'src/app/services/tabacchi.service';
 import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiResponse';
 import { getAllManiResponse } from 'src/app/dto/response/GetAllManiResponse';
 import { ManoService } from 'src/app/services/mano.service';
+import * as d3 from 'd3';
 /**
  * Componente per visualizzare la dashboard dell'admin.
  * implementa OnInit, un'interfaccia che espone il metodo ngOnInit() il quale 
@@ -25,8 +24,8 @@ import { ManoService } from 'src/app/services/mano.service';
 })
 export class AdminDashboardComponent implements OnInit, AfterViewInit {
   // VARIABILI PER I GRAFICI ----------------------------------------------------------------------------
-  @ViewChild('usersChart') usersChartRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('commercesChart') commercesChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('usersChart', { static: true }) private usersChartContainer!: ElementRef;
+  @ViewChild('commercesChart', { static: true }) private commercesChartContainer!: ElementRef;
   // VARIABILI DATI ADMIN ----------------------------------------------------------------------------
   numberOfUsers: number = 0;
   utenti: GetUserDataResponse[] = [];
@@ -59,11 +58,9 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(private userService: UserService,
     private toastr: ToastrService,
-    private authService: AuthService,
     private mapService: MapService,
     private tabacchiService: TabacchiService,
     private manoService: ManoService) {
-    Chart.register(...registerables);
   }
 
   // NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
@@ -77,6 +74,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.mapCreaTabacchi = this.mapService.initMapCreaTabacchi(this.mapCreaTabacchi);
+    this.initializeCharts();
   }
 
 
@@ -256,8 +254,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.manoService.getAllMani().subscribe({
       next: (response: getAllManiResponse[]) => {
         this.mani = response;
-        // Posticipa l'inizializzazione dei grafici al completamento di ngAfterViewInit
-        setTimeout(() => this.calculateMetricsAndInitializeCharts(), 0);
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while fetching hands: ', error);
@@ -266,77 +262,109 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  calculateMetricsAndInitializeCharts(): void {
+  private initializeCharts(): void {
+    // Assicurati che il contenitore sia disponibile e visibile
+    if (this.usersChartContainer.nativeElement && this.commercesChartContainer.nativeElement) {
+      setTimeout(() => {
+        this.createPieChart(this.usersChartContainer.nativeElement, this.calculateWinLossData());
+        this.createPieChart(this.commercesChartContainer.nativeElement, this.calculateSessionDurationData());
+      }, 500); // Potrebbe essere necessario un ritardo per assicurare che il DOM sia pronto
+    }
+  }
+
+
+  private calculateWinLossData(): { label: string; value: number }[] {
     const winnings = this.mani.filter(m => m.importo > 0).reduce((acc, curr) => acc + curr.importo, 0);
-    const losses = this.mani.filter(m => m.importo < 0).reduce((acc, curr) => acc - curr.importo, 0);
-    const totalGames = this.mani.length;
-    const winPercentage = totalGames > 0 ? (winnings / (winnings + losses)) * 100 : 0;
-
-    const totalAmountPlayed = this.mani.reduce((acc, curr) => acc + Math.abs(curr.importo), 0);
-    const playFrequency = totalGames > 0 ? (totalAmountPlayed / totalGames) : 0;
-
-    setTimeout(() => {
-      this.initializeUsersChart(winPercentage, 100 - winPercentage);
-      this.initializeCommercesChart(playFrequency, 100 - playFrequency);
-    }, 0); // Poco o nessun ritardo, solo per cedere il ciclo di eventi
+    const losses = this.mani.filter(m => m.importo < 0).reduce((acc, curr) => acc + Math.abs(curr.importo), 0);
+    return [
+      { label: 'Casino Wins', value: winnings },
+      { label: 'Casino Losses', value: losses }
+    ];
   }
 
+  private calculateSessionDurationData(): { label: string; value: number }[] {
+    let sessionsOver10Minutes = 0;
+    let totalSessions = 0;
+    const handsByUser = this.groupAndSortHandsByUser();
 
-  private initializeUsersChart(winPercent: number, losePercent: number): void {
-    if (!this.usersChartRef || !this.usersChartRef.nativeElement) {
-      console.error("Canvas for users chart is not available.");
-      return;
-    }
-    const ctx = this.usersChartRef.nativeElement.getContext('2d');
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Casino Wins', 'Casino Losses'],
-          datasets: [{
-            data: [winPercent, losePercent],
-            backgroundColor: ['#00F0FF', '#8B8B8D'],
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom'
-            }
-          }
+    Object.values(handsByUser).forEach(hands => {
+      let sessionStart = hands[0];
+      totalSessions++;
+      for (let i = 1; i < hands.length; i++) {
+        const timeDiff = (new Date(hands[i].dataMano).getTime() - new Date(sessionStart.dataMano).getTime()) / 60000;
+        if (timeDiff > 10) {
+          sessionsOver10Minutes++;
+          sessionStart = hands[i]; // Start a new session
+          totalSessions++;
         }
-      });
-    } else {
-      console.error("Failed to get context for users chart");
-    }
+      }
+    });
+
+    return [
+      { label: 'Sessions Over 10 Minutes', value: sessionsOver10Minutes },
+      { label: 'Other Sessions', value: totalSessions - sessionsOver10Minutes }
+    ];
   }
 
+  private groupAndSortHandsByUser(): { [username: string]: getAllManiResponse[] } {
+    return this.mani.reduce((acc, curr) => {
+      acc[curr.playerUsername] = acc[curr.playerUsername] || [];
+      acc[curr.playerUsername].push(curr);
+      return acc;
+    }, {} as { [username: string]: getAllManiResponse[] });
+  }
 
-  private initializeCommercesChart(playFrequency: number, restFrequency: number): void {
-    const ctx = this.commercesChartRef.nativeElement.getContext('2d');
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Play Frequency', 'Rest Frequency'],
-          datasets: [{
-            data: [playFrequency, restFrequency],
-            backgroundColor: ['#FEC500', '#8B8B8D'],
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }
+  // Assumi che d3Tip sia già importato correttamente come indicato
+  private createPieChart(container: HTMLElement, data: { label: string; value: number }[]): void {
+    const width = 360;
+    const height = 360;
+    const radius = Math.min(width, height) / 2;
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const tooltip = d3.select('#tooltip');
+
+    const svg = d3.select(container).append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', `translate(${width / 2}, ${height / 2})`);
+
+    const pie = d3.pie<{ label: string, value: number }>().value(d => d.value);
+    const path = d3.arc<d3.PieArcDatum<{ label: string; value: number }>>()
+      .outerRadius(radius - 10)
+      .innerRadius(0);
+
+    const arcs = svg.selectAll('.arc')
+      .data(pie(data))
+      .enter().append('g')
+      .attr('class', 'arc')
+      .on('mouseover', function (event, d) {
+        tooltip.transition().duration(200).style('opacity', 1);
+        tooltip.html(`<strong>Value:</strong> <span style='color:red'>${d.data.value}</span>`)
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 10) + 'px');
+      })
+      .on('mouseout', function () {
+        tooltip.transition().duration(500).style('opacity', 0);
       });
-    }
+
+    arcs.append('path')
+      .attr('d', path)
+      .attr('fill', (d, i) => color(i.toString()))
+      .transition()
+      .duration(1000)
+      .attrTween('d', function (d) {
+        const interpolate = d3.interpolate(d.startAngle + 0.1, d.endAngle);
+        return function (t) {
+          d.endAngle = interpolate(t);
+          return path(d) || "";
+        };
+      });
+
+    arcs.append('text')
+      .attr('transform', d => `translate(${path.centroid(d)})`)
+      .attr('dy', '0.35em')
+      .style('text-anchor', 'middle')
+      .text(d => `${d.data.label}: ${d.data.value}`);
   }
   // FINE COMPONETE ----------------------------------------------------------------------------
 }
