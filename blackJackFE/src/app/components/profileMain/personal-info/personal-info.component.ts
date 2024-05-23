@@ -1,8 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
+import { ToastrService } from 'ngx-toastr';
+import { GetUserDataResponse } from 'src/app/dto/response/GetUserDataResponse';
 import { NotificaResponse } from 'src/app/dto/response/NotificaResponse';
 import { NotificheService } from 'src/app/services/notifiche.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-personal-info',
@@ -26,7 +29,7 @@ export class PersonalInfoComponent implements OnInit {
   notifiche: NotificaResponse[] = [];
 
   // COSTRUTTORE -----------------------------------------------------------------------------------
-  constructor(private notificheService: NotificheService) {
+  constructor(private notificheService: NotificheService, private userService: UserService, private toastr: ToastrService) {
     this.initializeUserInfo();
     Chart.register(...registerables);
   }
@@ -35,10 +38,24 @@ export class PersonalInfoComponent implements OnInit {
   ngOnInit(): void {
     console.log('PersonalInfoComponent initialized');
     this.loadNotifiche();
+    this.loadUserData(parseInt(localStorage.getItem('id') || '0'));
   }
 
   ngAfterViewInit(): void {
     this.initializeChart();
+  }
+
+  loadUserData(id: number): void {
+    this.userService.getUserDataById(id).subscribe({
+      next: (response: GetUserDataResponse) => {
+        console.log("RESPONSE: ", response);
+        this.saldo = response.saldo;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching user data: ', error);
+        this.toastr.error('Error while fetching user data');
+      }
+    });
   }
 
   // METODI PER INIZIALIZZARE I DATI UTENTE -----------------------------------------------------------------------------------

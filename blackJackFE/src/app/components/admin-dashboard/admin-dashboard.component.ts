@@ -11,6 +11,8 @@ import { MapService } from 'src/app/services/map.service';
 import { debounceTime } from 'rxjs';
 import { TabacchiService } from 'src/app/services/tabacchi.service';
 import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiResponse';
+import { getAllManiResponse } from 'src/app/dto/response/GetAllManiResponse';
+import { ManoService } from 'src/app/services/mano.service';
 /**
  * Componente per visualizzare la dashboard dell'admin.
  * implementa OnInit, un'interfaccia che espone il metodo ngOnInit() il quale 
@@ -50,24 +52,34 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   economoSelezionatoId: number = 0;
   showEditDataUserByAdmin: boolean = false
   idSelected: number = 0;
+  //VARIABILI PER LE MANI ----------------------------------------------------------------------------
+  mani: getAllManiResponse[] = [];
+  //VARIABILI PER IL CURRENT USER ----------------------------------------------------------------------------
+  currentUser!: GetUserDataResponse;
   // COSTRUTTORE ----------------------------------------------------------------------------
-  constructor(private userService: UserService, private toastr: ToastrService, private authService: AuthService, private mapService: MapService, private tabacchiService: TabacchiService) {
+  constructor(private userService: UserService,
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private mapService: MapService,
+    private tabacchiService: TabacchiService,
+    private manoService: ManoService) {
     Chart.register(...registerables);
   }
 
-  //NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
+  // NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
     this.loadUsers();
     this.loadAllEconomi();
     this.loadAllTabacchi();
-
+    this.loadAllMani();  // Carica i dati e inizializza i grafici dopo il caricamento
   }
 
   ngAfterViewInit(): void {
     this.mapCreaTabacchi = this.mapService.initMapCreaTabacchi(this.mapCreaTabacchi);
-    this.initializeCharts();
   }
+
+
 
   // METODI PER PRENDERE LA LATITUDINE E LONGITUDINE DEL MARKER ----------------------------------------------------------------------------
   latMarker(): number {
@@ -239,21 +251,50 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // FUNZIONi PER INIZIALIZZARE I GRAFICI ----------------------------------------------------------------------------
-  private initializeCharts(): void {
-    this.initializeUsersChart();
-    this.initializeCommercesChart();
+  // FUNZIONE PER CARICARE LE MANI ----------------------------------------------------------------------------
+  loadAllMani(): void {
+    this.manoService.getAllMani().subscribe({
+      next: (response: getAllManiResponse[]) => {
+        this.mani = response;
+        // Posticipa l'inizializzazione dei grafici al completamento di ngAfterViewInit
+        setTimeout(() => this.calculateMetricsAndInitializeCharts(), 0);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error while fetching hands: ', error);
+        this.toastr.error('Error while fetching hands');
+      }
+    });
   }
 
-  private initializeUsersChart(): void {
+  calculateMetricsAndInitializeCharts(): void {
+    const winnings = this.mani.filter(m => m.importo > 0).reduce((acc, curr) => acc + curr.importo, 0);
+    const losses = this.mani.filter(m => m.importo < 0).reduce((acc, curr) => acc - curr.importo, 0);
+    const totalGames = this.mani.length;
+    const winPercentage = totalGames > 0 ? (winnings / (winnings + losses)) * 100 : 0;
+
+    const totalAmountPlayed = this.mani.reduce((acc, curr) => acc + Math.abs(curr.importo), 0);
+    const playFrequency = totalGames > 0 ? (totalAmountPlayed / totalGames) : 0;
+
+    setTimeout(() => {
+      this.initializeUsersChart(winPercentage, 100 - winPercentage);
+      this.initializeCommercesChart(playFrequency, 100 - playFrequency);
+    }, 0); // Poco o nessun ritardo, solo per cedere il ciclo di eventi
+  }
+
+
+  private initializeUsersChart(winPercent: number, losePercent: number): void {
+    if (!this.usersChartRef || !this.usersChartRef.nativeElement) {
+      console.error("Canvas for users chart is not available.");
+      return;
+    }
     const ctx = this.usersChartRef.nativeElement.getContext('2d');
     if (ctx) {
       new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Nuevos', 'Registrados'],
+          labels: ['Casino Wins', 'Casino Losses'],
           datasets: [{
-            data: [30, 65],
+            data: [winPercent, losePercent],
             backgroundColor: ['#00F0FF', '#8B8B8D'],
           }]
         },
@@ -267,18 +308,21 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
           }
         }
       });
+    } else {
+      console.error("Failed to get context for users chart");
     }
   }
 
-  private initializeCommercesChart(): void {
+
+  private initializeCommercesChart(playFrequency: number, restFrequency: number): void {
     const ctx = this.commercesChartRef.nativeElement.getContext('2d');
     if (ctx) {
       new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Nuevos', 'Registrados'],
+          labels: ['Play Frequency', 'Rest Frequency'],
           datasets: [{
-            data: [60, 40],
+            data: [playFrequency, restFrequency],
             backgroundColor: ['#FEC500', '#8B8B8D'],
           }]
         },

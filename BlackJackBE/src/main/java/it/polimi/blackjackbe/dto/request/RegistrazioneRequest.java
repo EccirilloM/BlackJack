@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class RegistrazioneRequest {
+    //TODO: Aggiungere alla documentazione la validazione dei bean
     @NotBlank(message = "Nome non può essere vuoto")
     private String nome;
     @NotBlank(message = "Cognome non può essere vuoto")

@@ -21,7 +21,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    @GetMapping("/getUserData/{userId}")
+    @GetMapping("/getUserDataById/{userId}")
     public ResponseEntity<UserResponse> getUserDataById(@PathVariable String userId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
