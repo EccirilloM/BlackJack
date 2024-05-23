@@ -10,9 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Configuration
 @EnableScheduling
 public class SaldoConfig {
-
-    /* TODO: Chiedere a fabrizio*/
-    private UserService userService;
+    private final UserService userService;
 
     @Scheduled(fixedRate = 1000 * 60 *60 * 24 * 5) // Ogni 5 giorni (1000 millisecondi * 60 secondi * 60 minuti * 24 ore * 5 giorni
     public void ricaricaSaldo() {

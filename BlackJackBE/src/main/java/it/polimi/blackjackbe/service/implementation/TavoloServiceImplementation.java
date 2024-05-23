@@ -163,6 +163,7 @@ public class TavoloServiceImplementation implements TavoloService {
         TavoloStatus tavoloStatus;
         if(punteggioDealer>21){
             tavoloStatus = TavoloStatus.PLAYER_WIN;
+            processWin(tavolo, tavoloStatus);
         }else{
             if(Math.abs(punteggioUtente-21) < Math.abs(punteggioDealer-21)){
                 tavoloStatus = TavoloStatus.PLAYER_WIN;
@@ -225,7 +226,7 @@ public class TavoloServiceImplementation implements TavoloService {
             user.setSaldo(user.getSaldo() + vincita);
             admin.setSaldo(admin.getSaldo() - vincita);
             tavolo.setTotalWinning(tavolo.getTotalWinning()+vincita);
-            importo = -vincita;
+            importo = -vincita/2;
         }
         else if(tavoloStatus == TavoloStatus.PLAYER_LOSE){
             admin.setSaldo(admin.getSaldo() + tavolo.getPlotUser());

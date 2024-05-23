@@ -27,6 +27,7 @@ public class Mano {
     @ManyToOne
     @JoinColumn(name = "tavolo_id")
     private Tavolo tavolo;
+    //Da qui posso ripescarmi sia l'utente e il tipotavolo
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataMano;
