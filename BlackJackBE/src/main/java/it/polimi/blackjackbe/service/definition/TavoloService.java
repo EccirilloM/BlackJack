@@ -5,7 +5,6 @@ import it.polimi.blackjackbe.dto.response.CartaResponse;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
 
 public interface TavoloService {
-    CartaResponse chiediCarta(Long userId);
 
     void init(String tipoTavolo, Long userId);
 

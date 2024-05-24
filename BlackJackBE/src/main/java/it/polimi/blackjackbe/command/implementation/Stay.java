@@ -8,7 +8,6 @@ import it.polimi.blackjackbe.repository.ManoRepository;
 import it.polimi.blackjackbe.repository.TavoloRepository;
 import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.service.implementation.TavoloServiceImplementation;
-import it.polimi.blackjackbe.strategy.context.StrategyManager;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,6 @@ import java.util.Map;
 @Transactional
 public class Stay extends Command {
     private final TavoloRepository tavoloRepository;
-    private final StrategyManager strategyManager;
     private final UserRepository userRepository;
     private final ManoRepository manoRepository;
     private final TavoloServiceImplementation tavoloServiceImplementation;

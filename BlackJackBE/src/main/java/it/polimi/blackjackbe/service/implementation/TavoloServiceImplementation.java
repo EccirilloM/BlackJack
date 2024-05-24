@@ -12,8 +12,6 @@ import it.polimi.blackjackbe.model.TavoloStatus;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
 import it.polimi.blackjackbe.service.definition.TavoloService;
 import it.polimi.blackjackbe.singleton.SingletonTavoli;
-import it.polimi.blackjackbe.strategy.context.StrategyManager;
-import it.polimi.blackjackbe.strategy.operation.ChiediCarta;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,21 +24,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TavoloServiceImplementation implements TavoloService {
     private final TavoloRepository tavoloRepository;
-    private final StrategyManager strategyManager;
     private final UserRepository userRepository;
     private final ManoRepository manoRepository;
 
-
-    @Override
-    public CartaResponse chiediCarta(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new BadRequestException("User not found");
-        }
-        Carta carta = strategyManager.executeStrategy(user.get(), new ChiediCarta());
-        CartaResponse response = new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder());
-        return response;
-    }
 
     @Override
     public void init(String tipoTavolo, Long userId) {
