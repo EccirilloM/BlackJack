@@ -1,11 +1,15 @@
 package it.polimi.blackjackbe.dto.response;
 
 import it.polimi.blackjackbe.model.TavoloStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TavoloStatusResponse {
     private List<CartaResponse> cartePlayer;
     private int punteggioPlayer;
@@ -15,14 +19,5 @@ public class TavoloStatusResponse {
     private Double saldo;
     private Double winning;
 
-    public TavoloStatusResponse(List<CartaResponse> cartePlayer, int punteggioPlayer, List<CartaResponse> carteDealer, int punteggioDealer, TavoloStatus tavoloStatus, Double saldo, Double winning) {
-        this.cartePlayer = cartePlayer;
-        this.punteggioPlayer = punteggioPlayer;
-        this.carteDealer = carteDealer;
-        this.punteggioDealer = punteggioDealer;
-        this.tavoloStatus = tavoloStatus;
-        this.saldo = saldo;
-        this.winning = winning;
-    }
 }
 

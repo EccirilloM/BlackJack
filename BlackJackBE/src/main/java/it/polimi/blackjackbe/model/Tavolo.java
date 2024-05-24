@@ -183,6 +183,11 @@ public class Tavolo {
         return punteggio;
     }
 
+    public void clear(){
+        carteSingolaManoPlayer.clear();
+        carteSingolaManoDealer.clear();
+    }
+
 
     public void end(){
         carteSingolaManoPlayer.clear();

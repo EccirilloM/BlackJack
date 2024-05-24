@@ -102,20 +102,17 @@
     </div>
 
     <!-- Game Control Buttons -->
+
+    <!-- TODO: Scommentare questo quando sarà fixato il BE -->
+    <!-- COMMAND PULSANTII  -->
     <div class="flex space-x-4 mr-12">
-      <button
-        [class]="wager<puntataMinima || !dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
-        [disabled]="wager<puntataMinima || !dealAttivo" (click)="deal()">Deal</button>
-      <button
-        [class]="dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
-        [disabled]="dealAttivo" (click)="hit()">Hit</button>
-      <button
-        [class]="dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
-        [disabled]="dealAttivo" (click)="stand()">Stand</button>
-      <button
-        [class]="dealAttivo ? 'buttonBlueAction text-lg px-6 py-3 opacity-50' : 'buttonBlueAction text-lg px-6 py-3'"
-        [disabled]="dealAttivo" (click)="double()">Double</button>
+      <button *ngFor="let command of availableCommands"
+        [class]="!dealAttivo && command !== 'Deal' ? 'buttonBlueAction text-lg px-6 py-3' : 'buttonBlueAction text-lg px-6 py-3 opacity-50'"
+        (click)="onCommandClick(command)">
+        {{ command }}
+      </button>
     </div>
+
 
     <!-- Cash/Winning Card -->
     <div class="cardWhite p-6 h-20 w-96">

@@ -7,6 +7,7 @@ import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { TavoloStatusResponse } from 'src/app/dto/response/TavoloStatusResponse';
 import { TablesService } from 'src/app/services/tables.service';
 import { Tavolo } from 'src/app/types/tavolo';
+import { Wager } from 'src/app/types/wager';
 
 @Component({
   selector: 'app-table',
@@ -43,6 +44,8 @@ export class TableComponent implements OnInit {
 
   valoreReale: number = 0;
 
+  availableCommands: string[] = [];
+
 
   constructor(private route: ActivatedRoute, private tablesService: TablesService, private router: Router, private toastr: ToastrService) {
     const saldo = localStorage.getItem('saldo');
@@ -54,6 +57,7 @@ export class TableComponent implements OnInit {
       this.tipoTavoloParam = params.get('tipoTavolo')?.toString().toUpperCase() || '';
       this.configureTableType(this.tipoTavoloParam);
       this.initTavolo(this.tipoTavoloParam);
+      this.loadAvailableCommands();
     });
   }
 
@@ -76,6 +80,45 @@ export class TableComponent implements OnInit {
       this.toastr.error('Tipo di tavolo non valido o mancante', 'Errore');
       this.router.navigate(['/homepage/dashboard']);
     }
+  }
+
+  loadAvailableCommands(): void {
+    this.tablesService.getAllCommandActions().subscribe({
+      next: (commands: string[]) => {
+        this.availableCommands = commands;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.toastr.error('Failed to load commands', 'Error');
+      }
+    });
+  }
+
+  onCommandClick(command: string): void {
+    if (command === 'deal' && this.wager > 0) {
+      this.sendCommandToBackend(command, this.wager);
+    } else if (command !== 'deal') {
+      this.sendCommandToBackend(command, NaN);
+    } else {
+      this.toastr.error('Wager is not set properly', 'Error');
+    }
+  }
+
+  sendCommandToBackend(command: string, plot: number): void {
+    const body: Wager = { plot };
+    console.log("Final body to send:", body); // Assicurati che questo mostri { plot: this.wager } correttamente
+    this.tablesService.executeCommandAction(command, body).subscribe({
+      next: (data) => {
+        this.playerCash = data.saldo;
+        this.playerWinning = data.winning;
+        this.handleTavoloStatus(data);
+        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
+        this.dealAttivo = command !== 'Deal';
+      },
+      error: (err: HttpErrorResponse) => {
+        this.toastr.error(err.error.message, 'Error');
+        this.router.navigate(['/homepage/dashboard']);
+      }
+    });
   }
 
 

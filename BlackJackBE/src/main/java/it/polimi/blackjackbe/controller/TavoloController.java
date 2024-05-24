@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.controller;
 
+import it.polimi.blackjackbe.command.CommandExecutor;
 import it.polimi.blackjackbe.dto.request.EndTavoloRequest;
 import it.polimi.blackjackbe.dto.response.CartaResponse;
 import it.polimi.blackjackbe.dto.response.MessageResponse;
@@ -10,12 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/tavolo")
 public class TavoloController {
 
     private final TavoloService tavoloService;
+    private final CommandExecutor commandExecutor;
 
     @GetMapping("/chiediCarta/{userId}")
     public ResponseEntity<CartaResponse> chiediCarta(@PathVariable Long userId) {
@@ -42,27 +47,18 @@ public class TavoloController {
                 .body(new MessageResponse("Tavolo terminato"));
     }
 
-    @PostMapping("/deal/{userId}")
-    public ResponseEntity<TavoloStatusResponse> deal(@PathVariable Long userId, @RequestParam double plot){
+
+    @PostMapping("/{command}/{userId}")
+    public ResponseEntity<TavoloStatusResponse> command(@PathVariable String command, @PathVariable Long userId, @RequestBody Map<String, Object> data){
+        System.out.println("Received data: " + data);
         return ResponseEntity
-                .ok(tavoloService.deal(userId, plot));
+                .ok(commandExecutor.executeCommand(command, userId, data));
     }
 
-    @PostMapping("/hit/{userId}")
-    public ResponseEntity<TavoloStatusResponse> hit(@PathVariable Long userId){
+    @GetMapping("/getCommandsAvaliable")
+    public ResponseEntity<Collection<String>> getCommands() {
         return ResponseEntity
-                .ok(tavoloService.hit(userId));
+                .ok(commandExecutor.getCommandNames());
     }
 
-    @PostMapping("/double/{userId}")
-    public ResponseEntity<TavoloStatusResponse> doubleCommand(@PathVariable Long userId){
-        return ResponseEntity
-                .ok(tavoloService.doubleCommand(userId));
-    }
-
-    @PostMapping("/stand/{userId}")
-    public ResponseEntity<TavoloStatusResponse> stay(@PathVariable Long userId){
-        return ResponseEntity
-                .ok(tavoloService.stay(userId));
-    }
 }

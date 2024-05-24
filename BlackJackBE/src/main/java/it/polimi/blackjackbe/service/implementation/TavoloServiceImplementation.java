@@ -83,111 +83,7 @@ public class TavoloServiceImplementation implements TavoloService {
         tavolo.get().end();
     }
 
-    @Override
-    public TavoloStatusResponse deal(Long userId, Double plot){
-        Optional<User> user = userRepository.findById(userId);
-
-        if(user.isEmpty()) {
-            throw new BadRequestException("User not found");
-        }
-        if(user.get().getSaldo() < plot)
-            throw new IllegalStateException("The plot is higer then the balance");
-
-        user.get().setSaldo(user.get().getSaldo() - plot);
-
-        Tavolo tavolo = SingletonTavoli.getInstance().getTable(user.get());
-        tavolo.setPlotUser(plot);
-
-        tavolo.pescaDealer();
-        tavolo.pescaCarta();
-        tavolo.pescaCarta();
-
-        TavoloStatus tavoloStatus = TavoloStatus.CONTINUE;
-        if(tavolo.punteggioUtente() == 21){
-            tavoloStatus = TavoloStatus.PLAYER_WIN;
-            processWin(tavolo, tavoloStatus, true);
-        }
-
-        TavoloStatusResponse tavoloStatusResponse = getTavoloStatusResponse(tavolo, tavoloStatus);
-        if(tavoloStatusResponse.getTavoloStatus() != TavoloStatus.CONTINUE)
-            clearHands(tavolo);
-        return tavoloStatusResponse;
-    }
-
-    @Override
-    public TavoloStatusResponse hit(Long userId){
-        Tavolo tavolo = getTavolo(userId);
-
-        tavolo.pescaCarta();
-        TavoloStatus tavoloStatus = TavoloStatus.CONTINUE;
-        if(tavolo.punteggioUtente()==21){
-            tavoloStatus = TavoloStatus.PLAYER_WIN;
-        } else if (tavolo.punteggioUtente()>21) {
-            tavoloStatus = TavoloStatus.PLAYER_LOSE;
-        }
-        TavoloStatusResponse tavoloStatusResponse = getTavoloStatusResponse(tavolo, tavoloStatus);
-        if(tavoloStatusResponse.getTavoloStatus() != TavoloStatus.CONTINUE){
-            processWin(tavolo, tavoloStatus);
-            clearHands(tavolo);
-        }
-        return tavoloStatusResponse;
-    }
-
-    @Override
-    public TavoloStatusResponse doubleCommand(Long userId){
-        Tavolo tavolo = getTavolo(userId);
-        Optional<User> user = userRepository.findById(userId);
-
-        if(user.isEmpty()) {
-            throw new BadRequestException("User not found");
-        }
-        if(user.get().getSaldo() < tavolo.getPlotUser())
-            throw new IllegalStateException("The plot is higer then the balance");
-
-        user.get().setSaldo(user.get().getSaldo() - tavolo.getPlotUser());
-
-        tavolo.setPlotUser(tavolo.getPlotUser()*2);
-
-        TavoloStatusResponse tavoloStatusResponse = hit(userId);
-        if(tavoloStatusResponse.getTavoloStatus() != TavoloStatus.CONTINUE)
-            return tavoloStatusResponse;
-        else
-            return stay(userId);
-    }
-
-    @Override
-    public TavoloStatusResponse stay(Long userId){
-        Tavolo tavolo = getTavolo(userId);
-
-        var punteggioUtente = tavolo.punteggioUtente();
-        var punteggioDealer = stayDealer(tavolo);
-        TavoloStatus tavoloStatus;
-        if(punteggioDealer>21){
-            tavoloStatus = TavoloStatus.PLAYER_WIN;
-            processWin(tavolo, tavoloStatus);
-        }else{
-            if(Math.abs(punteggioUtente-21) < Math.abs(punteggioDealer-21)){
-                tavoloStatus = TavoloStatus.PLAYER_WIN;
-                processWin(tavolo, tavoloStatus);
-            }else if(Math.abs(punteggioUtente-21)== Math.abs(punteggioDealer-21)) {
-                tavoloStatus = TavoloStatus.DRAW;
-                processWin(tavolo, tavoloStatus);
-            }else{
-                tavoloStatus = TavoloStatus.PLAYER_LOSE;
-                processWin(tavolo, tavoloStatus);
-            }
-        }
-        TavoloStatusResponse tavoloStatusResponse = getTavoloStatusResponse(tavolo, tavoloStatus);
-        clearHands(tavolo);
-        return tavoloStatusResponse;
-    }
-
-    private void clearHands(Tavolo tavolo){
-        tavolo.getCarteSingolaManoPlayer().clear();
-        tavolo.getCarteSingolaManoDealer().clear();
-    }
-
-    private TavoloStatusResponse getTavoloStatusResponse(Tavolo tavolo, TavoloStatus tavoloStatus){
+    public TavoloStatusResponse getTavoloStatusResponse(Tavolo tavolo, TavoloStatus tavoloStatus){
         User user = userRepository.findById(tavolo.getPlayer().getUserId()).get();
         return new TavoloStatusResponse(
                 tavolo.getCarteSingolaManoPlayer().stream().map(carta-> new CartaResponse(carta.getSeme(), carta.getValore(), carta.getPunteggio(), carta.getOrder())).toList(),
@@ -200,7 +96,7 @@ public class TavoloServiceImplementation implements TavoloService {
         );
     }
 
-    private Tavolo getTavolo(Long userId){
+    public Tavolo getTavolo(Long userId){
         Optional<User> user = userRepository.findById(userId);
 
         if(user.isEmpty()) {
@@ -214,11 +110,11 @@ public class TavoloServiceImplementation implements TavoloService {
         return tavolo;
     }
 
-    private void processWin(Tavolo tavolo,TavoloStatus tavoloStatus){
+    public void processWin(Tavolo tavolo,TavoloStatus tavoloStatus){
         processWin(tavolo, tavoloStatus, false);
     }
 
-    private void processWin(Tavolo tavolo, TavoloStatus tavoloStatus, boolean blackJack){
+    public void processWin(Tavolo tavolo, TavoloStatus tavoloStatus, boolean blackJack){
         User user = userRepository.findById(tavolo.getPlayer().getUserId()).get();
         User admin = userRepository.findByRuolo(Ruolo.ADMIN).get();
         Double importo = 0.0;
@@ -247,12 +143,5 @@ public class TavoloServiceImplementation implements TavoloService {
 
         manoRepository.save(mano);
 
-    }
-
-    private int stayDealer(Tavolo tavolo) {
-        while(tavolo.punteggioDealer() <17) {
-            tavolo.pescaDealer();
-        }
-        return tavolo.punteggioDealer();
     }
 }

@@ -11,11 +11,4 @@ public interface TavoloService {
 
     void end(Long userId, EndTavoloRequest request);
 
-    TavoloStatusResponse deal(Long userId, Double plot);
-
-    TavoloStatusResponse hit(Long userId);
-
-    TavoloStatusResponse doubleCommand(Long userId);
-
-    TavoloStatusResponse stay(Long userId);
 }
