@@ -22,13 +22,6 @@ public class TavoloController {
     private final TavoloService tavoloService;
     private final CommandExecutor commandExecutor;
 
-    @GetMapping("/chiediCarta/{userId}")
-    public ResponseEntity<CartaResponse> chiediCarta(@PathVariable Long userId) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(tavoloService.chiediCarta(userId));
-    }
-
     @GetMapping("/init/{tipoTavolo}/{userId}")
     public ResponseEntity<MessageResponse> init(@PathVariable String tipoTavolo, @PathVariable Long userId) {
 

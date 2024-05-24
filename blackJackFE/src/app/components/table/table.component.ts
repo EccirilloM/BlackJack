@@ -15,7 +15,6 @@ import { Wager } from 'src/app/types/wager';
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-  //TODO: Fixare bug che non mi salva la mano dello stand quando vinco e fixare il command
 
   playerUsername: string = localStorage.getItem('username') || '';
   warningMessage: string = '';
@@ -47,7 +46,10 @@ export class TableComponent implements OnInit {
   availableCommands: string[] = [];
 
 
-  constructor(private route: ActivatedRoute, private tablesService: TablesService, private router: Router, private toastr: ToastrService) {
+  constructor(private route: ActivatedRoute,
+    private tablesService: TablesService,
+    private router: Router,
+    private toastr: ToastrService) {
     const saldo = localStorage.getItem('saldo');
     this.playerCash = saldo ? parseFloat(saldo) : 0;
   }
@@ -96,23 +98,30 @@ export class TableComponent implements OnInit {
   onCommandClick(command: string): void {
     if (command === 'deal' && this.wager > 0) {
       this.sendCommandToBackend(command, this.wager);
+      this.dealAttivo = false; // Disabilita Deal appena viene cliccato
     } else if (command !== 'deal') {
       this.sendCommandToBackend(command, NaN);
+      if (!this.dealAttivo) {
+        this.dealAttivo = true; // Potrebbe non essere necessario se vuoi che Deal sia disabilitato fino a un nuovo inizio
+      }
     } else {
       this.toastr.error('Wager is not set properly', 'Error');
     }
   }
+
+
 
   sendCommandToBackend(command: string, plot: number): void {
     const body: Wager = { plot };
     console.log("Final body to send:", body); // Assicurati che questo mostri { plot: this.wager } correttamente
     this.tablesService.executeCommandAction(command, body).subscribe({
       next: (data) => {
+        console.log('Data received:', data);
         this.playerCash = data.saldo;
         this.playerWinning = data.winning;
         this.handleTavoloStatus(data);
         this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
-        this.dealAttivo = command !== 'Deal';
+        this.dealAttivo = command !== 'deal';
       },
       error: (err: HttpErrorResponse) => {
         this.toastr.error(err.error.message, 'Error');
@@ -135,86 +144,6 @@ export class TableComponent implements OnInit {
     });
   }
 
-  // Funzione per iniziare una nuova Mano
-  deal() {
-    this.carteDealer = [];
-    this.scoreDealer = 0;
-    this.cartePlayer = [];
-    this.scorePlayer = 0;
-    this.warningMessage = '';
-
-    console.log('Inizio della partita');
-
-    this.tablesService.deal(this.wager).subscribe({
-      next: (data: TavoloStatusResponse) => {
-        console.log('deal', data);
-        this.dealAttivo = false;
-        this.cartePlayer = data.cartePlayer;
-        this.scorePlayer = data.punteggioPlayer;
-        this.carteDealer = data.carteDealer;
-        this.scoreDealer = data.punteggioDealer;
-        this.playerCash = data.saldo;
-        this.playerWinning = data.winning;
-        this.handleTavoloStatus(data);
-        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error.message, 'Errore');
-        this.router.navigate(['/homepage/dashboard']);
-      }
-    });
-  }
-
-  hit() {
-    console.log('Pesca una carta');
-    this.tablesService.hit().subscribe({
-      next: (data: TavoloStatusResponse) => {
-        console.log('hit', data);
-        this.playerCash = data.saldo;
-        this.playerWinning = data.winning;
-        this.handleTavoloStatus(data);
-        this.updateConteggio(data.cartePlayer);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error, 'Errore');
-        this.router.navigate(['/homepage/dashboard']);
-      }
-    });
-  }
-
-  stand() {
-    console.log('Stai');
-    this.tablesService.stand().subscribe({
-      next: (data: TavoloStatusResponse) => {
-        console.log('stand', data);
-        this.playerCash = data.saldo;
-        this.playerWinning = data.winning;
-        this.handleTavoloStatus(data);
-        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error.message, 'Errore');
-        this.router.navigate(['/homepage/dashboard']);
-      }
-    });
-  }
-
-  double() {
-    console.log('Raddoppia la puntata');
-    this.tablesService.double().subscribe({
-      next: (data: TavoloStatusResponse) => {
-        console.log('double', data);
-        this.handleTavoloStatus(data);
-        this.playerCash = data.saldo;
-        this.playerWinning = data.winning;
-        this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
-      },
-      error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error.message, 'Errore');
-        this.router.navigate(['/homepage/dashboard']);
-      }
-    });
-  }
 
   private handleTavoloStatus(response: TavoloStatusResponse): void {
     this.cartePlayer = response.cartePlayer;
@@ -243,6 +172,7 @@ export class TableComponent implements OnInit {
         this.toastr.error('Stato tavolo sconosciuto', 'Errore');
         break;
     }
+    console.log("dealAttivo updated to:", this.dealAttivo);
   }
 
   updateConteggio(carte: CartaResponse[]): void {

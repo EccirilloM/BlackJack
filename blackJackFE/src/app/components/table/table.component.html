@@ -103,15 +103,17 @@
 
     <!-- Game Control Buttons -->
 
-    <!-- TODO: Scommentare questo quando sarà fixato il BE -->
     <!-- COMMAND PULSANTII  -->
+    <!-- COMMAND BUTTONS -->
     <div class="flex space-x-4 mr-12">
       <button *ngFor="let command of availableCommands"
-        [class]="!dealAttivo && command !== 'Deal' ? 'buttonBlueAction text-lg px-6 py-3' : 'buttonBlueAction text-lg px-6 py-3 opacity-50'"
+        [ngClass]="{'buttonBlueAction text-lg px-6 py-3': true, 'opacity-50': (dealAttivo && command !== 'deal') || (!dealAttivo && command === 'deal')}"
+        [disabled]="(dealAttivo && command !== 'deal') || (!dealAttivo && command === 'deal')"
         (click)="onCommandClick(command)">
         {{ command }}
       </button>
     </div>
+
 
 
     <!-- Cash/Winning Card -->

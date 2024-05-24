@@ -1,4 +1,4 @@
-package it.polimi.blackjackbe.command.impl;
+package it.polimi.blackjackbe.command.implementation;
 
 
 import it.polimi.blackjackbe.command.Command;

@@ -1,8 +1,7 @@
-package it.polimi.blackjackbe.command.impl;
+package it.polimi.blackjackbe.command.implementation;
 
 import it.polimi.blackjackbe.command.Command;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
-import it.polimi.blackjackbe.exception.BadRequestException;
 import it.polimi.blackjackbe.model.Tavolo;
 import it.polimi.blackjackbe.model.TavoloStatus;
 import it.polimi.blackjackbe.model.User;
@@ -10,11 +9,9 @@ import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.service.implementation.TavoloServiceImplementation;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Component
 @AllArgsConstructor

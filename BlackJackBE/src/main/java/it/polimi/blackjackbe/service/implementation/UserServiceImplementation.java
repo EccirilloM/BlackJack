@@ -140,11 +140,6 @@ public class UserServiceImplementation implements UserService {
         //Prendo dal db tutti gli utenti PLAYER.
         List<User> users = userRepository.findAllByRuolo(Ruolo.PLAYER);
 
-        //Se non è presente nessun utente lancio un'eccezione.
-        if(users.isEmpty()) {
-            throw new NotFoundException("Utenti non trovati");
-        }
-
         //Per ogni utente, ricarico il saldo.
         for(User user: users) {
             System.out.println("Ricarica saldo per l'utente: " + user.getUsername());
