@@ -11,7 +11,7 @@ import { TabacchiService } from 'src/app/services/tabacchi.service';
 import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiResponse';
 import { getAllManiResponse } from 'src/app/dto/response/GetAllManiResponse';
 import { ManoService } from 'src/app/services/mano.service';
-import * as d3 from 'd3';
+import { ChartService } from 'src/app/services/chart.service';
 /**
  * Componente per visualizzare la dashboard dell'admin.
  * implementa OnInit, un'interfaccia che espone il metodo ngOnInit() il quale 
@@ -60,7 +60,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService,
     private mapService: MapService,
     private tabacchiService: TabacchiService,
-    private manoService: ManoService) {
+    private manoService: ManoService,
+    private chartService: ChartService) {
   }
 
   // NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
@@ -266,8 +267,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     // Assicurati che il contenitore sia disponibile e visibile
     if (this.usersChartContainer.nativeElement && this.commercesChartContainer.nativeElement) {
       setTimeout(() => {
-        this.createPieChart(this.usersChartContainer.nativeElement, this.calculateWinLossData());
-        this.createPieChart(this.commercesChartContainer.nativeElement, this.calculateSessionDurationData());
+        this.chartService.createPieChart(this.usersChartContainer.nativeElement, this.calculateWinLossData());
+        this.chartService.createPieChart(this.commercesChartContainer.nativeElement, this.calculateSessionDurationData());
       }, 500); // Potrebbe essere necessario un ritardo per assicurare che il DOM sia pronto
     }
   }
@@ -314,57 +315,5 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     }, {} as { [username: string]: getAllManiResponse[] });
   }
 
-  // Assumi che d3Tip sia già importato correttamente come indicato
-  private createPieChart(container: HTMLElement, data: { label: string; value: number }[]): void {
-    const width = 360;
-    const height = 360;
-    const radius = Math.min(width, height) / 2;
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-    const tooltip = d3.select('#tooltip');
-
-    const svg = d3.select(container).append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', `translate(${width / 2}, ${height / 2})`);
-
-    const pie = d3.pie<{ label: string, value: number }>().value(d => d.value);
-    const path = d3.arc<d3.PieArcDatum<{ label: string; value: number }>>()
-      .outerRadius(radius - 10)
-      .innerRadius(0);
-
-    const arcs = svg.selectAll('.arc')
-      .data(pie(data))
-      .enter().append('g')
-      .attr('class', 'arc')
-      .on('mouseover', function (event, d) {
-        tooltip.transition().duration(200).style('opacity', 1);
-        tooltip.html(`<strong>Value:</strong> <span style='color:red'>${d.data.value}</span>`)
-          .style('left', (event.pageX + 10) + 'px')
-          .style('top', (event.pageY - 10) + 'px');
-      })
-      .on('mouseout', function () {
-        tooltip.transition().duration(500).style('opacity', 0);
-      });
-
-    arcs.append('path')
-      .attr('d', path)
-      .attr('fill', (d, i) => color(i.toString()))
-      .transition()
-      .duration(1000)
-      .attrTween('d', function (d) {
-        const interpolate = d3.interpolate(d.startAngle + 0.1, d.endAngle);
-        return function (t) {
-          d.endAngle = interpolate(t);
-          return path(d) || "";
-        };
-      });
-
-    arcs.append('text')
-      .attr('transform', d => `translate(${path.centroid(d)})`)
-      .attr('dy', '0.35em')
-      .style('text-anchor', 'middle')
-      .text(d => `${d.data.label}: ${d.data.value}`);
-  }
   // FINE COMPONETE ----------------------------------------------------------------------------
 }

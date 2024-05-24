@@ -8,6 +8,7 @@ import { ManoService } from 'src/app/services/mano.service';
 import { NotificheService } from 'src/app/services/notifiche.service';
 import { UserService } from 'src/app/services/user.service';
 import * as d3 from 'd3';
+import { ChartService } from 'src/app/services/chart.service';
 
 @Component({
   selector: 'app-personal-info',
@@ -16,7 +17,7 @@ import * as d3 from 'd3';
 })
 export class PersonalInfoComponent implements OnInit {
   // VARIABILI PER IL GRAFICO -----------------------------------------------------------------------------------
-  @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('chartContainer') chartContainer!: ElementRef; // Aggiornato per usare il div anziché canvas
   // VARIABILI PER SALDO -----------------------------------------------------------------------------------
   saldoString: string = localStorage.getItem('saldo') || '0';
   saldo: number = parseFloat(this.saldoString);
@@ -27,18 +28,21 @@ export class PersonalInfoComponent implements OnInit {
   joined: string = "";
   email: string = "";
   daysAgo: number = 0;
-  wonHands: number = 0;
-  sessionPlayed: number = 0;
+
 
   notifiche: NotificaResponse[] = [];
 
   maniUtente: getAllManiResponse[] = [];
+  wonHands: number = 0;
+  lostHands: number = 0; // Aggiunto lostHands
+  sessionPlayed: number = 0;
 
   // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(private notificheService: NotificheService,
     private userService: UserService,
     private toastr: ToastrService,
-    private manoService: ManoService) {
+    private manoService: ManoService,
+    private chartService: ChartService) {
     this.initializeUserInfo();
   }
 
@@ -51,7 +55,6 @@ export class PersonalInfoComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.initializeChart();
   }
 
   loadUserData(id: number): void {
@@ -98,15 +101,29 @@ export class PersonalInfoComponent implements OnInit {
     this.manoService.getAllManiByUserId(userId).subscribe({
       next: (response: getAllManiResponse[]) => {
         this.maniUtente = response;
-        this.countWonHands();
-        this.countSessionPlayed();
-        console.log('Mani utente: ', this.maniUtente);
+        this.calculateWinLoss();
+        this.initializeChart();
       },
       error: (error: HttpErrorResponse) => {
-        console.error('Error while fetching user data: ', error);
         this.toastr.error('Error while fetching user data');
+        console.error('Error while fetching user data: ', error);
       }
     });
+  }
+
+  calculateWinLoss(): void {
+    this.wonHands = this.maniUtente.filter(mano => mano.importo > 0).length;
+    this.lostHands = this.maniUtente.length - this.wonHands;
+  }
+
+  private initializeChart(): void {
+    if (this.chartContainer.nativeElement) {
+      const data = [
+        { label: 'Won Hands', value: this.wonHands },
+        { label: 'Lost Hands', value: this.lostHands }
+      ];
+      this.chartService.createPieChart(this.chartContainer.nativeElement, data);
+    }
   }
 
   // METODI PER INIZIALIZZARE I DATI UTENTE -----------------------------------------------------------------------------------
@@ -154,10 +171,5 @@ export class PersonalInfoComponent implements OnInit {
     const today = new Date();
     const diffTime = Math.abs(today.getTime() - date.getTime());
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  }
-
-  // METODI PER IL GRAFICO -----------------------------------------------------------------------------------
-  private initializeChart(): void {
-
   }
 }
