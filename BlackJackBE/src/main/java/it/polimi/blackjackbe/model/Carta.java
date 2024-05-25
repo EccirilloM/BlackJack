@@ -12,6 +12,12 @@ public class Carta {
     private int punteggio;
     private int order;
 
+    /**
+     * Costruttore della classe {@link Carta}
+     * @param seme questo è il seme della carta
+     * @param valore questo è il valore della carta
+     * @param punteggio questo è il punteggio della carta
+     */
     public Carta(String seme, String valore, int punteggio) {
         this.seme = seme;
         this.valore = valore;

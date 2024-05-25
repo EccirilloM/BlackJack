@@ -121,7 +121,7 @@ export class TableComponent implements OnInit {
         this.playerWinning = data.winning;
         this.handleTavoloStatus(data);
         this.updateConteggio([...data.cartePlayer, ...data.carteDealer]);
-        this.dealAttivo = command !== 'deal';
+        this.dealAttivo = data.tavoloStatus === 'PLAYER_WIN' || data.tavoloStatus === 'PLAYER_LOSE' || data.tavoloStatus === 'DRAW' ? true : false;
       },
       error: (err: HttpErrorResponse) => {
         this.toastr.error(err.error.message, 'Error');
