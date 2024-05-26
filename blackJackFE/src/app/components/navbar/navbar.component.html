@@ -7,6 +7,16 @@
       <!--Logo-->
       <img [src]="logoPath" alt="BlackJackSaferLogo" class="w-48 h-auto rounded-full">
 
+      <!-- Welcome -->
+      <button (click)="goToWelcome()"
+        [ngClass]="{ 'bg-gray-800 text-blue-300': currentRoute === 'welcome', 'bg-gray-700 text-gray-400': currentRoute !== 'welcome' }"
+        class="mt-1 w-full group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+        <span class="material-icons">
+          dashboard_customize
+        </span>
+        Welcome
+      </button>
+
       <!-- Nav-->
       <!-- Dashboard -->
       <nav class="mt-2 px-2">

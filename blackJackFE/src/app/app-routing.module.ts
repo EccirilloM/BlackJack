@@ -16,6 +16,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { EconomoGuard } from './guards/economo.guard';
 import { TableComponent } from './components/table/table.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
@@ -26,6 +27,9 @@ const routes: Routes = [
     component: HomepageComponent,
     canActivate: [AuthGuard],
     children: [
+      {
+        path: "welcome", component: WelcomeComponent
+      },
       {
         path: "dashboard", component: DashboardComponent
       },

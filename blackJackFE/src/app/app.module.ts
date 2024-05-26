@@ -22,6 +22,7 @@ import { ChargeMoneyComponent } from './components/charge-money/charge-money.com
 import { ForumComponent } from './components/forum/forum.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { EconomistDashboardComponent } from './components/economist-dashboard/economist-dashboard.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { EconomistDashboardComponent } from './components/economist-dashboard/ec
     ChargeMoneyComponent,
     ForumComponent,
     AdminDashboardComponent,
-    EconomistDashboardComponent
+    EconomistDashboardComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,

@@ -73,6 +73,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/homepage/economoDashboard']);
   }
 
+  goToWelcome(): void {
+    this.router.navigate(['/homepage/welcome']);
+  }
+
   // METODI PER IL MENU DEL FORUM -----------------------------------------------------------------------------------
   forumMenuOpen: boolean = false;
 

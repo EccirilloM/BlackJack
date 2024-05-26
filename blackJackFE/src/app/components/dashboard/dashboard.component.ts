@@ -13,13 +13,19 @@ export class DashboardComponent implements OnInit {
   protected puntataMinimaTavoloVip: number = 10;
   protected puntataMinimaTavoloExclusive: number = 20;
   protected location: string = "Roma";
-  protected currentHours: number = new Date().getHours();
+  protected currentHours: string = "";
   protected Tavolo = Tavolo;
 
   constructor(private router: Router) { }
 
   ngOnInit(): void {
     console.log("DashboardComponent initialized");
+    this.setCurrentTime();
+  }
+
+  setCurrentTime() {
+    const currentTime = new Date();
+    this.currentHours = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
   goToTable(tipoTavolo: Tavolo) {

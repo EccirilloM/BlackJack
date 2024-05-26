@@ -53,7 +53,7 @@ export class LoginComponent {
         this.authService.setIsAuthenticated(true);
 
         // Assumi che l'oggetto di risposta abbia un campo jwt. Modifica per adattarsi alla tua risposta effettiva
-        this.router.navigate(['/homepage']);
+        this.router.navigate(['/homepage/welcome']);
       },
       error: (error) => {
         this.toastr.error('Errore durante il login');
