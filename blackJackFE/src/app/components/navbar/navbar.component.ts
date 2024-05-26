@@ -88,4 +88,8 @@ export class NavbarComponent implements OnInit {
     return this.authService.getRole() === Ruolo.ECONOMO;
   }
 
+  isPlayer(): boolean {
+    return this.authService.getRole() === Ruolo.PLAYER;
+  }
+
 }

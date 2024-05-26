@@ -179,7 +179,7 @@ public class Tavolo {
         for(Carta carta:carte){
             punteggio+=carta.getPunteggio();
             while (punteggio>21 && carteSingolaManoDealer.stream().anyMatch(i -> i.getPunteggio()==11)){
-                carteSingolaManoDealer.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);
+                carte.stream().filter(i -> i.getPunteggio()==11).findAny().get().setPunteggio(1);
                 punteggio-=10;
             }
         }

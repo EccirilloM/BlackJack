@@ -27,34 +27,34 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('usersChart', { static: true }) private usersChartContainer!: ElementRef;
   @ViewChild('commercesChart', { static: true }) private commercesChartContainer!: ElementRef;
   // VARIABILI DATI ADMIN ----------------------------------------------------------------------------
-  numberOfUsers: number = 0;
-  utenti: GetUserDataResponse[] = [];
-  public searchResults: any[] = [];
-  private mapCreaTabacchi: any;
-  saldoString: string = localStorage.getItem('saldo') || '0';
-  saldo: number = parseFloat(this.saldoString);
+  protected numberOfUsers: number = 0;
+  protected utenti: GetUserDataResponse[] = [];
+  protected searchResults: any[] = [];
+  protected mapCreaTabacchi: any;
+  protected saldoString: string = localStorage.getItem('saldo') || '0';
+  protected saldo: number = parseFloat(this.saldoString);
   // VARIABILI PER Creare Economo Oppure Modificare Dati di un User----------------------------------------------------------------------------
-  nome = '';
-  cognome = '';
-  email = '';
-  username = '';
-  password = '';
-  passwordRipetuta = '';
-  dataNascita = new Date();
-  showPassword = false;
-  showRepeatPassword = false;
-  economi: GetUserDataResponse[] = [];
+  protected nome = '';
+  protected cognome = '';
+  protected email = '';
+  protected username = '';
+  protected password = '';
+  protected passwordRipetuta = '';
+  protected dataNascita = new Date();
+  protected showPassword = false;
+  protected showRepeatPassword = false;
+  protected economi: GetUserDataResponse[] = [];
   // VARIABILI PER Tabacchi ----------------------------------------------------------------------------
-  tabacchi: GetAllTabacchiResponse[] = [];
+  protected tabacchi: GetAllTabacchiResponse[] = [];
   // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
-  nomeTabacchi: string = '';
-  economoSelezionatoId: number = 0;
-  showEditDataUserByAdmin: boolean = false
-  idSelected: number = 0;
+  protected nomeTabacchi: string = '';
+  protected economoSelezionatoId: number = 0;
+  protected showEditDataUserByAdmin: boolean = false
+  protected idSelected: number = 0;
   //VARIABILI PER LE MANI ----------------------------------------------------------------------------
-  mani: getAllManiResponse[] = [];
+  protected mani: getAllManiResponse[] = [];
   //VARIABILI PER IL CURRENT USER ----------------------------------------------------------------------------
-  currentUser!: GetUserDataResponse;
+  protected currentUser!: GetUserDataResponse;
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(private userService: UserService,
     private toastr: ToastrService,
