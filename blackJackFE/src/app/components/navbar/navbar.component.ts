@@ -14,18 +14,18 @@ import { Ruolo } from 'src/app/types/ruolo';
 })
 export class NavbarComponent implements OnInit {
   // VARIABILI PER L'IMMAGINE PROFILO -----------------------------------------------------------------------------------
-  logoPath: string = 'assets/logos/BlackJackSaferLogo.png';
+  protected logoPath: string = 'assets/logos/BlackJackSaferLogo.png';
   // VARIABILI PER LA ROTTA -----------------------------------------------------------------------------------
-  currentRoute: string = '';
+  protected currentRoute: string = '';
   // VARIABILI PER L'UTENTE -----------------------------------------------------------------------------------
-  userId: string = localStorage.getItem('id') ?? '';
-  userNome: string = localStorage.getItem('nome') ?? '';
-  userCognome: string = localStorage.getItem('cognome') ?? '';
-  userUsername: string = localStorage.getItem('username') ?? '';
-  userDisplayName: string = `@${this.userUsername}`;
+  protected userId: string = localStorage.getItem('id') ?? '';
+  protected userNome: string = localStorage.getItem('nome') ?? '';
+  protected userCognome: string = localStorage.getItem('cognome') ?? '';
+  protected userUsername: string = localStorage.getItem('username') ?? '';
+  protected userDisplayName: string = `@${this.userUsername}`;
 
   // VABRIABILI PER IL TIPO DI TAVOLO -----------------------------------------------------------------------------------
-  Tavolo = Tavolo;
+  protected Tavolo = Tavolo;
 
   // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(private userService: UserService, private authService: AuthService, private router: Router) {

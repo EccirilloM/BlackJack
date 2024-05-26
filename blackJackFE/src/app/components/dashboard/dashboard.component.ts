@@ -8,13 +8,13 @@ import { Tavolo } from 'src/app/types/tavolo';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  puntataMinimaTavoloBase: number = 1;
-  puntataMinimaTavoloPremium: number = 5;
-  puntataMinimaTavoloVip: number = 10;
-  puntataMinimaTavoloExclusive: number = 20;
-  location: string = "Roma";
-  currentHours: number = new Date().getHours();
-  Tavolo = Tavolo;
+  protected puntataMinimaTavoloBase: number = 1;
+  protected puntataMinimaTavoloPremium: number = 5;
+  protected puntataMinimaTavoloVip: number = 10;
+  protected puntataMinimaTavoloExclusive: number = 20;
+  protected location: string = "Roma";
+  protected currentHours: number = new Date().getHours();
+  protected Tavolo = Tavolo;
 
   constructor(private router: Router) { }
 

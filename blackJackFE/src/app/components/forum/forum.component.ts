@@ -13,9 +13,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./forum.component.css']
 })
 export class ForumComponent implements OnInit {
-  tipoTavolo: Tavolo | null = null;
-  messaggi: GetAllMessagesByTipoTavoloResponse[] = [];
-  testoMessaggio: string = '';
+  protected tipoTavolo: Tavolo | null = null;
+  protected messaggi: GetAllMessagesByTipoTavoloResponse[] = [];
+  protected testoMessaggio: string = '';
 
 
   // COSTRUTTORE ----------------------------------------------------------------------------

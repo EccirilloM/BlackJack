@@ -19,23 +19,23 @@ export class PersonalInfoComponent implements OnInit {
   // VARIABILI PER IL GRAFICO -----------------------------------------------------------------------------------
   @ViewChild('chartContainer') chartContainer!: ElementRef; // Aggiornato per usare il div anziché canvas
   // VARIABILI PER SALDO -----------------------------------------------------------------------------------
-  saldoString: string = localStorage.getItem('saldo') || '0';
-  saldo: number = parseFloat(this.saldoString);
+  protected saldoString: string = localStorage.getItem('saldo') || '0';
+  protected saldo: number = parseFloat(this.saldoString);
 
   // VARIABILI PER INFORMAZIONI UTENTE -----------------------------------------------------------------------------------
-  fullName: string = "";
-  birthday: string = "";
-  joined: string = "";
-  email: string = "";
-  daysAgo: number = 0;
+  protected fullName: string = "";
+  protected birthday: string = "";
+  protected joined: string = "";
+  protected email: string = "";
+  protected daysAgo: number = 0;
 
 
-  notifiche: NotificaResponse[] = [];
+  protected notifiche: NotificaResponse[] = [];
 
-  maniUtente: getAllManiResponse[] = [];
-  wonHands: number = 0;
-  lostHands: number = 0; // Aggiunto lostHands
-  sessionPlayed: number = 0;
+  protected maniUtente: getAllManiResponse[] = [];
+  protected wonHands: number = 0;
+  protected lostHands: number = 0; // Aggiunto lostHands
+  protected sessionPlayed: number = 0;
 
   // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(private notificheService: NotificheService,

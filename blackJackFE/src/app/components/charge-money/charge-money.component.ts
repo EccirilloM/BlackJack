@@ -18,16 +18,16 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
   public searchResults: any[] = [];
   // VARIABILI PER LA MAPPA ----------------------------------------------------------------------------
   private mapRicaricaDenaro: any;
-  tabacchi: GetAllTabacchiResponse[] = [];
+  protected tabacchi: GetAllTabacchiResponse[] = [];
   // VARIABILI PER IL TABACCHI SELEZIONATO ----------------------------------------------------------------------------
   //Queste 2 variabili devono avere il valore aggiornato della funzione nel service findTabacchiByCoordinates, fai qualcosa perché ora non mi funziona
 
   // VARIABILI PER LE COORDINATE DEL MARKER SELEZIONATO ----------------------------------------------------------------------------
-  latMarkerSelezionato: number = this.mapService.latMarkerSelezionato;
-  lngMarkerSelezionato: number = this.mapService.lngMarkerSelezionato;
+  protected latMarkerSelezionato: number = this.mapService.latMarkerSelezionato;
+  protected lngMarkerSelezionato: number = this.mapService.lngMarkerSelezionato;
   // VARIABILE PER LA RICARICA DENARO ----------------------------------------------------------------------------
-  importo: number = 0;
-  tabacchiSelezionatoNome: string = '';
+  protected importo: number = 0;
+  protected tabacchiSelezionatoNome: string = '';
   private tabacchiSub!: Subscription;  // Subscription to handle observable
 
   //COSTRUTTORE ----------------------------------------------------------------------------
@@ -38,21 +38,6 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.mapRicaricaDenaro = this.mapService.initMap(this.mapRicaricaDenaro);
   }
-
-  // ngOnInit(): void {
-  //   console.log('ChargeMoneyComponent');
-  //   this.tabacchiService.getAllTabacchi().subscribe({
-  //     next: (response: GetAllTabacchiResponse[]) => {
-  //       console.log(response);
-  //       this.tabacchi = response;
-  //       this.mapService.placeTabacchiMarkersChargeMoney(response, this.mapRicaricaDenaro);
-  //     },
-  //     error: (error: HttpErrorResponse) => {
-  //       console.error('Error while fetching tabacchi: ', error);
-  //       this.toastr.error('Error while fetching Tabacchi');
-  //     }
-  //   });
-  // }
 
   ngOnInit(): void {
     this.tabacchiSub = this.mapService.selectedTabacchi$.subscribe(tabacchi => {
@@ -110,6 +95,22 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     });
 
   }
+
+  // ngOnInit(): void {
+  //   console.log('ChargeMoneyComponent');
+  //   this.tabacchiService.getAllTabacchi().subscribe({
+  //     next: (response: GetAllTabacchiResponse[]) => {
+  //       console.log(response);
+  //       this.tabacchi = response;
+  //       this.mapService.placeTabacchiMarkersChargeMoney(response, this.mapRicaricaDenaro);
+  //     },
+  //     error: (error: HttpErrorResponse) => {
+  //       console.error('Error while fetching tabacchi: ', error);
+  //       this.toastr.error('Error while fetching Tabacchi');
+  //     }
+  //   });
+  // }
+
 
   // METODI CHE DATA UNA LATITUDINE E LONGITUDINE, RITORNA IL NOME E L'ID DEL TABACCHI --------------------------------
   // findTabacchiByCoordinates(lat: number, lng: number): GetAllTabacchiResponse {

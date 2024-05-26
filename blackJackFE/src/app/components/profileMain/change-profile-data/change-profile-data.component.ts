@@ -11,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class ChangeProfileDataComponent implements OnInit {
   // VARIABILI PER I DATI UTENTE -----------------------------------------------------------------------------------
-  userData = {
+  protected userData = {
     nome: localStorage.getItem('nome') || '',
     cognome: localStorage.getItem('cognome') || '',
     email: localStorage.getItem('email') || '',

@@ -11,8 +11,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./economist-dashboard.component.css']
 })
 export class EconomistDashboardComponent implements OnInit {
-  richieste: GetAllRichiestaRicaricaSaldoResponse[] = [];
-  nomeEconomo: string = localStorage.getItem('nome') || '';
+  protected richieste: GetAllRichiestaRicaricaSaldoResponse[] = [];
+  protected nomeEconomo: string = localStorage.getItem('nome') || '';
 
   constructor(private ricaricaService: RicaricaService, private toastr: ToastrService) { }
 

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class HomepageComponent implements OnInit {
 
-  isAuthenticated: boolean = false;
+  protected isAuthenticated: boolean = false;
 
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(public authService: AuthService, public router: Router) {

@@ -11,9 +11,9 @@ import { LoginResponse } from 'src/app/dto/response/LoginResponse';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
-  showPassword: boolean = false;
+  protected username: string = '';
+  protected password: string = '';
+  protected showPassword: boolean = false;
 
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(

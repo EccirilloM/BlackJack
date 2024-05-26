@@ -9,7 +9,7 @@ import { filter } from 'rxjs/operators';
 })
 export class ProfileSideBarComponent implements OnInit {
   // VARIABILI PER IL SUBPATH CORRENTE ----------------------------------------------------------------------------
-  currentSubPath: string = '';
+  protected currentSubPath: string = '';
 
   // COSTRUTTORE ----------------------------------------------------------------------------
   constructor(private router: Router, private route: ActivatedRoute) { }

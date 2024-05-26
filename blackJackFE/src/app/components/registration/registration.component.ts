@@ -14,15 +14,15 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class RegistrationComponent {
 
   // VARIABILI PER LA REGISTRAZIONE -----------------------------------------------------------------------------------
-  nome = '';
-  cognome = '';
-  email = '';
-  username = '';
-  password = '';
-  passwordRipetuta = '';
-  dataNascita = ''; // Assicurati di gestire correttamente la formattazione della data per il backend
-  showPassword = false;
-  showRepeatPassword = false;
+  protected nome = '';
+  protected cognome = '';
+  protected email = '';
+  protected username = '';
+  protected password = '';
+  protected passwordRipetuta = '';
+  protected dataNascita = ''; // Assicurati di gestire correttamente la formattazione della data per il backend
+  protected showPassword = false;
+  protected showRepeatPassword = false;
 
   // COSTRUTTORE -----------------------------------------------------------------------------------
   constructor(

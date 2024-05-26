@@ -29,8 +29,8 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   // VARIABILI DATI ADMIN ----------------------------------------------------------------------------
   protected numberOfUsers: number = 0;
   protected utenti: GetUserDataResponse[] = [];
-  protected searchResults: any[] = [];
-  protected mapCreaTabacchi: any;
+  public searchResults: any[] = [];
+  private mapCreaTabacchi: any;
   protected saldoString: string = localStorage.getItem('saldo') || '0';
   protected saldo: number = parseFloat(this.saldoString);
   // VARIABILI PER Creare Economo Oppure Modificare Dati di un User----------------------------------------------------------------------------

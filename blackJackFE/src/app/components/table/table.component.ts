@@ -16,34 +16,34 @@ import { Wager } from 'src/app/types/wager';
 })
 export class TableComponent implements OnInit {
 
-  playerUsername: string = localStorage.getItem('username') || '';
-  warningMessage: string = '';
+  protected playerUsername: string = localStorage.getItem('username') || '';
+  protected warningMessage: string = '';
 
-  wager: number = 0;
-  playerCash: number = 0;
-  playerWinning: number = 0;
+  protected wager: number = 0;
+  protected playerCash: number = 0;
+  protected playerWinning: number = 0;
 
-  tipoTavolo!: Tavolo;
+  protected tipoTavolo!: Tavolo;
 
-  cartePlayer: CartaResponse[] = [];
-  scorePlayer: number = 0;
+  protected cartePlayer: CartaResponse[] = [];
+  protected scorePlayer: number = 0;
 
-  carteDealer: CartaResponse[] = [];
-  scoreDealer: number = 0;
+  protected carteDealer: CartaResponse[] = [];
+  protected scoreDealer: number = 0;
 
-  puntataPlayer: number = 0;
-  puntataMinima: number = 0;
+  protected puntataPlayer: number = 0;
+  protected puntataMinima: number = 0;
 
-  dealAttivo: boolean = true;
+  protected dealAttivo: boolean = true;
 
-  tipoTavoloParam: string = '';
+  protected tipoTavoloParam: string = '';
 
-  conteggio: number = 0;
-  carteUnicheGiocate: Set<number> = new Set();
+  protected conteggio: number = 0;
+  protected carteUnicheGiocate: Set<number> = new Set();
 
-  valoreReale: number = 0;
+  protected valoreReale: number = 0;
 
-  availableCommands: string[] = [];
+  protected availableCommands: string[] = [];
 
 
   constructor(private route: ActivatedRoute,
