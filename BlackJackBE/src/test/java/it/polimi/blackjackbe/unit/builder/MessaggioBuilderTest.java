@@ -21,6 +21,7 @@ public class MessaggioBuilderTest {
     @Test
     void testAllMethods(){
         assertAll(() -> messaggioBuilder
+                .messaggioId(1L)
                 .testo("Testo")
                 .createdAt(LocalDateTime.now())
                 .user(new User())
