@@ -176,10 +176,17 @@ export class TableComponent implements OnInit {
   }
 
   updateConteggio(carte: CartaResponse[]): void {
+    const totaleCarte = this.numeroDiMazzi * 52;  // Assumendo che ogni mazzo abbia 52 carte
+
     carte.forEach(carta => {
-      if (!this.carteUnicheGiocate.has(carta.order)) {
-        this.carteUnicheGiocate.add(carta.order);
+      // Calcola l'indice modificato di 'order' per gestire il riutilizzo del mazzo
+      const adjustedOrder = carta.order % totaleCarte;
+
+      // Verifica se la carta è già stata considerata
+      if (!this.carteUnicheGiocate.has(adjustedOrder)) {
+        this.carteUnicheGiocate.add(adjustedOrder);
         const valore = carta.valore;
+
         if (['2', '3', '4', '5', '6'].includes(valore)) {
           this.conteggio += 1;
         } else if (['10', 'J', 'Q', 'K', 'A'].includes(valore)) {
@@ -189,19 +196,28 @@ export class TableComponent implements OnInit {
       }
     });
 
-    const mazziRimasti = Math.max(this.numeroDiMazzi - (this.carteUnicheGiocate.size / 52), 0.5); // Evita la divisione per zero
-    this.valoreReale = this.conteggio / mazziRimasti; // Calcola il valore reale
+    this.updateValoreReale();
+  }
 
-    if (this.valoreReale > 4) { // Cambio soglia per mostrare il messaggio
+  private updateValoreReale(): void {
+    const mazziRimasti = Math.max(this.numeroDiMazzi - (this.carteUnicheGiocate.size / 52), 0.5);  // Evita la divisione per zero
+    this.valoreReale = this.conteggio / mazziRimasti;  // Calcola il valore reale
+
+    this.checkAndUpdateBetRecommendation();
+  }
+
+  private checkAndUpdateBetRecommendation(): void {
+    if (this.valoreReale > 4) {  // Cambio soglia per mostrare il messaggio
       this.toastr.info('Il Mazzo è carico! Aumenta la puntata!', 'Informazione', {
         timeOut: 3000
       });
     } else if (this.valoreReale < -4) {
-      this.toastr.info('Il Mazzo è scarico! Diminuisci la puntata!', 'Informazione', {
+      this.toastr.info('Il Mazzo è scarico! Gioca il Minimo!', 'Informazione', {
         timeOut: 3000
       });
     }
   }
+
 
 
   end(): void {

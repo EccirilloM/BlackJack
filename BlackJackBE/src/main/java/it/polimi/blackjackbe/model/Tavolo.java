@@ -139,6 +139,9 @@ public class Tavolo {
 
     @Transient
     public Carta pescaCarta(){
+        if(carte.isEmpty()){
+            initCarte();
+        }
         if(carteSingolaManoPlayer==null||carteSingolaManoPlayer.isEmpty()){
             carteSingolaManoPlayer=new ArrayList<>();
             Carta carta=carte.remove(0);
@@ -158,6 +161,9 @@ public class Tavolo {
 
     @Transient
     public Carta pescaDealer(){
+        if(carte.isEmpty()){
+            initCarte();
+        }
         Carta carta = carte.remove(0);
         carteSingolaManoDealer.add(carta);
         carta.setOrder(order++);
