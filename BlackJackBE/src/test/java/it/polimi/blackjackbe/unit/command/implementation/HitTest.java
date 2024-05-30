@@ -1,37 +1,112 @@
 package it.polimi.blackjackbe.unit.command.implementation;
 
-import it.polimi.blackjackbe.builder.TavoloBuilder;
-import it.polimi.blackjackbe.builder.UserBuilder;
 import it.polimi.blackjackbe.command.implementation.Hit;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
-import it.polimi.blackjackbe.model.Tavolo;
-import it.polimi.blackjackbe.model.TavoloStatus;
+import it.polimi.blackjackbe.model.*;
+import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.service.implementation.TavoloServiceImplementation;
+import it.polimi.blackjackbe.singleton.SingletonTavoli;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class HitTest {
+class HitTest {
 
     @Mock
     TavoloServiceImplementation tavoloServiceImplementation;
     @Mock
-    Tavolo tavolo = new TavoloBuilder().player(new UserBuilder().saldo(10.0).build()).build();
+    UserRepository userRepository;
     @InjectMocks
     Hit hit;
 
+
     @Test
-    void execute() {
-        TavoloStatusResponse tavoloStatusResponse = new TavoloStatusResponse(null, 0, null, 0, TavoloStatus.PLAYER_WIN, null, null);
-        when(tavoloServiceImplementation.getTavolo(1L)).thenReturn(tavolo);
-        when(tavoloServiceImplementation.getTavoloStatusResponse(any(), any())).thenReturn(tavoloStatusResponse);
-        assertAll(() -> hit.execute(1L, null));
+    void testHit() {
+        User user = new User();
+        user.setUserId(1);
+        user.setSaldo(100.00);
+        SingletonTavoli.getInstance().createTable(user, TipoTavolo.BASE);
+        Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
+        tavolo.setCarte(
+                new ArrayList<>(List.of(
+                        new Carta("Cuori", "A", 11),
+                        new Carta("Fiori", "5", 5),
+                        new Carta("Picche", "Q", 10)
+                ))
+        );
+        tavolo.setPlayer(user);
+
+        when(tavoloServiceImplementation.getTavolo(any())).thenReturn(tavolo);
+        when(tavoloServiceImplementation.getTavoloStatusResponse(any(), any())).thenReturn(new TavoloStatusResponse());
+
+        hit.execute(user.getUserId(), Map.of());
+
+        verify(tavoloServiceImplementation, times(1)).getTavoloStatusResponse(any(), any());
+    }
+
+    @Test
+    void testWin(){
+        User user = new User();
+        user.setUserId(1);
+        user.setSaldo(100.00);
+        SingletonTavoli.getInstance().createTable(user, TipoTavolo.BASE);
+        Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
+        tavolo.setCarteSingolaManoPlayer(
+                new ArrayList<>(List.of(
+                        new Carta("Cuori", "A", 11),
+                        new Carta("Fiori", "5", 5)
+                ))
+        );
+        tavolo.setCarte(
+                new ArrayList<>(List.of(
+                        new Carta("Cuori", "5", 5)
+                ))
+        );
+        tavolo.setPlayer(user);
+
+        when(tavoloServiceImplementation.getTavolo(any())).thenReturn(tavolo);
+        when(tavoloServiceImplementation.getTavoloStatusResponse(any(), any())).thenReturn(new TavoloStatusResponse());
+
+        hit.execute(user.getUserId(), Map.of());
+
+        verify(tavoloServiceImplementation, times(1)).getTavoloStatusResponse(any(), any());
+    }
+
+    @Test
+    void testLose(){
+        User user = new User();
+        user.setUserId(1);
+        user.setSaldo(100.00);
+        SingletonTavoli.getInstance().createTable(user, TipoTavolo.BASE);
+        Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
+        tavolo.setCarteSingolaManoPlayer(
+                new ArrayList<>(List.of(
+                        new Carta("Cuori", "A", 11),
+                        new Carta("Fiori", "5", 5)
+                ))
+        );
+        tavolo.setCarte(
+                new ArrayList<>(List.of(
+                        new Carta("Cuori", "K", 10)
+                ))
+        );
+        when(tavoloServiceImplementation.getTavolo(any())).thenReturn(tavolo);
+        when(tavoloServiceImplementation.getTavoloStatusResponse(any(), any())).thenReturn(new TavoloStatusResponse());
+        tavolo.setPlayer(user);
+        hit.execute(user.getUserId(), Map.of());
+
+        verify(tavoloServiceImplementation, times(1)).getTavoloStatusResponse(any(), any());
     }
 }

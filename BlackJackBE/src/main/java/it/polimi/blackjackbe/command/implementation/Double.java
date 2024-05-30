@@ -18,7 +18,6 @@ import java.util.Map;
 @Transactional
 public class Double extends Command {
     private final TavoloServiceImplementation tavoloServiceImplementation;
-    private final UserRepository userRepository;
     private final Command hit;
     private final Command stay;
 

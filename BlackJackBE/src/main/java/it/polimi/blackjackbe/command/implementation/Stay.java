@@ -18,9 +18,6 @@ import java.util.Map;
 @Component
 @Transactional
 public class Stay extends Command {
-    private final TavoloRepository tavoloRepository;
-    private final UserRepository userRepository;
-    private final ManoRepository manoRepository;
     private final TavoloServiceImplementation tavoloServiceImplementation;
 
     @Override

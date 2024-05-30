@@ -1,13 +1,11 @@
 package it.polimi.blackjackbe.dto.response;
 
 import it.polimi.blackjackbe.model.TavoloStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TavoloStatusResponse {
