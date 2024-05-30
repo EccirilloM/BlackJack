@@ -33,7 +33,7 @@ class HitTest {
 
 
     @Test
-    void testHit() {
+    void hitSuccessful() {
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
@@ -57,7 +57,7 @@ class HitTest {
     }
 
     @Test
-    void testWin(){
+    void winSuccessful(){
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
@@ -85,7 +85,7 @@ class HitTest {
     }
 
     @Test
-    void testLose(){
+    void loseSuccessful(){
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);

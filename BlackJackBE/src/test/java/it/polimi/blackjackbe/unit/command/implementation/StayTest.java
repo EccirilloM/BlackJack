@@ -32,7 +32,7 @@ class StayTest {
 
 
     @Test
-    void testStay() {
+    void staySuccessful() {
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
@@ -61,7 +61,7 @@ class StayTest {
     }
 
     @Test
-    void testWinInstant(){
+    void winInstantSuccessful(){
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
@@ -96,7 +96,7 @@ class StayTest {
     }
 
     @Test
-    void testWin(){
+    void winSuccessful(){
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
@@ -131,7 +131,7 @@ class StayTest {
     }
 
     @Test
-    void testDraw(){
+    void drawSuccessful(){
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);

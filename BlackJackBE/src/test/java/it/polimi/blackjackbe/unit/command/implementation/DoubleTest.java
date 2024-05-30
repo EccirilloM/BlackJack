@@ -34,7 +34,7 @@ class DoubleTest {
 
 
     @Test
-    void testDouble() {
+    void doubleSuccessful() {
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
@@ -59,7 +59,7 @@ class DoubleTest {
     }
 
     @Test
-    void testWin(){
+    void winSuccessful(){
         User user = new User();
         user.setUserId(1);
         user.setSaldo(100.00);
