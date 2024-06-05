@@ -4,6 +4,10 @@ import it.polimi.blackjackbe.builder.CartaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Model che rappresenta una carta nel gioco del Blackjack.
+ * Questa classe utilizza il pattern Builder per creare oggetti di tipo Carta.
+ */
 @Data
 @AllArgsConstructor
 public class Carta {
@@ -13,20 +17,17 @@ public class Carta {
     private int order;
 
     /**
-     * Costruttore della classe {@link Carta}
-     * @param seme questo è il seme della carta
-     * @param valore questo è il valore della carta
-     * @param punteggio questo è il punteggio della carta
+     * Costruttore che utilizza il builder per assegnare i valori agli attributi della carta.
+     * @param builder Dati appena settati tramite il pattern builder {@link CartaBuilder}.
      */
-    public Carta(String seme, String valore, int punteggio) {
-        this.seme = seme;
-        this.valore = valore;
-        this.punteggio = punteggio;
-    }
-
     public Carta(CartaBuilder builder) {
+        // Assegna il valore del seme dalla classe builder
         this.seme = builder.getSeme();
+        // Assegna il valore della carta dalla classe builder
         this.valore = builder.getValore();
+        // Assegna il punteggio della carta dalla classe builder
         this.punteggio = builder.getPunteggio();
+        // Assegna l'ordine della carta dalla classe builder
+        this.order = builder.getOrder();
     }
 }

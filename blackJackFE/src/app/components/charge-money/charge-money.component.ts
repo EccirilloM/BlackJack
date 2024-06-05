@@ -6,7 +6,11 @@ import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiRespo
 import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { MapService } from 'src/app/services/map.service';
 import { TabacchiService } from 'src/app/services/tabacchi.service';
-
+// -----------------------------------------------------------------------------------
+// COMPONENTE PER LA RICARICA DI DENARO
+// Questo componente gestisce la ricarica di denaro tramite i tabacchi selezionati sulla mappa.
+// Implementa OnInit e AfterViewInit, interfacce che espongono metodi eseguiti all'inizializzazione del componente e dopo che la vista è stata inizializzata.
+// -----------------------------------------------------------------------------------
 @Component({
   selector: 'app-charge-money',
   templateUrl: './charge-money.component.html',
@@ -14,27 +18,47 @@ import { TabacchiService } from 'src/app/services/tabacchi.service';
 })
 export class ChargeMoneyComponent implements OnInit, AfterViewInit {
 
-  // VARIABILE PER NOMINATIM ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER NOMINATIM
+  // Queste variabili memorizzano i risultati della ricerca tramite il servizio Nominatim.
+  // -----------------------------------------------------------------------------------
   public searchResults: any[] = [];
-  // VARIABILI PER LA MAPPA ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER LA MAPPA
+  // Queste variabili memorizzano l'istanza della mappa e i tabacchi caricati.
+  // -----------------------------------------------------------------------------------
   private mapRicaricaDenaro: any;
   protected tabacchi: GetAllTabacchiResponse[] = [];
-  // VARIABILI PER IL TABACCHI SELEZIONATO ----------------------------------------------------------------------------
-  //Queste 2 variabili devono avere il valore aggiornato della funzione nel service findTabacchiByCoordinates, fai qualcosa perché ora non mi funziona
-
-  // VARIABILI PER LE COORDINATE DEL MARKER SELEZIONATO ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL TABACCHI SELEZIONATO
+  // Queste variabili memorizzano il nome del tabacchi selezionato.
+  // -----------------------------------------------------------------------------------
+  protected tabacchiSelezionatoNome: string = '';
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER LE COORDINATE DEL MARKER SELEZIONATO
+  // Queste variabili memorizzano le coordinate del marker selezionato.
+  // -----------------------------------------------------------------------------------
   protected latMarkerSelezionato: number = this.mapService.latMarkerSelezionato;
   protected lngMarkerSelezionato: number = this.mapService.lngMarkerSelezionato;
-  // VARIABILE PER LA RICARICA DENARO ----------------------------------------------------------------------------
+
+  // -----------------------------------------------------------------------------------
+  // VARIABILE PER LA RICARICA DENARO
+  // Questa variabile memorizza l'importo della ricarica.
+  // -----------------------------------------------------------------------------------
   protected importo: number = 0;
-  protected tabacchiSelezionatoNome: string = '';
   private tabacchiSub!: Subscription;  // Subscription to handle observable
 
-  //COSTRUTTORE ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // COSTRUTTORE
+  // Il costruttore inietta i servizi necessari per la gestione della mappa e dei tabacchi.
+  // -----------------------------------------------------------------------------------
   constructor(private mapService: MapService, private tabacchiService: TabacchiService, private toastr: ToastrService) {
   }
 
-  //NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI ngOnInit E ngAfterViewInit
+  // Questi metodi vengono eseguiti non appena il componente viene visualizzato e dopo che la vista è stata inizializzata.
+  // -----------------------------------------------------------------------------------
   ngAfterViewInit() {
     this.mapRicaricaDenaro = this.mapService.initMap(this.mapRicaricaDenaro);
   }
@@ -57,7 +81,10 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     });
   }
 
-  //NOMINATIM SECTION --------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // NOMINATIM SECTION
+  // Questi metodi gestiscono la ricerca e la centratura della mappa sui risultati tramite il servizio Nominatim.
+  // -----------------------------------------------------------------------------------
   searchNominatim(query: string) {
     if (query.length < 3) {
       this.searchResults = [];
@@ -81,7 +108,10 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     this.mapRicaricaDenaro.flyTo([lat, lon], 15);
   }
 
-  // METODI PER MANDARE LA RICHIESTA DI RICARICA DENARO --------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI PER MANDARE LA RICHIESTA DI RICARICA DENARO
+  // Questi metodi gestiscono l'invio delle richieste di ricarica denaro.
+  // -----------------------------------------------------------------------------------
   mandaRichiestaRicaricaDenaro() {
     this.mapService.richiediRicaricaDenaro(this.importo).subscribe({
       next: (response: MessageResponse) => {
@@ -95,40 +125,39 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     });
 
   }
-
-  // ngOnInit(): void {
-  //   console.log('ChargeMoneyComponent');
-  //   this.tabacchiService.getAllTabacchi().subscribe({
-  //     next: (response: GetAllTabacchiResponse[]) => {
-  //       console.log(response);
-  //       this.tabacchi = response;
-  //       this.mapService.placeTabacchiMarkersChargeMoney(response, this.mapRicaricaDenaro);
-  //     },
-  //     error: (error: HttpErrorResponse) => {
-  //       console.error('Error while fetching tabacchi: ', error);
-  //       this.toastr.error('Error while fetching Tabacchi');
-  //     }
-  //   });
-  // }
-
-
-  // METODI CHE DATA UNA LATITUDINE E LONGITUDINE, RITORNA IL NOME E L'ID DEL TABACCHI --------------------------------
-  // findTabacchiByCoordinates(lat: number, lng: number): GetAllTabacchiResponse {
-  //   console.log(`Cerco tabacchi con lat: ${lat} e lng: ${lng}`);
-  //   const foundTabacchi = this.tabacchi.find(tabacchi =>
-  //     tabacchi.lat == lat && tabacchi.lng == lng
-  //   );
-
-  //   if (foundTabacchi) {
-  //     this.tabacchiIdSelezionato = foundTabacchi.tabacchiId;
-  //     this.tabacchiNomeSelezionato = foundTabacchi.nomeTabacchi;
-  //     console.log(`Trovato tabacchi: ${foundTabacchi.nomeTabacchi} con ID: ${foundTabacchi.tabacchiId}`);
-  //     return foundTabacchi;
-  //   } else {
-  //     console.log('Nessun tabacchi trovato con queste coordinate.');
-  //     this.toastr.error('Nessun tabacchi trovato con queste coordinate.');
-  //     return {} as GetAllTabacchiResponse;
-  //   }
-  // }
-  // FINE COMPONENTE ----------------------------------------------------------------------------
 }
+
+// ngOnInit(): void {
+//   console.log('ChargeMoneyComponent');
+//   this.tabacchiService.getAllTabacchi().subscribe({
+//     next: (response: GetAllTabacchiResponse[]) => {
+//       console.log(response);
+//       this.tabacchi = response;
+//       this.mapService.placeTabacchiMarkersChargeMoney(response, this.mapRicaricaDenaro);
+//     },
+//     error: (error: HttpErrorResponse) => {
+//       console.error('Error while fetching tabacchi: ', error);
+//       this.toastr.error('Error while fetching Tabacchi');
+//     }
+//   });
+// }
+
+
+// METODI CHE DATA UNA LATITUDINE E LONGITUDINE, RITORNA IL NOME E L'ID DEL TABACCHI --------------------------------
+// findTabacchiByCoordinates(lat: number, lng: number): GetAllTabacchiResponse {
+//   console.log(`Cerco tabacchi con lat: ${lat} e lng: ${lng}`);
+//   const foundTabacchi = this.tabacchi.find(tabacchi =>
+//     tabacchi.lat == lat && tabacchi.lng == lng
+//   );
+
+//   if (foundTabacchi) {
+//     this.tabacchiIdSelezionato = foundTabacchi.tabacchiId;
+//     this.tabacchiNomeSelezionato = foundTabacchi.nomeTabacchi;
+//     console.log(`Trovato tabacchi: ${foundTabacchi.nomeTabacchi} con ID: ${foundTabacchi.tabacchiId}`);
+//     return foundTabacchi;
+//   } else {
+//     console.log('Nessun tabacchi trovato con queste coordinate.');
+//     this.toastr.error('Nessun tabacchi trovato con queste coordinate.');
+//     return {} as GetAllTabacchiResponse;
+//   }
+// }

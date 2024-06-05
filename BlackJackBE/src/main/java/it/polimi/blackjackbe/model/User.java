@@ -22,11 +22,19 @@ import java.util.List;
     }
 )
 
-
+/**
+ * Model che rappresenta un utente nel sistema.
+ * Questa classe implementa {@link UserDetails} per integrarsi con Spring Security.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
+
+    /**
+     * Identificatore univoco per ogni utente.
+     * Configurato con autoincremento utilizzando una sequenza.
+     */
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -40,49 +48,109 @@ public class User implements UserDetails {
     @Column(updatable = false, nullable = false, name = "user_id")
     private long userId;
 
+    /**
+     * Nome dell'utente.
+     * Non deve essere vuoto.
+     */
     @Column(nullable = false)
     private String nome;
 
+    /**
+     * Cognome dell'utente.
+     * Non deve essere vuoto.
+     */
     @Column(nullable = false)
     private String cognome;
 
+    /**
+     * Email dell'utente.
+     * Non deve essere vuota.
+     */
     @Column(nullable = false)
     private String email;
 
+    /**
+     * Password dell'utente.
+     * Non deve essere vuota.
+     */
     @Column(nullable = false)
     private String password;
 
+    /**
+     * Username dell'utente.
+     * Non deve essere vuoto.
+     */
     @Column(nullable = false)
     private String username;
 
+    /**
+     * Ruolo dell'utente.
+     * Utilizza un enumerato per limitare i valori possibili.
+     */
     @Column(nullable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
+    /**
+     * Data di nascita dell'utente.
+     * Non deve essere vuota.
+     */
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataNascita;
 
+    /**
+     * Data di registrazione dell'utente.
+     * Non deve essere vuota.
+     */
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataRegistrazione;
 
+    /**
+     * Saldo dell'utente.
+     * Non deve essere vuoto.
+     */
     @Column(nullable = false)
     private Double saldo;
 
+    /**
+     * Tavoli in cui ha giocato il giocatore.
+     * Relazione One-to-Many con la classe {@link Tavolo}.
+     */
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY)
-    private List<Tavolo> tavoli; //Tavoli in cui ha giocato il player
+    private List<Tavolo> tavoli;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,  cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Messaggio> messaggi; //Messaggi inviati dall'utente
+    /**
+     * Messaggi inviati dall'utente.
+     * Relazione One-to-Many con la classe {@link Messaggio}.
+     */
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Messaggio> messaggi;
 
+    /**
+     * Ricariche effettuate dall'utente.
+     * Relazione One-to-Many con la classe {@link Ricarica}.
+     */
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ricarica> ricariche; //Ricariche effettuate dall'utente
+    private List<Ricarica> ricariche;
 
+    /**
+     * Tabacchi gestiti dall'economo.
+     * Relazione One-to-Many con la classe {@link Tabacchi}.
+     */
     @OneToMany(mappedBy = "economo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tabacchi> tabacchi; //Tabacchi gestiti dall'economo
+    private List<Tabacchi> tabacchi;
 
+    /**
+     * Notifiche ricevute dal giocatore.
+     * Relazione One-to-Many con la classe {@link Notifica}.
+     */
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Notifica> notifiche; //Notifiche ricevute dal player
+    private List<Notifica> notifiche;
 
+    /**
+     * Costruttore che utilizza il builder per assegnare i valori agli attributi dell'utente.
+     * @param userBuilder Dati appena settati tramite il pattern builder {@link UserBuilder}.
+     */
     public User (UserBuilder userBuilder) {
         this.userId = userBuilder.getUserId();
         this.nome = userBuilder.getNome();

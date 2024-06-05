@@ -17,38 +17,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service per gestire tutte le operazioni relative ai tabacchi.
+ */
 @Service
 @RequiredArgsConstructor
 public class TabacchiServiceImplementation implements TabacchiService {
 
-
     private final TabacchiRepository tabacchiRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Crea un nuovo tabacchi con i dati forniti nella richiesta.
+     *
+     * @param request DTO con i dati per la creazione del tabacchi.
+     * @throws IllegalArgumentException se uno dei campi forniti non è valido.
+     */
     @Override
     public void creaTabacchi(CreaTabacchiRequest request) {
-        if(request.getNomeTabacchi().isEmpty() || request.getNomeTabacchi().isBlank()) {
+        // Verifica che il nome del tabacchi sia valido.
+        if (request.getNomeTabacchi().isEmpty() || request.getNomeTabacchi().isBlank()) {
             throw new IllegalArgumentException("Nome tabacchi non valido");
         }
 
-        if(request.getLat().isInfinite() || request.getLat().isNaN()) {
+        // Verifica che la latitudine sia valida.
+        if (request.getLat().isInfinite() || request.getLat().isNaN()) {
             throw new IllegalArgumentException("Latitudine non valida");
         }
 
+        // Verifica che la longitudine sia valida.
         if (request.getLng().isInfinite() || request.getLng().isNaN()) {
             throw new IllegalArgumentException("Longitudine non valida");
         }
 
-        if(request.getEconomoId() < 1){
+        // Verifica che l'ID dell'economo sia valido.
+        if (request.getEconomoId() < 1) {
             throw new IllegalArgumentException("Id economo non valido");
         }
 
+        // Controlla se l'economo esiste nel database.
         Optional<User> economo = userRepository.findById(request.getEconomoId());
-
-        if(economo.isEmpty()) {
+        if (economo.isEmpty()) {
             throw new IllegalArgumentException("Economo non trovato");
         }
 
+        // Crea un nuovo tabacchi con i dati forniti e salva nel database.
         Tabacchi tabacchi = new TabacchiBuilder()
                 .nome(request.getNomeTabacchi())
                 .lng(Double.valueOf(request.getLng()))
@@ -58,17 +71,21 @@ public class TabacchiServiceImplementation implements TabacchiService {
         tabacchiRepository.save(tabacchi);
     }
 
+    /**
+     * Recupera tutti i tabacchi dal database.
+     *
+     * @return Lista di risposte contenenti tutti i tabacchi.
+     */
     @Override
     public List<TabacchiResponse> getAllTabacchi() {
-        //Prendo dal db tutti gli utenti.
+        // Prende dal database tutti i tabacchi.
         List<Tabacchi> tabacchis = tabacchiRepository.findAll();
 
-
-        //Inizializzo la variabile di risposta.
+        // Inizializza la variabile di risposta.
         List<TabacchiResponse> response = new ArrayList<>();
 
-        //Per ogni utente, aggiungo all'array di risposta i dati.
-        for(Tabacchi tabacchi: tabacchis) {
+        // Per ogni tabacchi, crea un oggetto di risposta e lo aggiunge alla lista di risposta.
+        for (Tabacchi tabacchi : tabacchis) {
             response.add(new TabacchiResponse(
                     tabacchi.getTabacchiId(),
                     tabacchi.getNome(),
@@ -81,14 +98,21 @@ public class TabacchiServiceImplementation implements TabacchiService {
         return response;
     }
 
+    /**
+     * Elimina un tabacchi dal database.
+     *
+     * @param tabacchiId ID del tabacchi da eliminare.
+     * @throws NotFoundException se il tabacchi non viene trovato.
+     */
     @Override
     public void deleteTabacchi(Long tabacchiId) {
+        // Controlla se il tabacchi esiste nel database.
         Optional<Tabacchi> tabacchi = tabacchiRepository.findById(tabacchiId);
-
-        if(tabacchi.isEmpty()) {
+        if (tabacchi.isEmpty()) {
             throw new NotFoundException("Tabacchi non trovato");
         }
 
+        // Elimina il tabacchi dal database.
         tabacchiRepository.delete(tabacchi.get());
     }
 }

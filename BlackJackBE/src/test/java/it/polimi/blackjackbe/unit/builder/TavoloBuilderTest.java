@@ -22,7 +22,6 @@ public class TavoloBuilderTest {
     void testTavoloBuilder() {
         Tavolo tavolo = new TavoloBuilder()
                 .tipoTavolo(TipoTavolo.BASE)
-                .vittoriaUser(true)
                 .carte(List.of(new CartaBuilder().build()))
                 .carteSingolaMano(List.of(new CartaBuilder().build()))
                 .cartaDealer(List.of(new CartaBuilder().build()))

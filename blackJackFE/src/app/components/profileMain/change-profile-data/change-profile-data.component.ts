@@ -4,13 +4,21 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
+// -----------------------------------------------------------------------------------
+// COMPONENTE PER LA MODIFICA DEI DATI DEL PROFILO
+// Questo componente gestisce la modifica dei dati del profilo dell'utente.
+// Implementa OnInit, un'interfaccia che espone un metodo che viene eseguito non appena il componente viene visualizzato.
+// -----------------------------------------------------------------------------------
 @Component({
   selector: 'app-change-profile-data',
   templateUrl: './change-profile-data.component.html',
   styleUrls: ['./change-profile-data.component.css']
 })
 export class ChangeProfileDataComponent implements OnInit {
-  // VARIABILI PER I DATI UTENTE -----------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER I DATI UTENTE
+  // Queste variabili vengono utilizzate per memorizzare e aggiornare i dati del profilo dell'utente.
+  // -----------------------------------------------------------------------------------
   protected userData = {
     nome: localStorage.getItem('nome') || '',
     cognome: localStorage.getItem('cognome') || '',
@@ -20,15 +28,24 @@ export class ChangeProfileDataComponent implements OnInit {
     nuovaPassword: '',
   };
 
-  // COSTRUTTORE -----------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // COSTRUTTORE
+  // Il costruttore inietta i servizi necessari per l'aggiornamento dei dati utente e la navigazione.
+  // -----------------------------------------------------------------------------------
   constructor(private userService: UserService, private toastr: ToastrService, private router: Router) { }
 
-  // NGONINIT -----------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO ngOnInit
+  // Questo metodo viene eseguito non appena il componente viene visualizzato.
+  // -----------------------------------------------------------------------------------
   ngOnInit(): void {
     console.log("ChangeProfileDataComponent initialized");
   }
 
-  // METODI PER L'AGGIORNAMENTO DATI UTENTE -----------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER L'AGGIORNAMENTO DATI UTENTE
+  // Esegue la richiesta di aggiornamento dei dati utente al servizio UserService.
+  // -----------------------------------------------------------------------------------
   aggiornaDatiUtente() {
     if (!this.userData.vecchiaPassword) {
       this.toastr.error("La vecchia password è necessaria.");

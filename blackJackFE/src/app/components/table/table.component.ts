@@ -8,44 +8,56 @@ import { TavoloStatusResponse } from 'src/app/dto/response/TavoloStatusResponse'
 import { TablesService } from 'src/app/services/tables.service';
 import { Tavolo } from 'src/app/types/tavolo';
 import { Wager } from 'src/app/types/wager';
-
+// -----------------------------------------------------------------------------------
+// COMPONENTE DI GESTIONE DEL TAVOLO DA GIOCO
+// Questo componente gestisce il tavolo da gioco e le sue interazioni.
+// Implementa OnInit, un'interfaccia che espone un metodo che viene eseguito non appena il componente viene visualizzato.
+// -----------------------------------------------------------------------------------
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-
+  // -----------------------------------------------------------------------------------
+  // VARIABILI DELL'UTENTE
+  // Queste variabili vengono utilizzate per memorizzare le informazioni dell'utente.
+  // -----------------------------------------------------------------------------------
   protected playerUsername: string = localStorage.getItem('username') || '';
-  protected warningMessage: string = '';
-
   protected wager: number = 0;
   protected playerCash: number = 0;
   protected playerWinning: number = 0;
-
-  protected tipoTavolo!: Tavolo;
-
   protected cartePlayer: CartaResponse[] = [];
   protected scorePlayer: number = 0;
-
-  protected carteDealer: CartaResponse[] = [];
-  protected scoreDealer: number = 0;
-
   protected puntataPlayer: number = 0;
   protected puntataMinima: number = 0;
-
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL TAVOLO
+  // Queste variabili gestiscono lo stato e le caratteristiche del tavolo da gioco.
+  // -----------------------------------------------------------------------------------
+  protected warningMessage: string = '';
+  protected tipoTavolo!: Tavolo;
   protected dealAttivo: boolean = true;
-
   protected tipoTavoloParam: string = '';
-
+  protected availableCommands: string[] = [];
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL DEALER
+  // Queste variabili vengono utilizzate per gestire le carte e il punteggio del dealer.
+  // -----------------------------------------------------------------------------------
+  protected carteDealer: CartaResponse[] = [];
+  protected scoreDealer: number = 0;
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL CONTEGGIO
+  // Queste variabili vengono utilizzate per tenere traccia del conteggio delle carte giocate.
+  // -----------------------------------------------------------------------------------
   protected conteggio: number = 0;
   protected carteUnicheGiocate: Set<number> = new Set();
-
   protected valoreReale: number = 0;
-
-  protected availableCommands: string[] = [];
-
-
+  numeroDiMazzi: number = 6; // Default al valore massimo se non specificato
+  // -----------------------------------------------------------------------------------
+  // COSTRUTTORE
+  // Il costruttore inietta i servizi necessari per il funzionamento del componente.
+  // -----------------------------------------------------------------------------------
   constructor(private route: ActivatedRoute,
     private tablesService: TablesService,
     private router: Router,
@@ -54,6 +66,10 @@ export class TableComponent implements OnInit {
     this.playerCash = saldo ? parseFloat(saldo) : 0;
   }
 
+  // -----------------------------------------------------------------------------------
+  // METODO ngOnInit
+  // Questo metodo viene eseguito non appena il componente viene visualizzato.
+  // -----------------------------------------------------------------------------------
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.tipoTavoloParam = params.get('tipoTavolo')?.toString().toUpperCase() || '';
@@ -62,9 +78,10 @@ export class TableComponent implements OnInit {
       this.loadAvailableCommands();
     });
   }
-
-  numeroDiMazzi: number = 6; // Default al valore massimo se non specificato
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER CONFIGURARE IL TIPO DI TAVOLO
+  // Configura le caratteristiche del tavolo in base al tipo di tavolo selezionato.
+  // -----------------------------------------------------------------------------------
   configureTableType(tipoTavoloParam: string): void {
     const puntate = {
       'BASE': { minima: 1, mazzi: 6 },
@@ -83,7 +100,10 @@ export class TableComponent implements OnInit {
       this.router.navigate(['/homepage/dashboard']);
     }
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER CARICARE I COMANDI DISPONIBILI
+  // Carica i comandi disponibili per il tavolo da gioco.
+  // -----------------------------------------------------------------------------------
   loadAvailableCommands(): void {
     this.tablesService.getAllCommandActions().subscribe({
       next: (commands: string[]) => {
@@ -94,7 +114,10 @@ export class TableComponent implements OnInit {
       }
     });
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER GESTIRE IL CLICK SUI COMANDI
+  // Gestisce le azioni eseguite quando un comando viene cliccato.
+  // -----------------------------------------------------------------------------------
   onCommandClick(command: string): void {
     if (command === 'deal' && this.wager > 0) {
       this.sendCommandToBackend(command, this.wager);
@@ -108,9 +131,10 @@ export class TableComponent implements OnInit {
       this.toastr.error('Wager is not set properly', 'Error');
     }
   }
-
-
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER INVIARE I COMANDI AL BACKEND
+  // Invia i comandi al backend per essere eseguiti.
+  // -----------------------------------------------------------------------------------
   sendCommandToBackend(command: string, plot: number): void {
     const body: Wager = { plot };
     console.log("Final body to send:", body); // Assicurati che questo mostri { plot: this.wager } correttamente
@@ -129,9 +153,10 @@ export class TableComponent implements OnInit {
       }
     });
   }
-
-
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER INIZIALIZZARE IL TAVOLO
+  // Inizializza lo stato del tavolo da gioco.
+  // -----------------------------------------------------------------------------------
   initTavolo(tipoTavolo: string): void {
     this.tablesService.initTavolo(tipoTavolo).subscribe({
       next: (data: MessageResponse) => {
@@ -143,8 +168,10 @@ export class TableComponent implements OnInit {
       }
     });
   }
-
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER GESTIRE LO STATO DEL TAVOLO
+  // Gestisce le modifiche allo stato del tavolo in base alla risposta del backend.
+  // -----------------------------------------------------------------------------------
   private handleTavoloStatus(response: TavoloStatusResponse): void {
     this.cartePlayer = response.cartePlayer;
     this.scorePlayer = response.punteggioPlayer;
@@ -174,7 +201,10 @@ export class TableComponent implements OnInit {
     }
     console.log("dealAttivo updated to:", this.dealAttivo);
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER AGGIORNARE IL CONTEGGIO DELLE CARTE
+  // Aggiorna il conteggio delle carte giocate per tenere traccia del gioco.
+  // -----------------------------------------------------------------------------------
   updateConteggio(carte: CartaResponse[]): void {
     const totaleCarte = this.numeroDiMazzi * 52;  // Assumendo che ogni mazzo abbia 52 carte
 
@@ -198,14 +228,20 @@ export class TableComponent implements OnInit {
 
     this.updateValoreReale();
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER AGGIORNARE IL VALORE REALE
+  // Calcola e aggiorna il valore reale delle carte rimaste nel mazzo.
+  // -----------------------------------------------------------------------------------
   private updateValoreReale(): void {
     const mazziRimasti = Math.max(this.numeroDiMazzi - (this.carteUnicheGiocate.size / 52), 0.5);  // Evita la divisione per zero
     this.valoreReale = this.conteggio / mazziRimasti;  // Calcola il valore reale
 
     this.checkAndUpdateBetRecommendation();
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER AGGIORNARE LA RACCOMANDAZIONE DI SCOMMESSA
+  // Fornisce raccomandazioni di scommessa in base al valore reale.
+  // -----------------------------------------------------------------------------------
   private checkAndUpdateBetRecommendation(): void {
     if (this.valoreReale > 4) {  // Cambio soglia per mostrare il messaggio
       this.toastr.info('Il Mazzo è carico! Aumenta la puntata!', 'Informazione', {
@@ -217,9 +253,10 @@ export class TableComponent implements OnInit {
       });
     }
   }
-
-
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER TERMINARE LA PARTITA
+  // Termina la partita e resetta lo stato del gioco.
+  // -----------------------------------------------------------------------------------
   end(): void {
     console.log('Fine della partita');
     this.cartePlayer = [];
@@ -239,7 +276,10 @@ export class TableComponent implements OnInit {
       }
     });
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER NAVIGARE ALLA HOMEPAGE
+  // Naviga alla dashboard della homepage.
+  // -----------------------------------------------------------------------------------
   goToHomePage(): void {
     this.router.navigate(['/homepage/dashboard']);
   }

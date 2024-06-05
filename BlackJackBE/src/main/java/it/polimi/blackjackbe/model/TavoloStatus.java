@@ -1,5 +1,26 @@
 package it.polimi.blackjackbe.model;
 
+/**
+ * Enum che rappresenta lo stato di un tavolo nel gioco del Blackjack.
+ */
 public enum TavoloStatus {
-    CONTINUE, PLAYER_WIN, PLAYER_LOSE, DRAW
+    /**
+     * Il gioco continua.
+     */
+    CONTINUE,
+
+    /**
+     * Il giocatore ha vinto.
+     */
+    PLAYER_WIN,
+
+    /**
+     * Il giocatore ha perso.
+     */
+    PLAYER_LOSE,
+
+    /**
+     * La partita è terminata con un pareggio.
+     */
+    DRAW
 }

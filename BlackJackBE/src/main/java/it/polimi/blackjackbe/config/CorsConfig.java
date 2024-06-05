@@ -24,17 +24,23 @@ public class CorsConfig {
     */
    @Bean
    public CorsFilter corsFilter() {
-
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); //Configurazione CORS basata su url.
+      // Configurazione CORS basata su URL
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
       CorsConfiguration config = new CorsConfiguration();
 
-      config.setAllowCredentials(false); //Disattiva la richiesta di credenziali.
-      config.addAllowedOrigin("*"); //Consente l'accesso da qualsiasi origine.
-      config.addAllowedMethod("*"); //Consente tutti i metodi HTTP.
-      config.addAllowedHeader("*"); //Consente tutti gli header.
+      // Disabilita la richiesta di credenziali
+      config.setAllowCredentials(false);
+      // Consente l'accesso da qualsiasi origine
+      config.addAllowedOrigin("*");
+      // Consente tutti i metodi HTTP
+      config.addAllowedMethod("*");
+      // Consente tutti gli header
+      config.addAllowedHeader("*");
 
-      source.registerCorsConfiguration("/**", config); //Registra la configurazione precedente.
+      // Registra la configurazione precedente per tutti i percorsi
+      source.registerCorsConfiguration("/**", config);
 
+      // Ritorna un filtro CORS configurato
       return new CorsFilter(source);
    }
 
@@ -44,21 +50,28 @@ public class CorsConfig {
     */
    @Bean
    public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
-
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource(); //Configurazione CORS basata su url.
+      // Configurazione CORS basata su URL
+      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
       CorsConfiguration config = new CorsConfiguration();
 
-      config.setAllowCredentials(false); //Disattiva la richiesta di credenziali.
-      config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "*")); //Consente l'accesso solo dalla porta locale 8080.
-      config.setAllowedMethods(Collections.singletonList("*")); //Qualsiasi metodo è consentito.
-      config.setAllowedHeaders(Collections.singletonList("*")); //Qualsiasi header è consentito.
-      source.registerCorsConfiguration("/**", config); //Registro la configurazione precedente.
+      // Disabilita la richiesta di credenziali
+      config.setAllowCredentials(false);
+      // Consente l'accesso dalla porta locale 8080 e da qualsiasi origine
+      config.setAllowedOrigins(Arrays.asList("http://localhost:8080", "*"));
+      // Consente tutti i metodi HTTP
+      config.setAllowedMethods(Collections.singletonList("*"));
+      // Consente tutti gli header
+      config.setAllowedHeaders(Collections.singletonList("*"));
 
-      //Registro la configurazione precedente.
+      // Registra la configurazione precedente per tutti i percorsi
+      source.registerCorsConfiguration("/**", config);
+
+      // Crea un filtro di registrazione con la configurazione CORS
       FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-      //Imposta l'ordine di esecuzione del filtro al valore più alto.
+      // Imposta l'ordine di esecuzione del filtro al valore più alto
       bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
       return bean;
    }
 }
+

@@ -12,28 +12,37 @@ import { GetAllTabacchiResponse } from 'src/app/dto/response/GetAllTabacchiRespo
 import { getAllManiResponse } from 'src/app/dto/response/GetAllManiResponse';
 import { ManoService } from 'src/app/services/mano.service';
 import { ChartService } from 'src/app/services/chart.service';
-/**
- * Componente per visualizzare la dashboard dell'admin.
- * implementa OnInit, un'interfaccia che espone il metodo ngOnInit() il quale 
- * viene chiamato automaticamente quando il componente viene caricato.
- */
+// -----------------------------------------------------------------------------------
+// COMPONENTE PER LA DASHBOARD DELL'ADMIN
+// Questo componente gestisce la visualizzazione e la gestione della dashboard dell'admin.
+// Implementa OnInit e AfterViewInit, interfacce che espongono metodi eseguiti all'inizializzazione del componente e dopo che la vista è stata inizializzata.
+// -----------------------------------------------------------------------------------
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit, AfterViewInit {
-  // VARIABILI PER I GRAFICI ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER I GRAFICI
+  // Queste variabili memorizzano i riferimenti ai contenitori dei grafici.
+  // -----------------------------------------------------------------------------------
   @ViewChild('usersChart', { static: true }) private usersChartContainer!: ElementRef;
   @ViewChild('commercesChart', { static: true }) private commercesChartContainer!: ElementRef;
-  // VARIABILI DATI ADMIN ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI DATI ADMIN
+  // Queste variabili memorizzano i dati relativi agli utenti, economi, tabacchi e mani.
+  // -----------------------------------------------------------------------------------
   protected numberOfUsers: number = 0;
   protected utenti: GetUserDataResponse[] = [];
   public searchResults: any[] = [];
   private mapCreaTabacchi: any;
   protected saldoString: string = localStorage.getItem('saldo') || '0';
   protected saldo: number = parseFloat(this.saldoString);
-  // VARIABILI PER Creare Economo Oppure Modificare Dati di un User----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER CREARE ECONOMO O MODIFICARE DATI DI UN USER
+  // Queste variabili vengono utilizzate per memorizzare i dati relativi agli economi e agli utenti.
+  // -----------------------------------------------------------------------------------
   protected nome = '';
   protected cognome = '';
   protected email = '';
@@ -44,18 +53,25 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   protected showPassword = false;
   protected showRepeatPassword = false;
   protected economi: GetUserDataResponse[] = [];
-  // VARIABILI PER Tabacchi ----------------------------------------------------------------------------
+  protected currentUser!: GetUserDataResponse;
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER TABACCHI
+  // Queste variabili vengono utilizzate per memorizzare i dati relativi ai tabacchi.
+  // -----------------------------------------------------------------------------------
   protected tabacchi: GetAllTabacchiResponse[] = [];
-  // VARIABILI PER Creare Tabacchi ----------------------------------------------------------------------------
   protected nomeTabacchi: string = '';
   protected economoSelezionatoId: number = 0;
   protected showEditDataUserByAdmin: boolean = false
   protected idSelected: number = 0;
-  //VARIABILI PER LE MANI ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER LE MANI
+  // Queste variabili vengono utilizzate per memorizzare i dati relativi alle mani giocate dagli utenti.
+  // -----------------------------------------------------------------------------------
   protected mani: getAllManiResponse[] = [];
-  //VARIABILI PER IL CURRENT USER ----------------------------------------------------------------------------
-  protected currentUser!: GetUserDataResponse;
-  // COSTRUTTORE ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // COSTRUTTORE
+  // Il costruttore inietta i servizi necessari per la gestione degli utenti, delle mappe, dei tabacchi e dei grafici.
+  // -----------------------------------------------------------------------------------
   constructor(private userService: UserService,
     private toastr: ToastrService,
     private mapService: MapService,
@@ -63,8 +79,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     private manoService: ManoService,
     private chartService: ChartService) {
   }
-
-  // NGONINIT E AFTERVIEWINIT ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI ngOnInit E ngAfterViewInit
+  // Questi metodi vengono eseguiti non appena il componente viene visualizzato e dopo che la vista è stata inizializzata.
+  // -----------------------------------------------------------------------------------
   ngOnInit(): void {
     console.log('Admin Dashboard initialized');
     this.loadUsers();
@@ -78,9 +96,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.initializeCharts();
   }
 
-
-
-  // METODI PER PRENDERE LA LATITUDINE E LONGITUDINE DEL MARKER ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI PER PRENDERE LA LATITUDINE E LONGITUDINE DEL MARKER
+  // Questi metodi restituiscono le coordinate del marker selezionato sulla mappa.
+  // -----------------------------------------------------------------------------------
   latMarker(): number {
     return this.mapService.lat;
   }
@@ -89,7 +108,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     return this.mapService.lng;
   }
 
-  // METODI PER Modificare i dati di un utente ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI PER MODIFICARE I DATI DI UN UTENTE
+  // Questi metodi gestiscono la modifica dei dati di un utente da parte dell'admin.
+  // -----------------------------------------------------------------------------------
   adminEditUserData() {
     this.userService.adminAggiornaDatiUtente(this.idSelected, this.nome, this.cognome, this.email, this.username)
       .subscribe({
@@ -107,9 +129,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.showEditDataUserByAdmin = !this.showEditDataUserByAdmin;
     this.idSelected = id;
   }
-
-
-  //NOMINATIM SECTION --------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // NOMINATIM SECTION
+  // Questi metodi gestiscono la ricerca di località tramite il servizio Nominatim.
+  // -----------------------------------------------------------------------------------
   searchNominatim(query: string) {
     if (query.length < 3) {
       this.searchResults = [];
@@ -132,8 +155,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     const lon = parseFloat(result.lon);
     this.mapCreaTabacchi.flyTo([lat, lon], 15);
   }
-
-  // FUNZIONI PER CREARE ECONOMO ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER CREARE ECONOMO
+  // Questo metodo gestisce la creazione di un nuovo economo.
+  // -----------------------------------------------------------------------------------
   creaEconomo(): void {
     // Validazione semplice. Potresti voler aggiungere validazioni più specifiche
     if (!this.nome || !this.cognome || !this.email || !this.username || !this.password || !this.passwordRipetuta || !this.dataNascita) {
@@ -165,7 +190,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         this.password = '';
         this.passwordRipetuta = '';
         this.dataNascita = new Date();
-        this.toastr.success("Economo creato con successo");
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
@@ -173,8 +197,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  // FUNZIONI PER CREARE TABACCHI ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER CREARE TABACCHI
+  // Questo metodo gestisce la creazione di nuovi tabacchi.
+  // -----------------------------------------------------------------------------------
   creaTabacchi(): void {
     this.tabacchiService.creaTabacchi(this.nomeTabacchi, this.latMarker(), this.lngMarker(), this.economoSelezionatoId).subscribe({
       next: (res: MessageResponse) => {
@@ -182,7 +208,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
         this.nomeTabacchi = '';
         this.tabacchi.push({ nomeTabacchi: this.nomeTabacchi, lat: this.latMarker(), lng: this.lngMarker(), userId: this.economoSelezionatoId, tabacchiId: 0 });
         this.mapService.placeTabacchiMarkers(this.tabacchi, this.mapCreaTabacchi);
-        this.toastr.success("Tabacchi creato con successo");
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
@@ -190,8 +215,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  // FUNZIONE PER CARICARE GLI UTENTI ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER CARICARE GLI UTENTI
+  // Questo metodo gestisce il caricamento degli utenti.
+  // -----------------------------------------------------------------------------------
   loadUsers(): void {
     this.userService.getAllUsers().subscribe({
       next: (response: GetUserDataResponse[]) => {
@@ -205,7 +232,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Funzione per caricare tutti gli Economi ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER CARICARE TUTTI GLI ECONOMI
+  // Questo metodo gestisce il caricamento di tutti gli economi.
+  // -----------------------------------------------------------------------------------
   loadAllEconomi(): void {
     this.userService.getAllByRuolo('ECONOMO').subscribe({
       next: (response: GetUserDataResponse[]) => {
@@ -219,7 +249,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
 
   }
 
-  // Funzione per caricare tutti i Tabacchi ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER CARICARE TUTTI I TABACCHI
+  // Questo metodo gestisce il caricamento di tutti i tabacchi.
+  // -----------------------------------------------------------------------------------
   loadAllTabacchi(): void {
     this.tabacchiService.getAllTabacchi().subscribe({
       next: (response: GetAllTabacchiResponse[]) => {
@@ -234,7 +267,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // FUNZIONE PER ELIMINARE UN UTENTE ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER ELIMINARE UN UTENTE
+  // Questo metodo gestisce l'eliminazione degli utenti.
+  // -----------------------------------------------------------------------------------
   deleteUser(userId: number): void {
     console.log('Eliminazione utente con id: ', userId);
     this.userService.deleteUser(userId).subscribe({
@@ -250,7 +286,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // FUNZIONE PER CARICARE LE MANI ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODO PER CARICARE LE MANI
+  // Questo metodo gestisce il caricamento delle mani.
+  // -----------------------------------------------------------------------------------
   loadAllMani(): void {
     this.manoService.getAllMani().subscribe({
       next: (response: getAllManiResponse[]) => {
@@ -262,7 +301,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER INIZIALIZZARE I GRAFICI
+  // Questo metodo gestisce l'inizializzazione dei grafici.
+  // -----------------------------------------------------------------------------------
   private initializeCharts(): void {
     // Assicurati che il contenitore sia disponibile e visibile
     if (this.usersChartContainer.nativeElement && this.commercesChartContainer.nativeElement) {
@@ -272,8 +314,14 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       }, 500); // Potrebbe essere necessario un ritardo per assicurare che il DOM sia pronto
     }
   }
-
-
+  // -----------------------------------------------------------------------------------
+  // METODI PER CALCOLARE I DATI DEI GRAFICI
+  // Questi metodi calcolano i dati necessari per i grafici.
+  // -----------------------------------------------------------------------------------
+  /**
+   * Calcola i dati delle vincite e delle perdite per il grafico a torta.
+   * @returns Un array di oggetti contenenti le etichette e i valori delle vincite e delle perdite.
+   */
   private calculateWinLossData(): { label: string; value: number }[] {
     const winnings = this.mani.filter(m => m.importo > 0).reduce((acc, curr) => acc + curr.importo, 0);
     const losses = this.mani.filter(m => m.importo < 0).reduce((acc, curr) => acc + Math.abs(curr.importo), 0);
@@ -283,6 +331,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     ];
   }
 
+  /**
+   * Calcola i dati della durata delle sessioni per il grafico a torta.
+   * @returns Un array di oggetti contenenti le etichette e i valori delle sessioni.
+   */
   private calculateSessionDurationData(): { label: string; value: number }[] {
     let sessionsOver10Minutes = 0;
     let totalSessions = 0;
@@ -306,7 +358,10 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       { label: 'Other Sessions', value: totalSessions - sessionsOver10Minutes }
     ];
   }
-
+  /**
+   * Calcola i dati della durata delle sessioni per il grafico a torta.
+   * @returns Un array di oggetti contenenti le etichette e i valori delle sessioni.
+   */
   private groupAndSortHandsByUser(): { [username: string]: getAllManiResponse[] } {
     return this.mani.reduce((acc, curr) => {
       acc[curr.playerUsername] = acc[curr.playerUsername] || [];
@@ -314,6 +369,4 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       return acc;
     }, {} as { [username: string]: getAllManiResponse[] });
   }
-
-  // FINE COMPONETE ----------------------------------------------------------------------------
 }

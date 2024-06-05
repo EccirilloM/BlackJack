@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.unit.command.implementation;
 
+import it.polimi.blackjackbe.builder.CartaBuilder;
 import it.polimi.blackjackbe.command.implementation.Double;
 import it.polimi.blackjackbe.command.implementation.Hit;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
@@ -42,9 +43,9 @@ class DoubleTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Fiori", "K", 10),
-                        new Carta("Picche", "Q", 10),
-                        new Carta("Cuori", "A", 11)
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build(),
+                        new CartaBuilder().seme("Picche").valore("Q").punteggio(10).build(),
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build()
                 ))
         );
         tavolo.setPlayer(user);
@@ -67,9 +68,9 @@ class DoubleTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Fiori", "K", 10),
-                        new Carta("Picche", "Q", 10),
-                        new Carta("Cuori", "A", 11)
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build(),
+                        new CartaBuilder().seme("Picche").valore("Q").punteggio(10).build(),
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build()
                 ))
         );
         tavolo.setPlayer(user);

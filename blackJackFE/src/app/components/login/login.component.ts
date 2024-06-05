@@ -4,25 +4,38 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { LoginRequest } from 'src/app/dto/request/LoginRequest';
 import { LoginResponse } from 'src/app/dto/response/LoginResponse';
-
+// -----------------------------------------------------------------------------------
+// COMPONENTE DI LOGIN
+// Questo componente gestisce il processo di login degli utenti.
+// -----------------------------------------------------------------------------------
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL FORM DI LOGIN
+  // Queste variabili memorizzano l'username e la password inseriti dall'utente.
+  // -----------------------------------------------------------------------------------
   protected username: string = '';
   protected password: string = '';
   protected showPassword: boolean = false;
 
-  // COSTRUTTORE ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // COSTRUTTORE
+  // Il costruttore inietta i servizi necessari per l'autenticazione, la visualizzazione di messaggi e la navigazione.
+  // -----------------------------------------------------------------------------------
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private router: Router
   ) { }
 
-  // METODI PER IL LOGIN ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI PER IL LOGIN
+  // Questi metodi gestiscono il processo di autenticazione degli utenti.
+  // -----------------------------------------------------------------------------------
   login(): void {
     if (!this.username || !this.password) {
       this.toastr.error("Compilare tutti i campi");
@@ -62,12 +75,18 @@ export class LoginComponent {
     });
   }
 
-  // METODI PER MOSTRARE LA PASSWORD ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI PER MOSTRARE LA PASSWORD
+  // Questi metodi gestiscono la visualizzazione della password nel campo di input.
+  // -----------------------------------------------------------------------------------
   toggleShowPassword(): void {
     this.showPassword = !this.showPassword;
   }
 
-  // METODI PER ANDARE AD ALTRE PAGINE ----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // METODI PER LA NAVIGAZIONE AD ALTRE PAGINE
+  // Questi metodi gestiscono la navigazione verso altre pagine dell'applicazione.
+  // -----------------------------------------------------------------------------------
   goToRegistration(): void {
     this.router.navigate(['/registrazione']);
   }

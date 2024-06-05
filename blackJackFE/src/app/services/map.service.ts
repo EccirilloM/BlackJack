@@ -21,45 +21,73 @@ const iconDefault = L.icon({
 });
 
 L.Marker.prototype.options.icon = iconDefault;
-
+// -----------------------------------------------------------------------------------
+// Servizio per gestire le mappe e le interazioni con il backend riguardanti i tabacchi.
+// -----------------------------------------------------------------------------------
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
-  // Variabile che prende il valore dell'url globale e gli aggiunge IL tabacchi -------------------------------------
   private backendUrl: string = globalBackendUrl + 'tabacchi/';
 
+  // -----------------------------------------------------------------------------------
+  // STATO DEL TABACCHI SELEZIONATO
+  // Variabile per il controllo dello stato del tabacchi selezionato.
+  // -----------------------------------------------------------------------------------
   private selectedTabacchiSource = new BehaviorSubject<GetAllTabacchiResponse | null>(null);
   selectedTabacchi$ = this.selectedTabacchiSource.asObservable();
 
-  // VARIABILI PER IL CURRENT TABACCHI --------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL TABACCHI CORRENTE
+  // Queste variabili memorizzano le coordinate del marker selezionato.
+  // -----------------------------------------------------------------------------------
   latMarkerSelezionato: number = 0;
   lngMarkerSelezionato: number = 0;
 
-  // VARIABILI PER LE MAPPE -------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER LE MAPPE
+  // Queste variabili memorizzano le istanze delle mappe utilizzate nel servizio.
+  // -----------------------------------------------------------------------------------
   private mapCreaTabacchi: any;
   private mapRicaricaDenaro: any;
 
-  // VARIABILI PER LE COORDINATE --------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER LE COORDINATE DEI TABACCHI
+  // Queste variabili memorizzano le coordinate geografiche deo tabacchi.
+  // -----------------------------------------------------------------------------------
   public lat: number = 0;
   public lng: number = 0;
   tabacchi: GetAllTabacchiResponse[] = [];
 
-  // VARIABILI PER IL TABACCHI SELEZIONATO -----------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------
+  // VARIABILI PER IL TABACCHI SELEZIONATO
+  // Queste variabili memorizzano i dettagli del tabacchi selezionato.
+  // -----------------------------------------------------------------------------------
   public tabacchiNomeSelezionato!: string;
   public tabacchiIdSelezionato!: number;
   public foundTabacchi!: GetAllTabacchiResponse | undefined;
 
-  // COSTRUTTORE --------------------------------------------------------------------------------------------------------
+  /**
+ * Costruttore dove vengono iniettate le dipendenze necessarie.
+ * @param http Istanza di HttpClient per effettuare le chiamate HTTP.
+ * @param toastr Istanza di ToastrService per visualizzare notifiche.
+ */
   constructor(private http: HttpClient, private toastr: ToastrService) { }
 
-  // CHIAMATE AL BACKEND PER IL TABACCHI -----------------------------------------------------------------------------
-  // METODO PER ELIMINARE IL TABACCHI SELEZIONATO
+  /**
+   * Metodo per eliminare il tabacchi selezionato.
+   * @param tabacchiId ID del tabacchi da eliminare.
+   * @returns Observable con la risposta del server.
+   */
   eliminaTabacchiById(tabacchiId: string): Observable<MessageResponse> {
     return this.http.delete<MessageResponse>(this.backendUrl + 'eliminaTabacchi/' + tabacchiId, { headers: this.getHeader() });
   }
 
-  // METODI PER LA CREAZIONE DELLA MAPPA PER RICARICARE DENARO  -----------------------------------------------------------------------------
+  /**
+   * Inizializza la mappa per ricaricare denaro.
+   * @param mapRicaricaDenaro Riferimento alla mappa da inizializzare.
+   * @returns La mappa inizializzata.
+   */
   initMap(mapRicaricaDenaro: any): any {
     mapRicaricaDenaro = L.map('mapRicaricaDenaro', {
       center: [41.9027835, 12.4963655],
@@ -78,7 +106,11 @@ export class MapService {
     return mapRicaricaDenaro;
   }
 
-  // METODI PER LA CREAZIONE DELLA MAPPA PER CREARE TABACCHI  -----------------------------------------------------------------------------
+  /**
+   * Inizializza la mappa per creare tabacchi.
+   * @param mapCreaTabacchi Riferimento alla mappa da inizializzare.
+   * @returns La mappa inizializzata.
+   */
   initMapCreaTabacchi(mapCreaTabacchi: any): any {
     mapCreaTabacchi = L.map('mapCreaTabacchi', {
       center: [41.9027835, 12.4963655],
@@ -115,31 +147,11 @@ export class MapService {
     return mapCreaTabacchi;
   }
 
-  // METODI PER CARICARE I MARKER DEI TABACCHI IN CHARGE MONEY -----------------------------------------------------------------------------
-  // placeTabacchiMarkersChargeMoney(tabacchi: GetAllTabacchiResponse[], mapRicaricaDenaro: any): void {
-  //   mapRicaricaDenaro.eachLayer((layer: any) => {
-  //     if (layer instanceof L.Marker) {
-  //       mapRicaricaDenaro.removeLayer(layer);
-  //     }
-
-  //   });
-
-  //   this.tabacchi = tabacchi;
-  //   // Aggiungi un popup al marker con un pulsante
-  //   tabacchi.forEach((tabacchi: GetAllTabacchiResponse) => {
-  //     let popupContent: string = `
-  //    <p id="nome-tabacchi">${tabacchi.nomeTabacchi}</p>
-  //  `;
-  //     L.marker([tabacchi.lat, tabacchi.lng]).addTo(mapRicaricaDenaro).bindPopup(popupContent).on('click', (e: any) => {
-  //       this.latMarkerSelezionato = e.latlng.lat;
-  //       this.lngMarkerSelezionato = e.latlng.lng;
-  //       //TODO Chiamare la funzione
-  //       this.findTabacchiByCoordinates(this.latMarkerSelezionato, this.lngMarkerSelezionato);
-  //     });
-  //   });
-  //   this.mapRicaricaDenaro = mapRicaricaDenaro;
-  // }
-
+  /**
+   * Posiziona i marker dei tabacchi sulla mappa per ricaricare denaro.
+   * @param tabacchi Lista di tabacchi da visualizzare sulla mappa.
+   * @param mapRicaricaDenaro Riferimento alla mappa.
+   */
   placeTabacchiMarkersChargeMoney(tabacchi: GetAllTabacchiResponse[], mapRicaricaDenaro: any): void {
     // Clears existing markers
     mapRicaricaDenaro.eachLayer((layer: any) => {
@@ -161,7 +173,11 @@ export class MapService {
     });
   }
 
-  // METODI CHE DATA UNA LATITUDINE E LONGITUDINE, RITORNA IL NOME E L'ID DEL TABACCHI --------------------------------
+  /**
+   * Trova il tabacchi in base alle coordinate.
+   * @param lat Latitudine.
+   * @param lng Longitudine.
+   */
   findTabacchiByCoordinates(lat: number, lng: number): void {
     console.log(`Cerco tabacchi con lat: ${lat} e lng: ${lng}`);
     this.foundTabacchi = this.tabacchi.find(tabacchi =>
@@ -178,12 +194,11 @@ export class MapService {
     }
   }
 
-  // CHIAMATA PER RICHIEDERE LA RICARICA DEL DENARO
-  // richiediRicaricaDenaro(importo: number): Observable<MessageResponse> {
-  //   const request: RicaricaSaldoRequest = { tabacchiId: this.tabacchiIdSelezionato, importo: importo };
-  //   return this.http.post<MessageResponse>('http://localhost:8080/api/v1/ricarica/richiediRicarica/' + localStorage.getItem("id"), request, { headers: this.getHeader() });
-  // }
-
+  /**
+   * Richiede la ricarica del denaro.
+   * @param importo Importo da ricaricare.
+   * @returns Observable con la risposta del server.
+   */
   richiediRicaricaDenaro(importo: number): Observable<MessageResponse> {
     const tabacchiId = this.selectedTabacchiSource.value?.tabacchiId;
     if (tabacchiId === undefined) {
@@ -195,8 +210,11 @@ export class MapService {
     return this.http.post<MessageResponse>('http://localhost:8080/api/v1/ricarica/richiediRicarica/' + localStorage.getItem("id"), request, { headers: this.getHeader() });
   }
 
-
-  // METODI PER CARICARE I MARKER DEI TABACCHI IN CREATE TABACCHI -----------------------------------------------------------------------------
+  /**
+   * Posiziona i marker dei tabacchi sulla mappa per creare tabacchi.
+   * @param tabacchi Lista di tabacchi da visualizzare sulla mappa.
+   * @param mapCreaTabacchi Riferimento alla mappa.
+   */
   placeTabacchiMarkers(tabacchi: GetAllTabacchiResponse[], mapCreaTabacchi: any): void {
     mapCreaTabacchi.eachLayer((layer: any) => {
       if (layer instanceof L.Marker) {
@@ -219,7 +237,10 @@ export class MapService {
     this.mapCreaTabacchi = mapCreaTabacchi;
   }
 
-  // METODO PER MOSTRARE IL NOME DEL TABACCHI SELEZIONATO -----------------------------------------------------------------------------
+  /**
+   * Mostra il nome del tabacchi selezionato.
+   * @param e Evento.
+   */
   handleMostraNome(e: any): void {
     const button = document.getElementById('nome-tabacchi');
     if (button) {
@@ -233,7 +254,10 @@ export class MapService {
     }
   }
 
-  // METODO PER ELIMINARE IL TABACCHI SELEZIONATO LATO FE-----------------------------------------------------------------------------
+  /**
+   * Gestisce l'eliminazione del tabacchi selezionato lato frontend.
+   * @param e Evento.
+   */
   handleEliminaTabacchi(e: any): void {
     const button = document.getElementById('elimina-tabacchi');
     if (button) {
@@ -254,8 +278,13 @@ export class MapService {
     }
   }
 
-  // METODI PER NOMINATIM  -----------------------------------------------------------------------------
   private nominatimUrl = 'https://nominatim.openstreetmap.org';
+
+  /**
+   * Cerca una posizione utilizzando Nominatim.
+   * @param query Query di ricerca.
+   * @returns Observable con i risultati della ricerca.
+   */
   searchNominatimLocation(query: string): Observable<any> {
     const url = `${this.nominatimUrl}/search?format=json&q=${encodeURIComponent(query)}`;
     return this.http.get<any>(url).pipe(
@@ -266,7 +295,10 @@ export class MapService {
     );
   }
 
-  //creo l'header con il token da mandare al backend
+  /**
+   * Crea l'header con il token da mandare al backend.
+   * @returns HttpHeaders con il token e le informazioni dell'utente.
+   */
   private getHeader(): HttpHeaders {
     return new HttpHeaders({
       'Authorization': localStorage.getItem('token') ? `${localStorage.getItem('token')}` : '',

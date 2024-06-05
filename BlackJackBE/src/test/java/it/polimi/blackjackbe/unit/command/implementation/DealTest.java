@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.unit.command.implementation;
 
+import it.polimi.blackjackbe.builder.CartaBuilder;
 import it.polimi.blackjackbe.command.implementation.Deal;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
 import it.polimi.blackjackbe.exception.BadRequestException;
@@ -46,9 +47,9 @@ class DealTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "A", 11),
-                        new Carta("Fiori", "K", 10)
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build(),
+                        new CartaBuilder().seme("Picche").valore("Q").punteggio(10).build(),
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build()
                 ))
         );
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));

@@ -11,7 +11,9 @@ import it.polimi.blackjackbe.exception.InternalServerErrorException;
 import it.polimi.blackjackbe.exception.NotFoundException;
 import it.polimi.blackjackbe.model.Ruolo;
 import it.polimi.blackjackbe.model.User;
+import it.polimi.blackjackbe.repository.ManoRepository;
 import it.polimi.blackjackbe.repository.TabacchiRepository;
+import it.polimi.blackjackbe.repository.TavoloRepository;
 import it.polimi.blackjackbe.repository.UserRepository;
 import it.polimi.blackjackbe.service.implementation.UserServiceImplementation;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +42,10 @@ public class UserServiceImplementationTest {
     PasswordEncoder passwordEncoder;
     @Mock
     TabacchiRepository tabacchiRepository;
+    @Mock
+    TavoloRepository tavoloRepository;
+    @Mock
+    ManoRepository manoRepository;
     @InjectMocks
     UserServiceImplementation userServiceImplementation;
 
@@ -73,6 +80,7 @@ public class UserServiceImplementationTest {
     void deleteUserThrowsErroreEliminazioneUtente() {
         when(tabacchiRepository.findAll()).thenReturn(List.of(new TabacchiBuilder().economo(new UserBuilder().userId(2L).build()).build()));
         when(userRepository.findByUserId(any())).thenReturn(Optional.of(new User()));
+        when(tavoloRepository.findAllByPlayer(any(User.class))).thenReturn(Collections.emptyList()); // Aggiungi questa riga
         assertThrows(InternalServerErrorException.class, () -> userServiceImplementation.deleteUser(1L));
     }
 

@@ -1,5 +1,6 @@
 package it.polimi.blackjackbe.unit.command.implementation;
 
+import it.polimi.blackjackbe.builder.CartaBuilder;
 import it.polimi.blackjackbe.command.implementation.Stay;
 import it.polimi.blackjackbe.dto.response.TavoloStatusResponse;
 import it.polimi.blackjackbe.model.*;
@@ -40,14 +41,14 @@ class StayTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarteSingolaManoPlayer(
             new ArrayList<>(List.of(
-                    new Carta("Cuori", "A", 11),
-                    new Carta("Fiori", "5", 5)
+                    new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                    new CartaBuilder().seme("Fiori").valore("5").punteggio(5).build()
             ))
         );
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "10", 10),
-                        new Carta("Fiori", "K", 10)
+                        new CartaBuilder().seme("Cuori").valore("10").punteggio(10).build(),
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build()
                 ))
         );
         tavolo.setPlayer(user);
@@ -69,20 +70,20 @@ class StayTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarteSingolaManoPlayer(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "5", 5)
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                        new CartaBuilder().seme("Fiori").valore("5").punteggio(5).build()
                 ))
         );
         tavolo.setCarteSingolaManoDealer(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "2", 2)
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                        new CartaBuilder().seme("Fiori").valore("2").punteggio(2).build()
                 ))
         );
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "10", 10),
-                        new Carta("Fiori", "K", 10)
+                        new CartaBuilder().seme("Cuori").valore("10").punteggio(10).build(),
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build()
                 ))
         );
         tavolo.setPlayer(user);
@@ -104,20 +105,20 @@ class StayTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarteSingolaManoPlayer(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "9", 9)
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                        new CartaBuilder().seme("Fiori").valore("9").punteggio(9).build()
                 ))
         );
         tavolo.setCarteSingolaManoDealer(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "5", 2)
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                        new CartaBuilder().seme("Fiori").valore("5").punteggio(2).build()
                 ))
         );
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "4", 4),
-                        new Carta("Fiori", "K", 10)
+                        new CartaBuilder().seme("Cuori").valore("4").punteggio(4).build(),
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build()
                 ))
         );
         tavolo.setPlayer(user);
@@ -139,20 +140,20 @@ class StayTest {
         Tavolo tavolo = SingletonTavoli.getInstance().getTable(user);
         tavolo.setCarteSingolaManoPlayer(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "9", 9)
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                        new CartaBuilder().seme("Fiori").valore("9").punteggio(9).build()
                 ))
         );
         tavolo.setCarteSingolaManoDealer(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "A", 11),
-                        new Carta("Fiori", "5", 2)
+                        new CartaBuilder().seme("Cuori").valore("A").punteggio(11).build(),
+                        new CartaBuilder().seme("Fiori").valore("5").punteggio(2).build()
                 ))
         );
         tavolo.setCarte(
                 new ArrayList<>(List.of(
-                        new Carta("Cuori", "7", 7),
-                        new Carta("Fiori", "K", 10)
+                        new CartaBuilder().seme("Cuori").valore("7").punteggio(7).build(),
+                        new CartaBuilder().seme("Fiori").valore("K").punteggio(10).build()
                 ))
         );
         tavolo.setPlayer(user);
