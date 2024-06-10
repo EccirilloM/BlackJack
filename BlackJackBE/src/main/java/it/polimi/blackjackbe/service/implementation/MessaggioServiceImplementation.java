@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementazione del service che gestisce le operazioni relative ai messaggi nel gioco.
+ * Implementazione del service che gestisce le operazioni relative ai messaggi nel'applicazione.
  */
 @Service
 @RequiredArgsConstructor
