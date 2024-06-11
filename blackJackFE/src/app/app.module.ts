@@ -23,9 +23,7 @@ import { ForumComponent } from './components/forum/forum.component';
 import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 import { EconomistDashboardComponent } from './components/economist-dashboard/economist-dashboard.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
-const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
 
 @NgModule({
   declarations: [
@@ -55,7 +53,6 @@ const config: SocketIoConfig = { url: 'http://localhost:8080', options: {} };
     ToastrModule.forRoot(),
     FormsModule,
     HttpClientModule,
-    SocketIoModule.forRoot(config)
   ],
   providers: [
 
