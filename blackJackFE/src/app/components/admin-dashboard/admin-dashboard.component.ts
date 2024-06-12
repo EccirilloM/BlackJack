@@ -95,7 +95,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.mapCreaTabacchi = this.mapService.initMapCreaTabacchi(this.mapCreaTabacchi);
     this.initializeCharts();
   }
-
   // -----------------------------------------------------------------------------------
   // METODI PER PRENDERE LA LATITUDINE E LONGITUDINE DEL MARKER
   // Questi metodi restituiscono le coordinate del marker selezionato sulla mappa.
@@ -107,7 +106,6 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   lngMarker(): number {
     return this.mapService.lng;
   }
-
   // -----------------------------------------------------------------------------------
   // METODI PER MODIFICARE I DATI DI UN UTENTE
   // Questi metodi gestiscono la modifica dei dati di un utente da parte dell'admin.

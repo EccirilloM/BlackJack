@@ -54,6 +54,7 @@ export class TableComponent implements OnInit {
   protected carteUnicheGiocate: Set<number> = new Set();
   protected valoreReale: number = 0;
   numeroDiMazzi: number = 6; // Default al valore massimo se non specificato
+  protected showDeviazioniClassiche: boolean = false
   // -----------------------------------------------------------------------------------
   // COSTRUTTORE
   // Il costruttore inietta i servizi necessari per il funzionamento del componente.
@@ -282,5 +283,9 @@ export class TableComponent implements OnInit {
   // -----------------------------------------------------------------------------------
   goToHomePage(): void {
     this.router.navigate(['/homepage/dashboard']);
+  }
+
+  toggleModalDeviazioniClassiche(): void {
+    this.showDeviazioniClassiche = !this.showDeviazioniClassiche;
   }
 }
