@@ -48,24 +48,25 @@ export class ChangeProfileDataComponent implements OnInit {
   // -----------------------------------------------------------------------------------
   aggiornaDatiUtente() {
     if (!this.userData.vecchiaPassword) {
-      this.toastr.error("La vecchia password è necessaria.");
+      this.toastr.error('The old password is required.');
       return;
     }
 
     this.userService.aggiornaDatiUtente(this.userData.nome, this.userData.cognome, this.userData.email, this.userData.username, this.userData.vecchiaPassword, this.userData.nuovaPassword)
       .subscribe({
         next: (res) => {
-          this.toastr.success("Dati modificati con successo");
+          this.toastr.success("Data updated successfully");
           this.userData.vecchiaPassword = '';
           this.userData.nuovaPassword = '';
           this.router.navigateByUrl('/login').then(() => {
-            this.toastr.info("Eseguire nuovamente il login");
+            this.toastr.info("Please login again with your new credentials.");
           });
         },
         error: (err: HttpErrorResponse) => {
           this.toastr.error(err.error.message);
           this.userData.vecchiaPassword = '';
           this.userData.nuovaPassword = '';
+          this.toastr.info(err.error.message);
         }
       });
   }

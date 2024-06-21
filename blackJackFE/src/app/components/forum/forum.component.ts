@@ -68,11 +68,11 @@ export class ForumComponent implements OnInit {
         console.log(response);
         this.loadMessages();
         this.testoMessaggio = '';
-        this.toastr.success('Messaggio inviato', 'Successo');
+        this.toastr.success('Messagge sent', 'Success');
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while sending message: ', error);
-        this.toastr.error('Errore durante l\'invio del messaggio', 'Errore');
+        this.toastr.error('Error while sending message', 'Error');
       }
     });
   }
@@ -90,7 +90,7 @@ export class ForumComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while fetching messages: ', error);
-        this.toastr.error('Errore durante il caricamento dei messaggi', 'Errore');
+        this.toastr.error('Error while fetching messages', 'Error');
       }
     });
   }

@@ -41,7 +41,7 @@ export class AdminGuard implements CanActivate {
 
     // Se l'utente non è autenticato o non è amministratore, mostra un errore e reindirizza.
     if (!isAuthenticated || !isAdmin) {
-      this.toastr.error('Accesso Negato, Devi essere Admin per essere in questa pagina');
+      this.toastr.error('Access Denied, You must be an Admin to access this page');
       this.router.navigate(['/homepage']);
       return false;
     }

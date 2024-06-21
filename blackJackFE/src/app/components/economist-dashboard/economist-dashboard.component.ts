@@ -66,10 +66,10 @@ export class EconomistDashboardComponent implements OnInit {
       next: (response: MessageResponse) => {
         console.log(response);
         this.loadRichieste();
-        this.toastr.success('Richiesta accettata', 'Successo');
+        this.toastr.success('Request accepted', 'Success');
       },
       error: (error: HttpErrorResponse) => {
-        this.toastr.error('Errore durante l\'accettazione della richiesta', 'Errore');
+        this.toastr.error('Error while the request', 'Error');
       }
     });
   }
@@ -85,11 +85,11 @@ export class EconomistDashboardComponent implements OnInit {
       next: (response: MessageResponse) => {
         console.log(response);
         this.loadRichieste();
-        this.toastr.success('Richiesta rifiutata', 'Successo');
+        this.toastr.success('Request denied', 'Success');
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while refusing richiesta: ', error);
-        this.toastr.error('Errore durante il rifiuto della richiesta', 'Errore');
+        this.toastr.error('Error while refusing request', 'Error');
       }
     });
   }

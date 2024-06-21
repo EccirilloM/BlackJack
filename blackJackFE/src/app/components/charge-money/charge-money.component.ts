@@ -116,7 +116,7 @@ export class ChargeMoneyComponent implements OnInit, AfterViewInit {
     this.mapService.richiediRicaricaDenaro(this.importo).subscribe({
       next: (response: MessageResponse) => {
         console.log(response);
-        this.toastr.success('Richiesta effettuata con successo');
+        this.toastr.success('Request sent', 'Success');
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while fetching users: ', error);

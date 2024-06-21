@@ -119,7 +119,7 @@
                 <td class="py-3 px-2">{{ utente.dataNascita | date: 'mediumDate' }}</td>
                 <td class="py-3 px-2">{{ utente.saldo | currency:'EUR' }}</td>
                 <td class="py-3 px-2">
-                  <div class="inline-flex items-center space-x-3">
+                  <div *ngIf="utente.ruolo!= 'ADMIN'" class="inline-flex items-center space-x-3">
                     <a title="Edit User Data" class="cursor-pointer">
                       <span class="material-icons text-white text-lg hover:text-blue-500"
                         (click)="toggleModalEditUserData(utente.userId)">lock_person</span>

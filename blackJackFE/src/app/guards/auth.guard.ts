@@ -41,7 +41,7 @@ export class AuthGuard implements CanActivate {
       map(isAuthenticated => {
         // Se l'utente non è autenticato, mostra un errore e reindirizza.
         if (!isAuthenticated) {
-          this.toastr.error('Devi essere autenticato per accedere a questa pagina');
+          this.toastr.error('You must be authenticated to access this page');
           this.router.navigate(['/login']);
           return false;
         }

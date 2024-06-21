@@ -114,7 +114,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
     this.userService.adminAggiornaDatiUtente(this.idSelected, this.nome, this.cognome, this.email, this.username)
       .subscribe({
         next: (res: GetUserDataResponse) => {
-          this.toastr.success("Dati modificati con successo");
+          this.toastr.success("Success updating user data");
           this.showEditDataUserByAdmin = false;
         },
         error: (err: HttpErrorResponse) => {
@@ -160,12 +160,12 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
   creaEconomo(): void {
     // Validazione semplice. Potresti voler aggiungere validazioni più specifiche
     if (!this.nome || !this.cognome || !this.email || !this.username || !this.password || !this.passwordRipetuta || !this.dataNascita) {
-      this.toastr.error("Compilare tutti i campi");
+      this.toastr.error("Compilale all fields");
       return;
     }
 
     if (this.password !== this.passwordRipetuta) {
-      this.toastr.error("Le password non coincidono");
+      this.toastr.error("Passwords don't match");
       return;
     }
 
@@ -191,7 +191,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
-        this.toastr.error(err.error.message || 'Errore durante la registration');
+        this.toastr.error(err.error.message || 'Error while creating economo');
       }
     });
   }
@@ -209,7 +209,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       },
       error: (err: HttpErrorResponse) => {
         console.error(err);
-        this.toastr.error(err.error.message || 'Errore durante la creazione del tabacchi');
+        this.toastr.error(err.error.message || 'Error while creating tabacchi');
       }
     });
   }
@@ -260,7 +260,7 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while fetching tabacchi: ', error);
-        this.toastr.error('Error while fetching tabacchi');
+        this.toastr.error(error.error.message);
       }
     });
   }
@@ -275,11 +275,11 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
       next: (response: MessageResponse) => {
         console.log(response);
         this.loadUsers();
-        this.toastr.success("Utente eliminato con successo");
+        this.toastr.success("User deleted successfully");
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error while deleting user: ', error);
-        this.toastr.error('Error while deleting user');
+        this.toastr.error(error.error.message);
       }
     });
   }
@@ -321,14 +321,22 @@ export class AdminDashboardComponent implements OnInit, AfterViewInit {
    * @returns Un array di oggetti contenenti le etichette e i valori delle vincite e delle perdite.
    */
   private calculateWinLossData(): { label: string; value: number }[] {
-    const winnings = this.mani.filter(m => m.importo > 0).reduce((acc, curr) => acc + curr.importo, 0);
-    const losses = this.mani.filter(m => m.importo < 0).reduce((acc, curr) => acc + Math.abs(curr.importo), 0);
+
+    console.log('All Hands:', this.mani);
+    const winningsData = this.mani.filter(m => m.importo > 0);
+    const lossesData = this.mani.filter(m => m.importo < 0);
+
+    console.log('Winnings Data:', winningsData);
+    console.log('Losses Data:', lossesData);
+
+    const winningsCount = winningsData.length;
+    const lossesCount = lossesData.length;
+
     return [
-      { label: 'Casino Wins', value: winnings },
-      { label: 'Casino Losses', value: losses }
+      { label: 'Casino Wins', value: Math.round(winningsCount) },
+      { label: 'Casino Losses', value: Math.round(lossesCount) }
     ];
   }
-
   /**
    * Calcola i dati della durata delle sessioni per il grafico a torta.
    * @returns Un array di oggetti contenenti le etichette e i valori delle sessioni.

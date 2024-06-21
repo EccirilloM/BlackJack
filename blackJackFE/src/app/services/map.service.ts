@@ -168,7 +168,7 @@ export class MapService {
 
       marker.on('click', () => {
         this.selectedTabacchiSource.next(tabacchi);  // Update the BehaviorSubject
-        this.toastr.info(`Tabacchi ${tabacchi.nomeTabacchi} selezionato`);
+        this.toastr.info(`Tabacchi ${tabacchi.nomeTabacchi} selected`);
       });
     });
   }
@@ -190,7 +190,7 @@ export class MapService {
       console.log(`Trovato tabacchi: ${this.foundTabacchi.nomeTabacchi} con ID: ${this.foundTabacchi.tabacchiId}`);
     } else {
       console.log('Nessun tabacchi trovato con queste coordinate.');
-      this.toastr.error('Nessun tabacchi trovato con queste coordinate.');
+      this.toastr.error('Tabacchi not found with these coordinates.');
     }
   }
 
@@ -200,10 +200,13 @@ export class MapService {
    * @returns Observable con la risposta del server.
    */
   richiediRicaricaDenaro(importo: number): Observable<MessageResponse> {
+    if (importo <= 0) {
+      this.toastr.error('Insert a valid amount!');
+    }
     const tabacchiId = this.selectedTabacchiSource.value?.tabacchiId;
     if (tabacchiId === undefined) {
-      this.toastr.error('Nessun tabacchi selezionato!');
-      throw new Error('Nessun tabacchi selezionato!'); // Lancia un errore o gestisci come preferisci
+      this.toastr.error('No tabacchi selected!');
+      throw new Error('No Tabacchi Selected'); // Lancia un errore o gestisci come preferisci
     }
 
     const request: RicaricaSaldoRequest = { tabacchiId, importo };
@@ -267,10 +270,12 @@ export class MapService {
           const target = e.target as HTMLButtonElement;
           this.eliminaTabacchiById(target.name.toString()).subscribe({
             next: (response: MessageResponse) => {
+              this.toastr.success("Tabacchi deleted successfully!");
               this.tabacchi = this.tabacchi.filter((tabacchi: GetAllTabacchiResponse) => tabacchi.tabacchiId.toString() !== target.name);
               this.placeTabacchiMarkers(this.tabacchi, this.mapCreaTabacchi);
             }, error: (error: HttpErrorResponse) => {
               console.error('Error while deleting tabacchi: ', error);
+              this.toastr.error(error.error.message);
             }
           });
         }

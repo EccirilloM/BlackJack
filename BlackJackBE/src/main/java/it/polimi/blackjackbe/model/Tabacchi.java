@@ -61,7 +61,7 @@ public class Tabacchi {
      * Ricariche effettuate nel singolo tabacchi.
      * Relazione One-to-Many con la classe {@link Ricarica}.
      */
-    @OneToMany(mappedBy = "tabacchi", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tabacchi", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ricarica> ricariche;
 
     /**

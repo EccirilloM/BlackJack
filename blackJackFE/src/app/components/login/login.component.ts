@@ -38,7 +38,7 @@ export class LoginComponent {
   // -----------------------------------------------------------------------------------
   login(): void {
     if (!this.username || !this.password) {
-      this.toastr.error("Compilare tutti i campi");
+      this.toastr.error('Please fill all fields');
       return;
     }
 
@@ -50,7 +50,7 @@ export class LoginComponent {
     this.authService.login(request).subscribe({
       next: (res: LoginResponse) => {
         console.log(res);
-        this.toastr.success('Login effettuato con successo!');
+        this.toastr.success('Login Success!');
         // Qui puoi salvare i dettagli dell'utente come token nel localStorage o gestire la navigazione
         localStorage.setItem('id', res.userId.toString());
         localStorage.setItem('nome', res.nome);
@@ -69,7 +69,7 @@ export class LoginComponent {
         this.router.navigate(['/homepage/welcome']);
       },
       error: (error) => {
-        this.toastr.error('Errore durante il login');
+        this.toastr.error('Error while login!');
         console.error(error);
       }
     });

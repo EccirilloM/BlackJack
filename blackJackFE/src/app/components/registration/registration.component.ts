@@ -49,12 +49,12 @@ export class RegistrationComponent {
   register(): void {
     // Validazione semplice. Potresti voler aggiungere validazioni più specifiche
     if (!this.nome || !this.cognome || !this.email || !this.username || !this.password || !this.passwordRipetuta || !this.dataNascita) {
-      this.toastr.error("Compilare tutti i campi");
+      this.toastr.error('Please fill all fields');
       return;
     }
 
     if (this.password !== this.passwordRipetuta) {
-      this.toastr.error("Le password non coincidono");
+      this.toastr.error('Passwords do not match');
       return;
     }
 

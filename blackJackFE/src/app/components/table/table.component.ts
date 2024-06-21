@@ -97,7 +97,7 @@ export class TableComponent implements OnInit {
       this.numeroDiMazzi = config.mazzi;
       this.wager = this.puntataMinima;
     } else {
-      this.toastr.error('Tipo di tavolo non valido o mancante', 'Errore');
+      this.toastr.error('Invalid or missing table type', 'Error');
       this.router.navigate(['/homepage/dashboard']);
     }
   }
@@ -161,10 +161,10 @@ export class TableComponent implements OnInit {
   initTavolo(tipoTavolo: string): void {
     this.tablesService.initTavolo(tipoTavolo).subscribe({
       next: (data: MessageResponse) => {
-        this.toastr.success(data.message, 'Tavolo inizializzato');
+        this.toastr.success(data.message, 'Table initialized');
       },
       error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error.message, 'Errore');
+        this.toastr.error(err.error.message, 'Error');
         this.router.navigate(['/homepage/dashboard']);
       }
     });
@@ -197,7 +197,7 @@ export class TableComponent implements OnInit {
         this.dealAttivo = false;
         break;
       default:
-        this.toastr.error('Stato tavolo sconosciuto', 'Errore');
+        this.toastr.error('Unkown Table Status', 'Errore');
         break;
     }
     console.log("dealAttivo updated to:", this.dealAttivo);
@@ -208,6 +208,12 @@ export class TableComponent implements OnInit {
   // -----------------------------------------------------------------------------------
   updateConteggio(carte: CartaResponse[]): void {
     const totaleCarte = this.numeroDiMazzi * 52;  // Assumendo che ogni mazzo abbia 52 carte
+
+    // Se l'ordine corrente supera il totale delle carte, resettare il conteggio
+    const maxOrder = Math.max(...carte.map(carta => carta.order));
+    if (maxOrder >= totaleCarte) {
+      this.resetConteggio();
+    }
 
     carte.forEach(carta => {
       // Calcola l'indice modificato di 'order' per gestire il riutilizzo del mazzo
@@ -229,6 +235,16 @@ export class TableComponent implements OnInit {
 
     this.updateValoreReale();
   }
+
+  // -----------------------------------------------------------------------------------
+  // METODO PER RESETTARE IL CONTEGGIO DELLE CARTE
+  // Resetta il conteggio delle carte quando il mazzo viene rimescolato.
+  // -----------------------------------------------------------------------------------
+  private resetConteggio(): void {
+    this.carteUnicheGiocate.clear();
+    this.conteggio = 0;
+    this.valoreReale = 0;
+  }
   // -----------------------------------------------------------------------------------
   // METODO PER AGGIORNARE IL VALORE REALE
   // Calcola e aggiorna il valore reale delle carte rimaste nel mazzo.
@@ -245,11 +261,13 @@ export class TableComponent implements OnInit {
   // -----------------------------------------------------------------------------------
   private checkAndUpdateBetRecommendation(): void {
     if (this.valoreReale > 4) {  // Cambio soglia per mostrare il messaggio
-      this.toastr.info('Il Mazzo è carico! Aumenta la puntata!', 'Informazione', {
+      // Traducimi in inglese: "Il Mazzo è carico! Aumenta la punta"
+
+      this.toastr.info('The Deck is hot! Increase your bet!', 'Informazione', {
         timeOut: 3000
       });
     } else if (this.valoreReale < -4) {
-      this.toastr.info('Il Mazzo è scarico! Gioca il Minimo!', 'Informazione', {
+      this.toastr.info('The Deck is Cold! Play the minimum', 'Informazione', {
         timeOut: 3000
       });
     }
@@ -272,7 +290,7 @@ export class TableComponent implements OnInit {
         this.dealAttivo = true;
       },
       error: (err: HttpErrorResponse) => {
-        this.toastr.error(err.error.message, 'Errore');
+        this.toastr.error(err.error.message, 'Error');
         this.router.navigate(['/homepage/dashboard']);
       }
     });

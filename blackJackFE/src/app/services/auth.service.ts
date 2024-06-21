@@ -83,7 +83,7 @@ export class AuthService {
   logout(): void {
     this.router.navigateByUrl('/login');
     localStorage.clear();
-    this.toastr.success('Logout effettuato con successo');
+    this.toastr.success("Logout successful");
     this.setIsAuthenticated(false);
   }
 

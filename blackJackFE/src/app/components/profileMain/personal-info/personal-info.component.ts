@@ -108,7 +108,7 @@ export class PersonalInfoComponent implements OnInit {
     this.maniUtente.forEach(mano => {
       const currentTime = new Date(mano.dataMano).getTime();
       // Se l'intervallo di tempo tra le mani è superiore a 20 minuti, consideralo una nuova sessione
-      if (currentTime - lastSessionTime > 1200000) { // 1200000 ms = 20 minuti
+      if (currentTime - lastSessionTime > 600000) { // 1200000 ms = 20 minuti
         sessionCount++;
         lastSessionTime = currentTime;
       }
