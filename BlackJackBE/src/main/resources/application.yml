@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://blackjacksafer.cdmk2mgus0n7.eu-north-1.rds.amazonaws.com:5432/blackjacksafer
-    username: ettore
-    password: notarnicola1
+    url: jdbc:postgresql://localhost:5432/blackJack
+    username: postgres
+    password: ettore
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
