@@ -90,6 +90,10 @@ public class UserServiceImplementation implements UserService {
             throw new NotFoundException("Utente non trovato");
         }
 
+        if(userExists.get().getRuolo().equals(Ruolo.ADMIN)) {
+            throw new ConflictException("Non è possibile eliminare un amministratore");
+        }
+
         // Controlla se l'utente è associato a un tabacchi.
         List<Tabacchi> listaTabacchi = tabacchiRepository.findAll();
         for (Tabacchi tabacchi : listaTabacchi) {

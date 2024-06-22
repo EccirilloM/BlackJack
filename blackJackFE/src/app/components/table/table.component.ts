@@ -6,6 +6,7 @@ import { CartaResponse } from 'src/app/dto/response/CartaResponse';
 import { MessageResponse } from 'src/app/dto/response/MessageResponse';
 import { TavoloStatusResponse } from 'src/app/dto/response/TavoloStatusResponse';
 import { TablesService } from 'src/app/services/tables.service';
+import { UserService } from 'src/app/services/user.service';
 import { Tavolo } from 'src/app/types/tavolo';
 import { Wager } from 'src/app/types/wager';
 // -----------------------------------------------------------------------------------
@@ -288,12 +289,20 @@ export class TableComponent implements OnInit {
         console.log('end', data);
         this.initTavolo(this.tipoTavoloParam);
         this.dealAttivo = true;
+        this.updatePlayerCash();
       },
       error: (err: HttpErrorResponse) => {
         this.toastr.error(err.error.message, 'Error');
         this.router.navigate(['/homepage/dashboard']);
       }
     });
+  }
+  // -----------------------------------------------------------------------------------
+  // METODO PER AGGIORNARE IL SALDO DELL'UTENTE
+  // Aggiorna il saldo dell'utente dopo ogni partita.
+  // --------------------------------------------------------------------------------
+  updatePlayerCash(): void {
+    localStorage.setItem('playerCash', this.playerCash.toString());
   }
   // -----------------------------------------------------------------------------------
   // METODO PER NAVIGARE ALLA HOMEPAGE

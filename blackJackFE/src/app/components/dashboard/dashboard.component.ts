@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Tavolo } from 'src/app/types/tavolo';
 // -----------------------------------------------------------------------------------
 // COMPONENTE DASHBOARD
@@ -23,12 +24,13 @@ export class DashboardComponent implements OnInit {
   protected location: string = "Roma";
   protected currentHours: string = "";
   protected Tavolo = Tavolo;
+  protected userBalance: number = 0;
 
   // -----------------------------------------------------------------------------------
   // COSTRUTTORE
   // Il costruttore inietta il servizio Router necessario per la navigazione.
   // -----------------------------------------------------------------------------------
-  constructor(private router: Router) { }
+  constructor(private router: Router, private toastr: ToastrService) { }
 
   // -----------------------------------------------------------------------------------
   // METODO ngOnInit
@@ -47,12 +49,43 @@ export class DashboardComponent implements OnInit {
     const currentTime = new Date();
     this.currentHours = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
-
+  // -----------------------------------------------------------------------------------
+  // METODO PER RECUPERARE IL SALDO DELL'UTENTE
+  // Recupera il saldo dell'utente dal localStorage.
+  // -----------------------------------------------------------------------------------
+  getUserBalance() {
+    const balance = localStorage.getItem('saldo');
+    if (balance) {
+      this.userBalance = parseFloat(balance);
+    }
+  }
   // -----------------------------------------------------------------------------------
   // METODO PER LA NAVIGAZIONE AL TAVOLO
-  // Naviga alla pagina del tavolo selezionato.
+  // Naviga alla pagina del tavolo selezionato se il saldo è sufficiente.
   // -----------------------------------------------------------------------------------
   goToTable(tipoTavolo: Tavolo) {
-    this.router.navigate(['/homepage/table', tipoTavolo]);
+    let minBet = 0;
+    switch (tipoTavolo) {
+      case Tavolo.BASE:
+        minBet = this.puntataMinimaTavoloBase;
+        break;
+      case Tavolo.PREMIUM:
+        minBet = this.puntataMinimaTavoloPremium;
+        break;
+      case Tavolo.VIP:
+        minBet = this.puntataMinimaTavoloVip;
+        break;
+      case Tavolo.EXCLUSIVE:
+        minBet = this.puntataMinimaTavoloExclusive;
+        break;
+      default:
+        minBet = 0;
+    }
+
+    if (this.userBalance >= minBet) {
+      this.router.navigate(['/homepage/table', tipoTavolo]);
+    } else {
+      this.toastr.error('Insufficient Balance to get access to this table', 'Error');
+    }
   }
 }
